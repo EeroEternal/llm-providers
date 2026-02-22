@@ -1,4 +1,4 @@
-use llm_providers::{get_providers_data, Model as RustModel, Provider as RustProvider};
+use llm_providers::{get_providers_data, Model as RustModel, Provider as RustProvider, ModelFilter};
 use pyo3::prelude::*;
 
 /// Represents a Model configuration.
@@ -93,6 +93,29 @@ fn get_model(provider_id: &str, model_id: &str) -> PyResult<Model> {
         })
 }
 
+/// Filter models based on criteria.
+/// Returns a list of tuples (provider_id, Model).
+#[pyfunction]
+#[pyo3(signature = (provider_id=None, region=None, supports_tools=None, min_context_length=None))]
+fn filter_models(
+    provider_id: Option<String>,
+    region: Option<String>,
+    supports_tools: Option<bool>,
+    min_context_length: Option<u64>,
+) -> Vec<(String, Model)> {
+    let filter = ModelFilter {
+        provider_id,
+        region,
+        supports_tools,
+        min_context_length,
+    };
+    
+    llm_providers::filter_models(filter)
+        .into_iter()
+        .map(|(pid, m)| (pid, Model::from(&m)))
+        .collect()
+}
+
 /// Get detailed information for a specific provider as a Provider object
 #[pyfunction]
 fn get_provider(provider_id: &str) -> PyResult<Provider> {
@@ -141,6 +164,7 @@ fn llm_providers_list(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(list_providers, m)?)?;
     m.add_function(wrap_pyfunction!(list_models, m)?)?;
     m.add_function(wrap_pyfunction!(get_model, m)?)?;
+    m.add_function(wrap_pyfunction!(filter_models, m)?)?;
     m.add_function(wrap_pyfunction!(get_provider, m)?)?;
     m.add_function(wrap_pyfunction!(get_all_providers, m)?)?;
     m.add_function(wrap_pyfunction!(get_provider_info, m)?)?;

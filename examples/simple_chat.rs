@@ -3,18 +3,26 @@ use llm_providers::get_providers_data;
 use std::env;
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<(), Box<dyn std.error::Error>> {
     // 1. 获取所有 Provider 数据
     let providers = get_providers_data();
     
     // 2. 检查是否有 OpenAI 配置
     // 为了演示方便，我们这里使用 expect，实际代码中应处理 Option
     if let Some(openai) = providers.get("openai") {
-        println!("Found Provider: {}", openai.label);
+        println!("Found Provider: {} (Family: {:?}, Region: {:?})", 
+            openai.label, 
+            openai.provider_family, 
+            openai.region
+        );
         
         // 3. 选择一个模型 (例如 gpt-4o)
         if let Some(model) = openai.models.iter().find(|m| m.id == "gpt-4o") {
-            println!("Selected Model: {} (Context: {:?})", model.name, model.context_length);
+            println!("Selected Model: {} (Context: {:?}, Currency: {})", 
+                model.name, 
+                model.context_length,
+                model.price_currency
+            );
 
             // 4. 从环境变量获取 API Key (请确保已设置)
             if let Ok(api_key) = env::var("OPENAI_API_KEY") {

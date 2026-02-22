@@ -75,6 +75,66 @@ pub fn get_model(provider_id: &str, model_id: &str) -> Option<Model> {
         .and_then(|p| p.models.iter().find(|m| m.id == model_id).cloned())
 }
 
+#[derive(Default)]
+pub struct ModelFilter {
+    pub provider_id: Option<String>,
+    pub region: Option<String>,
+    pub supports_tools: Option<bool>,
+    pub min_context_length: Option<u64>,
+}
+
+/// 高级过滤函数：筛选符合条件的模型
+/// 返回 (provider_id, Model) 的元组列表
+pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
+    let mut results = Vec::new();
+    
+    for (pid, provider) in get_providers_data() {
+        // Filter by provider_id
+        if let Some(ref target_pid) = filter.provider_id {
+            if pid != target_pid {
+                continue;
+            }
+        }
+
+        // Filter by region
+        if let Some(ref target_region) = filter.region {
+            if provider.region.as_ref() != Some(target_region) {
+                continue;
+            }
+        }
+
+        for model in &provider.models {
+            // Filter by supports_tools
+            if let Some(target_tools) = filter.supports_tools {
+                if model.supports_tools != target_tools {
+                    continue;
+                }
+            }
+
+            // Filter by min_context_length
+            if let Some(min_ctx) = filter.min_context_length {
+                if model.context_length.unwrap_or(0) < min_ctx {
+                    continue;
+                }
+            }
+
+            results.push((pid.clone(), model.clone()));
+        }
+    }
+    
+    // Sort for deterministic output (by provider_id, then model_id)
+    results.sort_by(|a, b| {
+        let p_cmp = a.0.cmp(&b.0);
+        if p_cmp == std::cmp::Ordering::Equal {
+            a.1.id.cmp(&b.1.id)
+        } else {
+            p_cmp
+        }
+    });
+
+    results
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -116,6 +176,26 @@ mod tests {
         let model = get_model("openai", "gpt-4o").expect("Model not found");
         assert_eq!(model.id, "gpt-4o");
         assert!(model.supports_tools);
+    }
+
+    #[test]
+    fn test_filter_models() {
+        // 1. Filter by region="cn"
+        let cn_models = filter_models(ModelFilter {
+            region: Some("cn".to_string()),
+            ..Default::default()
+        });
+        assert!(!cn_models.is_empty());
+        assert!(cn_models.iter().any(|(p, _)| p == "aliyun"));
+        assert!(!cn_models.iter().any(|(p, _)| p == "openai"));
+
+        // 2. Filter by supports_tools=true
+        let tool_models = filter_models(ModelFilter {
+            supports_tools: Some(true),
+            provider_id: Some("openai".to_string()),
+            ..Default::default()
+        });
+        assert!(tool_models.iter().any(|(_, m)| m.id == "gpt-4o"));
     }
 
     #[tokio::test]

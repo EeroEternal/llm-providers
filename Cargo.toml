@@ -22,3 +22,7 @@ tokio = { version = "1", features = ["full"] }
 [[example]]
 name = "simple_chat"
 path = "examples/simple_chat.rs"
+
+[[example]]
+name = "filter_models"
+path = "examples/filter_models.rs"
