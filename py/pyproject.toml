@@ -4,11 +4,18 @@ build-backend = "maturin"
 
 [project]
 name = "llm-providers-list"
-version = "0.1.0"
-description = "Python bindings for LLM Providers Registry"
-authors = [{name = "lipi", email = "lipicoder@qq.com"}]
+version = "0.1.1"
+description = "A unified source of truth for LLM providers, models, pricing, and capabilities."
+authors = [{name = "lipish", email = "lipish.1@gmail.com"}]
 requires-python = ">=3.8"
+readme = "../README.md"
+license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Rust",
     "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
+urls = {Repository = "https://github.com/lipish/llm-providers"}
