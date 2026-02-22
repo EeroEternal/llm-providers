@@ -10,7 +10,7 @@
   <p>
     <a href="https://github.com/lipish/llm-providers/actions"><img src="https://img.shields.io/github/actions/workflow/status/lipish/llm-providers/ci.yml?branch=main" alt="Build Status"></a>
     <a href="https://crates.io/crates/llm_providers"><img src="https://img.shields.io/crates/v/llm_providers.svg" alt="Crates.io"></a>
-    <a href="https://pypi.org/project/llm-providers-list/"><img src="https://img.shields.io/pypi/v/llm-providers-list.svg" alt="PyPI"></a>
+    <a href="https://pypi.org/project/llm-providers-list"><img src="https://img.shields.io/pypi/v/llm-providers-list.svg" alt="PyPI"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License"></a>
   </p>
 </div>

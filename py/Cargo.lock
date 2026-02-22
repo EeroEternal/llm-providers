@@ -48,20 +48,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6800badb6cb2082ffd7b6a67e6125bb39f18782f793520caee8cb8846be06112"
 
 [[package]]
-name = "llm_provider_registry"
+name = "llm_providers"
 version = "0.1.0"
 dependencies = [
- "llm_providers",
- "pyo3",
+ "lazy_static",
  "serde",
  "serde_json",
 ]
 
 [[package]]
-name = "llm_providers"
+name = "llm_providers_list"
 version = "0.1.0"
 dependencies = [
- "lazy_static",
+ "llm_providers",
+ "pyo3",
  "serde",
  "serde_json",
 ]
