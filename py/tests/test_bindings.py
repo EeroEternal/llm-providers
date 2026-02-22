@@ -12,6 +12,27 @@ class TestLLMProviders(unittest.TestCase):
         # Check sorted order
         self.assertEqual(providers, sorted(providers))
 
+    def test_list_models(self):
+        """Test listing models for a specific provider"""
+        models = llm_providers_list.list_models("openai")
+        self.assertIsInstance(models, list)
+        self.assertIn("gpt-4o", models)
+        
+        # Test non-existing provider
+        with self.assertRaises(ValueError):
+            llm_providers_list.list_models("non_existent_provider")
+
+    def test_get_model(self):
+        """Test getting detailed model object"""
+        model = llm_providers_list.get_model("openai", "gpt-4o")
+        self.assertEqual(model.id, "gpt-4o")
+        self.assertEqual(model.name, "GPT-4o")
+        self.assertTrue(model.supports_tools)
+        
+        # Test non-existing model
+        with self.assertRaises(ValueError):
+            llm_providers_list.get_model("openai", "non_existent_model")
+
     def test_get_provider(self):
         """Test getting detailed provider object"""
         # Test existing provider

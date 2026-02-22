@@ -63,9 +63,25 @@ impl From<&RustProvider> for Provider {
 /// List all provider IDs
 #[pyfunction]
 fn list_providers() -> Vec<String> {
-    let mut keys: Vec<String> = get_providers_data().keys().cloned().collect();
-    keys.sort();
-    keys
+    llm_providers::list_providers()
+}
+
+/// List all model IDs for a specific provider
+#[pyfunction]
+fn list_models(provider_id: &str) -> PyResult<Vec<String>> {
+    llm_providers::list_models(provider_id).ok_or_else(|| {
+        pyo3::exceptions::PyValueError::new_err("Provider not found")
+    })
+}
+
+/// Get detailed information for a specific model
+#[pyfunction]
+fn get_model(provider_id: &str, model_id: &str) -> PyResult<Model> {
+    llm_providers::get_model(provider_id, model_id)
+        .map(|m| Model::from(&m))
+        .ok_or_else(|| {
+            pyo3::exceptions::PyValueError::new_err("Model not found")
+        })
 }
 
 /// Get detailed information for a specific provider as a Provider object
@@ -114,6 +130,8 @@ fn get_all_info() -> PyResult<String> {
 #[pymodule]
 fn llm_providers_list(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(list_providers, m)?)?;
+    m.add_function(wrap_pyfunction!(list_models, m)?)?;
+    m.add_function(wrap_pyfunction!(get_model, m)?)?;
     m.add_function(wrap_pyfunction!(get_provider, m)?)?;
     m.add_function(wrap_pyfunction!(get_all_providers, m)?)?;
     m.add_function(wrap_pyfunction!(get_provider_info, m)?)?;
