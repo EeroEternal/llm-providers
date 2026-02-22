@@ -19,6 +19,8 @@ pub struct Model {
     pub input_price: f64,
     #[pyo3(get)]
     pub output_price: f64,
+    #[pyo3(get)]
+    pub price_currency: String,
 }
 
 impl From<&RustModel> for Model {
@@ -31,6 +33,7 @@ impl From<&RustModel> for Model {
             context_length: m.context_length,
             input_price: m.input_price,
             output_price: m.output_price,
+            price_currency: m.price_currency.clone(),
         }
     }
 }
@@ -41,6 +44,10 @@ impl From<&RustModel> for Model {
 pub struct Provider {
     #[pyo3(get)]
     pub label: String,
+    #[pyo3(get)]
+    pub provider_family: Option<String>,
+    #[pyo3(get)]
+    pub region: Option<String>,
     #[pyo3(get)]
     pub base_url: String,
     #[pyo3(get)]
@@ -53,6 +60,8 @@ impl From<&RustProvider> for Provider {
     fn from(p: &RustProvider) -> Self {
         Provider {
             label: p.label.clone(),
+            provider_family: p.provider_family.clone(),
+            region: p.region.clone(),
             base_url: p.base_url.clone(),
             models: p.models.iter().map(Model::from).collect(),
             docs_url: p.docs_url.clone(),

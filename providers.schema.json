@@ -1,0 +1,104 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "LLM Providers Registry",
+  "type": "object",
+  "required": ["version", "updated_at", "providers"],
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Schema version of the providers file"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last update timestamp (ISO 8601)"
+    },
+    "providers": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/Provider"
+      }
+    }
+  },
+  "definitions": {
+    "Provider": {
+      "type": "object",
+      "required": ["label", "provider_family", "region", "base_url", "models"],
+      "properties": {
+        "label": {
+          "type": "string",
+          "description": "Human-readable label for the provider"
+        },
+        "provider_family": {
+          "type": "string",
+          "description": "Family identifier (e.g., 'openai', 'anthropic', 'aliyun')"
+        },
+        "region": {
+          "type": ["string", "null"],
+          "enum": ["cn", "global", "us", "eu", null],
+          "description": "Region of the provider ('cn', 'global', etc.)"
+        },
+        "base_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "Base URL for the API"
+        },
+        "docs_url": {
+          "type": ["string", "null"],
+          "format": "uri",
+          "description": "URL to the official documentation"
+        },
+        "models": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Model"
+          }
+        }
+      }
+    },
+    "Model": {
+      "type": "object",
+      "required": ["id", "name", "input_price", "output_price"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Model identifier used in API calls"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the model"
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description of the model capabilities"
+        },
+        "supports_tools": {
+          "type": "boolean",
+          "default": false,
+          "description": "Whether the model supports function calling / tools"
+        },
+        "context_length": {
+          "type": ["integer", "null"],
+          "minimum": 0,
+          "description": "Maximum context length (tokens)"
+        },
+        "input_price": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Price per 1M input tokens (USD or CNY)"
+        },
+        "output_price": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Price per 1M output tokens (USD or CNY)"
+        },
+        "price_currency": {
+          "type": "string",
+          "enum": ["USD", "CNY"],
+          "default": "USD",
+          "description": "Currency for the price fields"
+        }
+      }
+    }
+  }
+}
