@@ -1,6 +1,5 @@
 use llm_providers::{get_providers_data, Model as RustModel, Provider as RustProvider};
 use pyo3::prelude::*;
-use serde_json;
 
 /// Represents a Model configuration.
 #[pyclass]
