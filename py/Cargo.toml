@@ -6,7 +6,7 @@ description = "Python bindings for LLM Providers Registry"
 license = "MIT"
 repository = "https://github.com/lipish/llm-providers"
 authors = ["lipish <lipish.1@gmail.com>"]
-readme = "../README.md"
+readme = "README.md"
 
 [lib]
 name = "llm_providers_list"

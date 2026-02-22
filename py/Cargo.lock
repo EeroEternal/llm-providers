@@ -58,7 +58,7 @@ dependencies = [
 
 [[package]]
 name = "llm_providers_list"
-version = "0.1.0"
+version = "0.1.1"
 dependencies = [
  "llm_providers",
  "pyo3",
