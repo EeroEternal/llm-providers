@@ -1,12 +1,12 @@
 [package]
 name = "llm_providers_list"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 description = "Python bindings for LLM Providers Registry"
 license = "MIT"
 repository = "https://github.com/lipish/llm-providers"
 authors = ["lipish <lipish.1@gmail.com>"]
-readme = "README.md"
+readme = "README_PYTHON.md"
 
 [lib]
 name = "llm_providers_list"

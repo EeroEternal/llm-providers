@@ -4,11 +4,11 @@ build-backend = "maturin"
 
 [project]
 name = "llm-providers-list"
-version = "0.1.1"
+version = "0.1.2"
 description = "A unified source of truth for LLM providers, models, pricing, and capabilities."
 authors = [{name = "lipish", email = "lipish.1@gmail.com"}]
 requires-python = ">=3.8"
-readme = "README.md"
+readme = "README_PYTHON.md"
 license = {text = "MIT"}
 classifiers = [
     "Programming Language :: Rust",
