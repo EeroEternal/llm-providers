@@ -123,6 +123,52 @@ print(f"Label: {openai.label}")
 print(f"Base URL: {openai.base_url}")
 ```
 
+## Advanced Usage
+
+### Filtering Models
+
+You can filter models by region, capabilities (tools), or context length.
+
+#### Rust
+
+```rust
+use llm_providers::{filter_models, ModelFilter};
+
+let cn_models = filter_models(ModelFilter {
+    region: Some("cn".to_string()),
+    supports_tools: Some(true),
+    ..Default::default()
+});
+
+for (provider_id, model) in cn_models {
+    println!("{}: {}", provider_id, model.name);
+}
+```
+
+#### Python
+
+```python
+import llm_providers_list
+
+# Find all models in CN region that support tools
+cn_tools_models = llm_providers_list.filter_models(
+    region="cn", 
+    supports_tools=True
+)
+
+for provider_id, model in cn_tools_models:
+    print(f"[{provider_id}] {model.name} ({model.price_currency})")
+```
+
+### Data Structure
+
+The registry uses a structured schema enforced by `providers.schema.json`.
+
+- **Provider Family**: Grouping for providers (e.g., `openai`, `aliyun`).
+- **Region**: `cn` (China), `global` (International), `us`, `eu`, etc.
+- **Price Currency**: `USD` or `CNY`.
+
+
 ## Supported Providers
 
 - **OpenAI** (GPT-4o, GPT-3.5, o1)

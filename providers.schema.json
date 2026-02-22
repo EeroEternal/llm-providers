@@ -3,6 +3,7 @@
   "title": "LLM Providers Registry",
   "type": "object",
   "required": ["version", "updated_at", "providers"],
+  "additionalProperties": false,
   "properties": {
     "version": {
       "type": "string",
@@ -24,6 +25,7 @@
     "Provider": {
       "type": "object",
       "required": ["label", "provider_family", "region", "base_url", "models"],
+      "additionalProperties": false,
       "properties": {
         "label": {
           "type": "string",
@@ -59,6 +61,7 @@
     "Model": {
       "type": "object",
       "required": ["id", "name", "input_price", "output_price"],
+      "additionalProperties": false,
       "properties": {
         "id": {
           "type": "string",

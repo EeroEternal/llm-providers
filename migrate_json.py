@@ -1,9 +1,40 @@
 import json
 from datetime import datetime
 
+# Explicit mapping for provider metadata
+# Key -> (provider_family, region)
+PROVIDER_METADATA = {
+    "aliyun": ("aliyun", "cn"),
+    "anthropic": ("anthropic", "global"),
+    "deepseek": ("deepseek", "cn"),
+    "longcat": ("longcat", "cn"),
+    "minimax": ("minimax", "cn"),
+    "minimax-global": ("minimax", "global"),
+    "moonshot": ("moonshot", "cn"),
+    "moonshot-global": ("moonshot", "global"),
+    "openai": ("openai", "global"),
+    "tencent": ("tencent", "cn"),
+    "volcengine": ("volcengine", "cn"),
+    "zhipu": ("zhipu", "cn"),
+    "zhipu-global": ("zhipu", "global"),
+}
+
 def migrate():
-    with open("providers.json", "r") as f:
-        old_data = json.load(f)
+    # Note: This script assumes the input is the OLD format (map of providers).
+    # Since we've already migrated to the new format, running this on the NEW format might break things.
+    # This is kept for reference or re-migration from source.
+    
+    try:
+        with open("providers.json", "r") as f:
+            data = json.load(f)
+    except FileNotFoundError:
+        print("providers.json not found.")
+        return
+
+    # Check if already migrated
+    if "version" in data and "providers" in data:
+        print("providers.json already seems to be in the new format. Skipping migration.")
+        return
 
     new_data = {
         "version": "1.0",
@@ -11,27 +42,15 @@ def migrate():
         "providers": {}
     }
 
-    for key, provider in old_data.items():
-        # Default values
-        family = key.split("-")[0]
-        region = "cn"  # Default to CN as many are Chinese providers
-        
-        # Heuristics for region and family
-        if "global" in key:
-            region = "global"
-            family = key.replace("-global", "")
-        elif key in ["openai", "anthropic"]:
-            region = "global"
-            family = key
-        
-        # Special cases
-        if key == "aliyun":
-            family = "aliyun"
-            region = "cn"
-        elif key == "volcengine":
-            family = "volcengine"
-            region = "cn"
-        
+    for key, provider in data.items():
+        # Use explicit mapping, fallback to heuristics only if unknown
+        if key in PROVIDER_METADATA:
+            family, region = PROVIDER_METADATA[key]
+        else:
+            print(f"Warning: Unknown provider '{key}', using heuristics.")
+            family = key.split("-")[0]
+            region = "global" if "global" in key else "cn"
+
         # Create new provider object
         new_provider = {
             "label": provider.get("label", key),
