@@ -33,6 +33,27 @@ pub fn get_providers_data() -> &'static Providers {
     })
 }
 
+/// 获取所有 Provider 的 ID 列表（排序后）
+pub fn list_providers() -> Vec<String> {
+    let mut keys: Vec<String> = get_providers_data().keys().cloned().collect();
+    keys.sort();
+    keys
+}
+
+/// 获取指定 Provider 下的所有模型 ID 列表
+pub fn list_models(provider_id: &str) -> Option<Vec<String>> {
+    get_providers_data().get(provider_id).map(|p| {
+        p.models.iter().map(|m| m.id.clone()).collect()
+    })
+}
+
+/// 根据 Provider ID 和 Model ID 获取模型详细信息
+pub fn get_model(provider_id: &str, model_id: &str) -> Option<Model> {
+    get_providers_data()
+        .get(provider_id)
+        .and_then(|p| p.models.iter().find(|m| m.id == model_id).cloned())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -42,6 +63,26 @@ mod tests {
         let providers = get_providers_data();
         assert!(!providers.is_empty());
         assert!(providers.contains_key("openai"));
+    }
+
+    #[test]
+    fn test_list_providers() {
+        let providers = list_providers();
+        assert!(providers.contains(&"openai".to_string()));
+        assert!(providers.contains(&"anthropic".to_string()));
+    }
+
+    #[test]
+    fn test_list_models() {
+        let models = list_models("openai").expect("OpenAI provider not found");
+        assert!(models.contains(&"gpt-4o".to_string()));
+    }
+
+    #[test]
+    fn test_get_model() {
+        let model = get_model("openai", "gpt-4o").expect("Model not found");
+        assert_eq!(model.id, "gpt-4o");
+        assert!(model.supports_tools);
     }
 
     #[tokio::test]
