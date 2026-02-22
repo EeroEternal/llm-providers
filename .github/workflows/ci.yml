@@ -15,12 +15,15 @@ permissions:
 
 jobs:
   test-rust:
-    name: Test Rust Core
+    name: Test Rust Core & Examples
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
-      - run: cargo test --verbose
+      - name: Run Tests
+        run: cargo test --verbose
+      - name: Check Examples
+        run: cargo check --examples
 
   test-python-bindings:
     name: Test Python Bindings
@@ -37,7 +40,8 @@ jobs:
         run: |
           cd py
           cargo test --verbose
-          maturin build --release
+          maturin develop
+          python3 tests/test_bindings.py
 
   lint:
     name: Lint
