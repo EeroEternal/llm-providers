@@ -1,5 +1,5 @@
-use pyo3::prelude::*;
 use llm_providers::{get_providers_data, Model as RustModel, Provider as RustProvider};
+use pyo3::prelude::*;
 use serde_json;
 
 /// Represents a Model configuration.
@@ -76,7 +76,9 @@ fn get_provider(provider_id: &str) -> PyResult<Provider> {
     if let Some(p) = providers.get(provider_id) {
         Ok(Provider::from(p))
     } else {
-        Err(pyo3::exceptions::PyValueError::new_err("Provider not found"))
+        Err(pyo3::exceptions::PyValueError::new_err(
+            "Provider not found",
+        ))
     }
 }
 
@@ -96,14 +98,17 @@ fn get_provider_info(provider_id: &str) -> PyResult<String> {
     if let Some(p) = providers.get(provider_id) {
         serde_json::to_string(p).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))
     } else {
-        Err(pyo3::exceptions::PyValueError::new_err("Provider not found"))
+        Err(pyo3::exceptions::PyValueError::new_err(
+            "Provider not found",
+        ))
     }
 }
 
 /// Get all information as a JSON string
 #[pyfunction]
 fn get_all_info() -> PyResult<String> {
-    serde_json::to_string(get_providers_data()).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))
+    serde_json::to_string(get_providers_data())
+        .map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))
 }
 
 /// A Python module implemented in Rust.
