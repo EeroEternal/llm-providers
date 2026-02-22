@@ -48,33 +48,79 @@ This data is **embedded at compile-time** into a Rust crate for zero-latency acc
 
 ## Installation
 
-Install via pip:
+### Rust
+
+Add this to your `Cargo.toml`:
+
+```toml
+[dependencies]
+llm_providers = { git = "https://github.com/lipish/llm-providers.git" }
+```
+
+### Python
+
+Install via pip (once published) or build from source:
 
 ```bash
+# From PyPI (Coming Soon)
 pip install llm-providers-list
+
+# Build from source (requires maturin)
+pip install maturin
+maturin develop -m py/Cargo.toml
 ```
 
 ## Usage
 
+### Rust
+
+```rust
+use llm_providers::{get_providers_data, list_providers, list_models, get_model};
+
+fn main() {
+    // 1. Get raw map of all providers
+    let providers = get_providers_data();
+    if let Some(openai) = providers.get("openai") {
+        println!("Provider: {}", openai.label);
+    }
+
+    // 2. List all provider IDs
+    let provider_ids = list_providers();
+    println!("Providers: {:?}", provider_ids);
+
+    // 3. List models for a specific provider
+    if let Some(models) = list_models("openai") {
+        println!("OpenAI Models: {:?}", models);
+    }
+
+    // 4. Get specific model details
+    if let Some(model) = get_model("openai", "gpt-4o") {
+        println!("Model: {} (Price: ${}/1M input)", model.name, model.input_price);
+    }
+}
+```
+
+### Python
+
 ```python
 import llm_providers_list
-import json
 
-# List all supported providers
+# 1. List all supported providers
 print(llm_providers_list.list_providers())
 # Output: ['aliyun', 'anthropic', 'deepseek', 'openai', ...]
 
-# Get provider object (Rich Type)
+# 2. List models for a specific provider
+print(llm_providers_list.list_models("openai"))
+# Output: ['gpt-4o', 'gpt-3.5-turbo', ...]
+
+# 3. Get specific model details
+model = llm_providers_list.get_model("openai", "gpt-4o")
+print(f"Model: {model.name}, Price: ${model.input_price}/1M tokens")
+
+# 4. Get full provider object (Rich Type)
 openai = llm_providers_list.get_provider("openai")
 print(f"Label: {openai.label}")
 print(f"Base URL: {openai.base_url}")
-
-for model in openai.models:
-    print(f"Model: {model.name}, Price: ${model.input_price}/1M tokens")
-
-# Get raw JSON info
-info = llm_providers_list.get_provider_info("anthropic")
-print(info)
 ```
 
 ## Supported Providers
