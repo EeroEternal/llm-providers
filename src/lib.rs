@@ -1,78 +1,97 @@
-use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
-use std::sync::OnceLock;
+use serde::Serialize;
 
-// Embed the JSON file at compile time
-static PROVIDERS_JSON: &str = include_str!("../providers.json");
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Clone, Copy)]
 pub struct Model {
-    pub id: String,
-    pub name: String,
-    pub description: String,
+    pub id: &'static str,
+    pub name: &'static str,
+    pub description: &'static str,
     pub supports_tools: bool,
     pub context_length: Option<u64>,
     pub input_price: f64,
     pub output_price: f64,
-    #[serde(default = "default_currency")]
-    pub price_currency: String,
 }
 
-fn default_currency() -> String {
-    "USD".to_string()
+#[derive(Debug, Serialize, Clone, Copy)]
+pub struct Endpoint {
+    pub label: &'static str,
+    pub region: &'static str,
+    pub base_url: &'static str,
+    pub price_currency: &'static str,
+    pub docs_url: Option<&'static str>,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize)]
 pub struct Provider {
-    pub label: String,
-    pub provider_family: Option<String>,
-    pub region: Option<String>,
-    pub base_url: String,
-    pub models: Vec<Model>,
-    pub docs_url: Option<String>,
+    pub label: &'static str,
+    pub endpoints: &'static phf::Map<&'static str, Endpoint>,
+    pub models: &'static [Model],
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct ProviderRegistry {
-    pub version: String,
-    pub updated_at: String,
-    pub providers: HashMap<String, Provider>,
-}
+include!(concat!(env!("OUT_DIR"), "/registry_generated.rs"));
 
-pub type Providers = HashMap<String, Provider>;
+pub type Providers = phf::Map<&'static str, Provider>;
 
-/// Get the full registry metadata
-pub fn get_registry() -> &'static ProviderRegistry {
-    static REGISTRY: OnceLock<ProviderRegistry> = OnceLock::new();
-    REGISTRY.get_or_init(|| {
-        serde_json::from_str(PROVIDERS_JSON).expect("Failed to parse providers.json")
-    })
-}
-
-/// Get the providers map (for backward compatibility)
+/// Get the providers map
 pub fn get_providers_data() -> &'static Providers {
-    &get_registry().providers
+    &PROVIDERS
 }
 
-/// 获取所有 Provider 的 ID 列表（排序后）
+pub fn registry_version() -> &'static str {
+    REGISTRY_VERSION
+}
+
+pub fn registry_updated_at() -> &'static str {
+    REGISTRY_UPDATED_AT
+}
+
+/// List all provider family IDs (sorted)
 pub fn list_providers() -> Vec<String> {
-    let mut keys: Vec<String> = get_providers_data().keys().cloned().collect();
+    let mut keys: Vec<String> = get_providers_data()
+        .keys()
+        .cloned()
+        .map(|s| s.to_string())
+        .collect();
     keys.sort();
     keys
 }
 
-/// 获取指定 Provider 下的所有模型 ID 列表
+/// List all endpoint IDs (sorted)
+pub fn list_endpoints() -> Vec<String> {
+    let mut ids: Vec<String> = get_providers_data()
+        .values()
+        .flat_map(|p| p.endpoints.keys().cloned().map(|s| s.to_string()))
+        .collect();
+    ids.sort();
+    ids.dedup();
+    ids
+}
+
+/// Find endpoint details by endpoint ID, returning (family_id, Endpoint)
+pub fn get_endpoint(endpoint_id: &str) -> Option<(&'static str, &'static Endpoint)> {
+    for (&family_id, provider) in get_providers_data() {
+        if let Some(ep) = provider.endpoints.get(endpoint_id) {
+            return Some((family_id, ep));
+        }
+    }
+    None
+}
+
+/// List all model IDs under a provider family
 pub fn list_models(provider_id: &str) -> Option<Vec<String>> {
     get_providers_data().get(provider_id).map(|p| {
-        p.models.iter().map(|m| m.id.clone()).collect()
+        p.models.iter().map(|m| m.id.to_string()).collect()
     })
 }
 
-/// 根据 Provider ID 和 Model ID 获取模型详细信息
+/// Get model details by (provider_id, model_id)
 pub fn get_model(provider_id: &str, model_id: &str) -> Option<Model> {
+    get_model_ref(provider_id, model_id).copied()
+}
+
+pub fn get_model_ref(provider_id: &str, model_id: &str) -> Option<&'static Model> {
     get_providers_data()
         .get(provider_id)
-        .and_then(|p| p.models.iter().find(|m| m.id == model_id).cloned())
+        .and_then(|p| p.models.iter().find(|m| m.id == model_id))
 }
 
 #[derive(Default)]
@@ -83,27 +102,27 @@ pub struct ModelFilter {
     pub min_context_length: Option<u64>,
 }
 
-/// 高级过滤函数：筛选符合条件的模型
-/// 返回 (provider_id, Model) 的元组列表
+/// Advanced filtering: returns a list of (provider_id, Model)
 pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
     let mut results = Vec::new();
     
-    for (pid, provider) in get_providers_data() {
+    for (&pid, provider) in get_providers_data() {
         // Filter by provider_id
         if let Some(ref target_pid) = filter.provider_id {
-            if pid != target_pid {
+            if pid != target_pid.as_str() {
                 continue;
             }
         }
 
-        // Filter by region
+        // Filter by region: match if any endpoint has the target region
         if let Some(ref target_region) = filter.region {
-            if provider.region.as_ref() != Some(target_region) {
+            let has_region = provider.endpoints.values().any(|ep| ep.region == target_region);
+            if !has_region {
                 continue;
             }
         }
 
-        for model in &provider.models {
+        for model in provider.models {
             // Filter by supports_tools
             if let Some(target_tools) = filter.supports_tools {
                 if model.supports_tools != target_tools {
@@ -118,7 +137,7 @@ pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
                 }
             }
 
-            results.push((pid.clone(), model.clone()));
+            results.push((pid.to_string(), *model));
         }
     }
     
@@ -135,27 +154,79 @@ pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
     results
 }
 
+pub fn filter_models_ref(filter: ModelFilter) -> Vec<(&'static str, &'static Model)> {
+    let mut results = Vec::new();
+
+    for (&pid, provider) in get_providers_data() {
+        if let Some(ref target_pid) = filter.provider_id {
+            if pid != target_pid.as_str() {
+                continue;
+            }
+        }
+
+        if let Some(ref target_region) = filter.region {
+            let has_region = provider.endpoints.values().any(|ep| ep.region == target_region);
+            if !has_region {
+                continue;
+            }
+        }
+
+        for model in provider.models {
+            if let Some(target_tools) = filter.supports_tools {
+                if model.supports_tools != target_tools {
+                    continue;
+                }
+            }
+
+            if let Some(min_ctx) = filter.min_context_length {
+                if model.context_length.unwrap_or(0) < min_ctx {
+                    continue;
+                }
+            }
+
+            results.push((pid, model));
+        }
+    }
+
+    results.sort_by(|a, b| {
+        let p_cmp = a.0.cmp(b.0);
+        if p_cmp == std::cmp::Ordering::Equal {
+            a.1.id.cmp(b.1.id)
+        } else {
+            p_cmp
+        }
+    });
+
+    results
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
     #[test]
     fn test_parse_providers() {
-        let registry = get_registry();
-        assert_eq!(registry.version, "1.0");
-        
         let providers = get_providers_data();
         assert!(!providers.is_empty());
         assert!(providers.contains_key("openai"));
+
+        assert_eq!(registry_version(), "2.0");
     }
 
     #[test]
-    fn test_provider_fields() {
+    fn test_provider_endpoints() {
         let providers = get_providers_data();
-        if let Some(aliyun) = providers.get("aliyun") {
-            assert_eq!(aliyun.provider_family.as_deref(), Some("aliyun"));
-            assert_eq!(aliyun.region.as_deref(), Some("cn"));
-        }
+        let aliyun = providers.get("aliyun").expect("aliyun not found");
+        let ep = aliyun.endpoints.get("aliyun").expect("aliyun endpoint not found");
+        assert_eq!(ep.region, "cn");
+        assert_eq!(ep.price_currency, "CNY");
+
+        // Multi-endpoint provider
+        let moonshot = providers.get("moonshot").expect("moonshot not found");
+        assert!(moonshot.endpoints.contains_key("moonshot"));
+        assert!(moonshot.endpoints.contains_key("moonshot_global"));
+        assert_eq!(moonshot.endpoints["moonshot"].region, "cn");
+        assert_eq!(moonshot.endpoints["moonshot_global"].region, "global");
     }
 
     #[test]
@@ -163,6 +234,24 @@ mod tests {
         let providers = list_providers();
         assert!(providers.contains(&"openai".to_string()));
         assert!(providers.contains(&"anthropic".to_string()));
+        // moonshot_global should NOT be a top-level provider anymore
+        assert!(!providers.contains(&"moonshot_global".to_string()));
+    }
+
+    #[test]
+    fn test_list_endpoints() {
+        let endpoints = list_endpoints();
+        assert!(endpoints.contains(&"openai".to_string()));
+        assert!(endpoints.contains(&"moonshot".to_string()));
+        assert!(endpoints.contains(&"moonshot_global".to_string()));
+    }
+
+    #[test]
+    fn test_get_endpoint() {
+        let (family_id, ep) = get_endpoint("moonshot_global").expect("endpoint not found");
+        assert_eq!(family_id, "moonshot");
+        assert_eq!(ep.region, "global");
+        assert_eq!(ep.price_currency, "USD");
     }
 
     #[test]
@@ -180,7 +269,7 @@ mod tests {
 
     #[test]
     fn test_filter_models() {
-        // 1. Filter by region="cn"
+        // 1. Filter by region="cn" — matches providers that have any CN endpoint
         let cn_models = filter_models(ModelFilter {
             region: Some("cn".to_string()),
             ..Default::default()
@@ -202,7 +291,8 @@ mod tests {
     async fn test_integration_with_llm_connector() {
         let providers = get_providers_data();
         if let Some(openai) = providers.get("openai") {
-            assert!(openai.base_url.contains("api.openai.com"));
+            let ep = openai.endpoints.get("openai").expect("openai endpoint not found");
+            assert!(ep.base_url.contains("api.openai.com"));
             let has_gpt4o = openai.models.iter().any(|m| m.id == "gpt-4o");
             assert!(has_gpt4o, "OpenAI provider should have gpt-4o");
         }

@@ -54,7 +54,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-llm_providers = { git = "https://github.com/lipish/llm-providers.git" }
+llm_providers = "0.5"
 ```
 
 ### Python
@@ -75,22 +75,20 @@ maturin develop -m py/Cargo.toml
 ### Rust
 
 ```rust
-use llm_providers::{get_providers_data, list_providers, list_models, get_model};
+use llm_providers::{get_providers_data, list_providers, list_endpoints, get_endpoint, get_model};
 
 fn main() {
-    // 1. Get raw map of all providers
-    let providers = get_providers_data();
-    if let Some(openai) = providers.get("openai") {
-        println!("Provider: {}", openai.label);
-    }
+    // 1. List all provider family IDs
+    let families = list_providers();
+    println!("Families: {:?}", families);
 
-    // 2. List all provider IDs
-    let provider_ids = list_providers();
-    println!("Providers: {:?}", provider_ids);
+    // 2. List all endpoint IDs (for direct configuration)
+    let endpoints = list_endpoints();
+    println!("Endpoints: {:?}", endpoints);
 
-    // 3. List models for a specific provider
-    if let Some(models) = list_models("openai") {
-        println!("OpenAI Models: {:?}", models);
+    // 3. Get endpoint details by ID
+    if let Some((family_id, ep)) = get_endpoint("moonshot_global") {
+        println!("Family: {}, Base URL: {}, Region: {}", family_id, ep.base_url, ep.region);
     }
 
     // 4. Get specific model details
@@ -105,22 +103,21 @@ fn main() {
 ```python
 import llm_providers_list
 
-# 1. List all supported providers
+# 1. List all provider families
 print(llm_providers_list.list_providers())
 # Output: ['aliyun', 'anthropic', 'deepseek', 'openai', ...]
 
-# 2. List models for a specific provider
-print(llm_providers_list.list_models("openai"))
-# Output: ['gpt-4o', 'gpt-3.5-turbo', ...]
+# 2. List all endpoint IDs (for direct configuration)
+print(llm_providers_list.list_endpoints())
+# Output: ['aliyun', 'anthropic', 'moonshot', 'moonshot_global', ...]
 
-# 3. Get specific model details
+# 3. Get endpoint details by ID
+family_id, ep = llm_providers_list.get_endpoint("moonshot_global")
+print(f"Family: {family_id}, Base URL: {ep.base_url}, Region: {ep.region}")
+
+# 4. Get specific model details
 model = llm_providers_list.get_model("openai", "gpt-4o")
 print(f"Model: {model.name}, Price: ${model.input_price}/1M tokens")
-
-# 4. Get full provider object (Rich Type)
-openai = llm_providers_list.get_provider("openai")
-print(f"Label: {openai.label}")
-print(f"Base URL: {openai.base_url}")
 ```
 
 ## Advanced Usage
@@ -157,16 +154,19 @@ cn_tools_models = llm_providers_list.filter_models(
 )
 
 for provider_id, model in cn_tools_models:
-    print(f"[{provider_id}] {model.name} ({model.price_currency})")
+    print(f"[{provider_id}] {model.name}")
 ```
 
 ### Data Structure
 
-The registry uses a structured schema enforced by `providers.schema.json`.
+The registry is embedded in the crate as Rust static data (PHF maps, no runtime JSON parsing).
 
-- **Provider Family**: Grouping for providers (e.g., `openai`, `aliyun`).
+- **Provider Family**: Top-level grouping (e.g., `openai`, `moonshot`). Models are defined once per family.
+- **Endpoint**: Regional API entry point under a family. Each endpoint has its own `base_url`, `region`, and `price_currency`.
 - **Region**: `cn` (China), `global` (International), `us`, `eu`, etc.
-- **Price Currency**: `USD` or `CNY`.
+- **Price Currency**: `USD` or `CNY`, defined at the endpoint level.
+
+See [docs/providers.md](docs/providers.md) for a full list of endpoint IDs.
 
 
 ## Supported Providers
@@ -192,8 +192,8 @@ The registry uses a structured schema enforced by `providers.schema.json`.
 
 Contributions are welcome! To add a new provider or update existing models:
 
-1.  Edit `providers.json` in the root directory.
-2.  Run tests to ensure validity:
+1.  Edit `data/providers.json`.
+2.  Run tests to ensure validity (this will run `build.rs` to embed the registry at compile time):
     ```bash
     cargo test
     ```
