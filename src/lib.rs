@@ -78,9 +78,9 @@ pub fn get_endpoint(endpoint_id: &str) -> Option<(&'static str, &'static Endpoin
 
 /// List all model IDs under a provider family
 pub fn list_models(provider_id: &str) -> Option<Vec<String>> {
-    get_providers_data().get(provider_id).map(|p| {
-        p.models.iter().map(|m| m.id.to_string()).collect()
-    })
+    get_providers_data()
+        .get(provider_id)
+        .map(|p| p.models.iter().map(|m| m.id.to_string()).collect())
 }
 
 /// Get model details by (provider_id, model_id)
@@ -105,7 +105,7 @@ pub struct ModelFilter {
 /// Advanced filtering: returns a list of (provider_id, Model)
 pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
     let mut results = Vec::new();
-    
+
     for (&pid, provider) in get_providers_data() {
         // Filter by provider_id
         if let Some(ref target_pid) = filter.provider_id {
@@ -116,7 +116,10 @@ pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
 
         // Filter by region: match if any endpoint has the target region
         if let Some(ref target_region) = filter.region {
-            let has_region = provider.endpoints.values().any(|ep| ep.region == target_region);
+            let has_region = provider
+                .endpoints
+                .values()
+                .any(|ep| ep.region == target_region);
             if !has_region {
                 continue;
             }
@@ -140,7 +143,7 @@ pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
             results.push((pid.to_string(), *model));
         }
     }
-    
+
     // Sort for deterministic output (by provider_id, then model_id)
     results.sort_by(|a, b| {
         let p_cmp = a.0.cmp(&b.0);
@@ -165,7 +168,10 @@ pub fn filter_models_ref(filter: ModelFilter) -> Vec<(&'static str, &'static Mod
         }
 
         if let Some(ref target_region) = filter.region {
-            let has_region = provider.endpoints.values().any(|ep| ep.region == target_region);
+            let has_region = provider
+                .endpoints
+                .values()
+                .any(|ep| ep.region == target_region);
             if !has_region {
                 continue;
             }
@@ -217,7 +223,10 @@ mod tests {
     fn test_provider_endpoints() {
         let providers = get_providers_data();
         let aliyun = providers.get("aliyun").expect("aliyun not found");
-        let ep = aliyun.endpoints.get("aliyun").expect("aliyun endpoint not found");
+        let ep = aliyun
+            .endpoints
+            .get("aliyun")
+            .expect("aliyun endpoint not found");
         assert_eq!(ep.region, "cn");
         assert_eq!(ep.price_currency, "CNY");
 
@@ -291,7 +300,10 @@ mod tests {
     async fn test_integration_with_llm_connector() {
         let providers = get_providers_data();
         if let Some(openai) = providers.get("openai") {
-            let ep = openai.endpoints.get("openai").expect("openai endpoint not found");
+            let ep = openai
+                .endpoints
+                .get("openai")
+                .expect("openai endpoint not found");
             assert!(ep.base_url.contains("api.openai.com"));
             let has_gpt4o = openai.models.iter().any(|m| m.id == "gpt-4o");
             assert!(has_gpt4o, "OpenAI provider should have gpt-4o");

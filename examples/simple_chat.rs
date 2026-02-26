@@ -1,4 +1,4 @@
-use llm_connector::{LlmClient, ChatRequest, Message, Role};
+use llm_connector::{ChatRequest, LlmClient, Message, Role};
 use llm_providers::get_providers_data;
 use std::env;
 
@@ -6,22 +6,23 @@ use std::env;
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // 1. Get all provider data
     let providers = get_providers_data();
-    
+
     // 2. Check whether OpenAI is present
     if let Some(openai) = providers.get("openai") {
-        let ep = openai.endpoints.get("openai").expect("openai endpoint not found");
-        println!("Found Provider: {} (Base URL: {}, Region: {})", 
-            openai.label, 
-            ep.base_url, 
-            ep.region
+        let ep = openai
+            .endpoints
+            .get("openai")
+            .expect("openai endpoint not found");
+        println!(
+            "Found Provider: {} (Base URL: {}, Region: {})",
+            openai.label, ep.base_url, ep.region
         );
-        
+
         // 3. Pick a model (e.g. gpt-4o)
         if let Some(model) = openai.models.iter().find(|m| m.id == "gpt-4o") {
-            println!("Selected Model: {} (Context: {:?}, Currency: {})", 
-                model.name, 
-                model.context_length,
-                ep.price_currency
+            println!(
+                "Selected Model: {} (Context: {:?}, Currency: {})",
+                model.name, model.context_length, ep.price_currency
             );
 
             // 4. Read API key from environment variables (make sure it's set)
@@ -32,9 +33,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
                 // 6. Build request
                 let request = ChatRequest {
                     model: model.id.to_string(),
-                    messages: vec![
-                        Message::text(Role::User, "Hello, who are you?")
-                    ],
+                    messages: vec![Message::text(Role::User, "Hello, who are you?")],
                     ..Default::default()
                 };
 

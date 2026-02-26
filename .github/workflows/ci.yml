@@ -39,6 +39,9 @@ jobs:
       - name: Build and Test Bindings
         run: |
           cd py
+          python -m venv .venv
+          source .venv/bin/activate
+          pip install maturin
           cargo test --verbose
           maturin develop
           python3 tests/test_bindings.py

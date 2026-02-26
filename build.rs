@@ -189,5 +189,6 @@ fn main() {
 
     let out_dir = std::env::var("OUT_DIR").expect("OUT_DIR");
     let out_path = Path::new(&out_dir).join("registry_generated.rs");
-    fs::write(&out_path, out).unwrap_or_else(|e| panic!("failed to write {}: {e}", out_path.display()));
+    fs::write(&out_path, out)
+        .unwrap_or_else(|e| panic!("failed to write {}: {e}", out_path.display()));
 }
