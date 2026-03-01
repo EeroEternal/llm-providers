@@ -5,7 +5,7 @@
     "openai": {
       "label": "OpenAI",
       "endpoints": {
-        "openai": {
+        "global": {
           "label": "OpenAI",
           "region": "global",
           "base_url": "https://api.openai.com/v1",
@@ -118,7 +118,7 @@
     "anthropic": {
       "label": "Anthropic",
       "endpoints": {
-        "anthropic": {
+        "global": {
           "label": "Anthropic",
           "region": "global",
           "base_url": "https://api.anthropic.com",
@@ -177,7 +177,7 @@
     "deepseek": {
       "label": "DeepSeek",
       "endpoints": {
-        "deepseek": {
+        "cn": {
           "label": "DeepSeek",
           "region": "cn",
           "base_url": "https://api.deepseek.com/v1",
@@ -209,7 +209,7 @@
     "aliyun": {
       "label": "Aliyun Bailian",
       "endpoints": {
-        "aliyun": {
+        "cn": {
           "label": "Aliyun Bailian",
           "region": "cn",
           "base_url": "https://dashscope.aliyuncs.com/compatible-mode/v1",
@@ -313,14 +313,14 @@
     "moonshot": {
       "label": "Moonshot AI",
       "endpoints": {
-        "moonshot": {
+        "cn": {
           "label": "Moonshot AI",
           "region": "cn",
           "base_url": "https://api.moonshot.cn/v1",
           "price_currency": "CNY",
           "docs_url": "https://platform.moonshot.cn/docs/guide/model-list"
         },
-        "moonshot_global": {
+        "global": {
           "label": "Moonshot AI Global",
           "region": "global",
           "base_url": "https://api.moonshot.ai/v1",
@@ -424,14 +424,14 @@
     "minimax": {
       "label": "MiniMax",
       "endpoints": {
-        "minimax": {
+        "cn": {
           "label": "MiniMax",
           "region": "cn",
           "base_url": "https://api.minimaxi.com/v1",
           "price_currency": "CNY",
           "docs_url": "https://platform.minimaxi.com/docs/guides/models-intro"
         },
-        "minimax_global": {
+        "global": {
           "label": "MiniMax Global",
           "region": "global",
           "base_url": "https://api.minimax.io/v1",
@@ -562,14 +562,14 @@
     "zhipu": {
       "label": "Zhipu AI",
       "endpoints": {
-        "zhipu": {
+        "cn": {
           "label": "BigModel (Zhipu CN)",
           "region": "cn",
           "base_url": "https://open.bigmodel.cn/api/paas/v4",
           "price_currency": "CNY",
           "docs_url": "https://open.bigmodel.cn/dev/howuse/model"
         },
-        "zhipu_global": {
+        "global": {
           "label": "Z.ai (Zhipu Global)",
           "region": "global",
           "base_url": "https://api.z.ai/api/paas/v4",
@@ -700,7 +700,7 @@
     "tencent": {
       "label": "Tencent Hunyuan",
       "endpoints": {
-        "tencent": {
+        "cn": {
           "label": "Tencent Hunyuan",
           "region": "cn",
           "base_url": "https://hunyuan.tencentcloudapi.com",
@@ -831,7 +831,7 @@
     "volcengine": {
       "label": "Volcengine",
       "endpoints": {
-        "volcengine": {
+        "cn": {
           "label": "Volcengine",
           "region": "cn",
           "base_url": "https://ark.cn-beijing.volces.com/api/v3",
@@ -944,7 +944,7 @@
     "longcat": {
       "label": "LongCat",
       "endpoints": {
-        "longcat": {
+        "cn": {
           "label": "LongCat",
           "region": "cn",
           "base_url": "https://api.longcat.chat/openai/v1",

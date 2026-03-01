@@ -54,7 +54,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-llm_providers = "0.5"
+llm_providers = "0.6"
 ```
 
 ### Python
@@ -87,7 +87,7 @@ fn main() {
     println!("Endpoints: {:?}", endpoints);
 
     // 3. Get endpoint details by ID
-    if let Some((family_id, ep)) = get_endpoint("moonshot_global") {
+    if let Some((family_id, ep)) = get_endpoint("moonshot:global") {
         println!("Family: {}, Base URL: {}, Region: {}", family_id, ep.base_url, ep.region);
     }
 
@@ -109,10 +109,10 @@ print(llm_providers_list.list_providers())
 
 # 2. List all endpoint IDs (for direct configuration)
 print(llm_providers_list.list_endpoints())
-# Output: ['aliyun', 'anthropic', 'moonshot', 'moonshot_global', ...]
+# Output: ['aliyun:cn', 'anthropic:global', 'moonshot:cn', 'moonshot:global', ...]
 
 # 3. Get endpoint details by ID
-family_id, ep = llm_providers_list.get_endpoint("moonshot_global")
+family_id, ep = llm_providers_list.get_endpoint("moonshot:global")
 print(f"Family: {family_id}, Base URL: {ep.base_url}, Region: {ep.region}")
 
 # 4. Get specific model details
@@ -165,6 +165,13 @@ The registry is embedded in the crate as Rust static data (PHF maps, no runtime 
 - **Endpoint**: Regional API entry point under a family. Each endpoint has its own `base_url`, `region`, and `price_currency`.
 - **Region**: `cn` (China), `global` (International), `us`, `eu`, etc.
 - **Price Currency**: `USD` or `CNY`, defined at the endpoint level.
+
+### Endpoint ID Format (v0.6+)
+
+Endpoint IDs are now **composite** to avoid ambiguity across providers:
+
+- `"{provider_id}:{endpoint_key}"` (recommended)
+- Example: `moonshot:global`, `zhipu:cn`
 
 See [docs/providers.md](docs/providers.md) for a full list of endpoint IDs.
 

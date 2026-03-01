@@ -11,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     if let Some(openai) = providers.get("openai") {
         let ep = openai
             .endpoints
-            .get("openai")
+            .get("global")
             .expect("openai endpoint not found");
         println!(
             "Found Provider: {} (Base URL: {}, Region: {})",

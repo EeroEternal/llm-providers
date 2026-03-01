@@ -58,22 +58,42 @@ pub fn list_providers() -> Vec<String> {
 /// List all endpoint IDs (sorted)
 pub fn list_endpoints() -> Vec<String> {
     let mut ids: Vec<String> = get_providers_data()
-        .values()
-        .flat_map(|p| p.endpoints.keys().cloned().map(|s| s.to_string()))
+        .entries()
+        .flat_map(|(provider_id, p)| {
+            p.endpoints
+                .keys()
+                .cloned()
+                .map(move |endpoint_key| format!("{}:{}", provider_id, endpoint_key))
+        })
         .collect();
     ids.sort();
-    ids.dedup();
     ids
 }
 
 /// Find endpoint details by endpoint ID, returning (family_id, Endpoint)
+///
+/// Endpoint ID format: "{provider_id}:{endpoint_key}".
 pub fn get_endpoint(endpoint_id: &str) -> Option<(&'static str, &'static Endpoint)> {
+    if let Some((provider_id, endpoint_key)) = endpoint_id.split_once(':') {
+        for (&pid, provider) in get_providers_data() {
+            if pid == provider_id {
+                let ep = provider.endpoints.get(endpoint_key)?;
+                return Some((pid, ep));
+            }
+        }
+        return None;
+    }
+
+    let mut found: Option<(&'static str, &'static Endpoint)> = None;
     for (&family_id, provider) in get_providers_data() {
         if let Some(ep) = provider.endpoints.get(endpoint_id) {
-            return Some((family_id, ep));
+            if found.is_some() {
+                return None;
+            }
+            found = Some((family_id, ep));
         }
     }
-    None
+    found
 }
 
 /// List all model IDs under a provider family
@@ -225,17 +245,17 @@ mod tests {
         let aliyun = providers.get("aliyun").expect("aliyun not found");
         let ep = aliyun
             .endpoints
-            .get("aliyun")
+            .get("cn")
             .expect("aliyun endpoint not found");
         assert_eq!(ep.region, "cn");
         assert_eq!(ep.price_currency, "CNY");
 
         // Multi-endpoint provider
         let moonshot = providers.get("moonshot").expect("moonshot not found");
-        assert!(moonshot.endpoints.contains_key("moonshot"));
-        assert!(moonshot.endpoints.contains_key("moonshot_global"));
-        assert_eq!(moonshot.endpoints["moonshot"].region, "cn");
-        assert_eq!(moonshot.endpoints["moonshot_global"].region, "global");
+        assert!(moonshot.endpoints.contains_key("cn"));
+        assert!(moonshot.endpoints.contains_key("global"));
+        assert_eq!(moonshot.endpoints["cn"].region, "cn");
+        assert_eq!(moonshot.endpoints["global"].region, "global");
     }
 
     #[test]
@@ -250,14 +270,14 @@ mod tests {
     #[test]
     fn test_list_endpoints() {
         let endpoints = list_endpoints();
-        assert!(endpoints.contains(&"openai".to_string()));
-        assert!(endpoints.contains(&"moonshot".to_string()));
-        assert!(endpoints.contains(&"moonshot_global".to_string()));
+        assert!(endpoints.contains(&"openai:global".to_string()));
+        assert!(endpoints.contains(&"moonshot:cn".to_string()));
+        assert!(endpoints.contains(&"moonshot:global".to_string()));
     }
 
     #[test]
     fn test_get_endpoint() {
-        let (family_id, ep) = get_endpoint("moonshot_global").expect("endpoint not found");
+        let (family_id, ep) = get_endpoint("moonshot:global").expect("endpoint not found");
         assert_eq!(family_id, "moonshot");
         assert_eq!(ep.region, "global");
         assert_eq!(ep.price_currency, "USD");
@@ -302,7 +322,7 @@ mod tests {
         if let Some(openai) = providers.get("openai") {
             let ep = openai
                 .endpoints
-                .get("openai")
+                .get("global")
                 .expect("openai endpoint not found");
             assert!(ep.base_url.contains("api.openai.com"));
             let has_gpt4o = openai.models.iter().any(|m| m.id == "gpt-4o");
