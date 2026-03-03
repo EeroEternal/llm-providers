@@ -1,7 +1,84 @@
 {
   "version": "2.0",
-  "updated_at": "2026-02-25T14:44:00.000000Z",
+  "updated_at": "2026-03-03T10:00:00.000000Z",
   "providers": {
+    "google": {
+      "label": "Google Gemini",
+      "endpoints": {
+        "global": {
+          "label": "Google Gemini",
+          "region": "global",
+          "base_url": "https://generativelanguage.googleapis.com/v1beta",
+          "price_currency": "USD",
+          "docs_url": "https://ai.google.dev/gemini-api/docs/models"
+        }
+      },
+      "models": [
+        {
+          "id": "gemini-3",
+          "name": "Gemini 3",
+          "description": "Next generation multimodal model with frontier intelligence",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 5.0,
+          "output_price": 20.0
+        },
+        {
+          "id": "gemini-2.5-pro",
+          "name": "Gemini 2.5 Pro",
+          "description": "Highly capable multimodal model for complex reasoning and tasks",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 3.5,
+          "output_price": 10.5
+        },
+        {
+          "id": "gemini-2.5-flash",
+          "name": "Gemini 2.5 Flash",
+          "description": "Fast and versatile multimodal model for high-volume tasks",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 0.1,
+          "output_price": 0.4
+        },
+        {
+          "id": "gemini-2.5-flash-lite",
+          "name": "Gemini 2.5 Flash-Lite",
+          "description": "Lite version of Gemini 2.5 Flash for ultra-fast response",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 0.05,
+          "output_price": 0.2
+        },
+        {
+          "id": "gemini-2.0-flash",
+          "name": "Gemini 2.0 Flash",
+          "description": "Previous flagship flash model, fast and efficient",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 0.1,
+          "output_price": 0.4
+        },
+        {
+          "id": "gemini-1.5-pro",
+          "name": "Gemini 1.5 Pro",
+          "description": "Mid-range model with massive context window",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 3.5,
+          "output_price": 10.5
+        },
+        {
+          "id": "gemini-1.5-flash",
+          "name": "Gemini 1.5 Flash",
+          "description": "Fast and cost-efficient multimodal model",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 0.075,
+          "output_price": 0.3
+        }
+      ]
+    },
     "openai": {
       "label": "OpenAI",
       "endpoints": {

@@ -53,10 +53,10 @@ print(llm_providers_list.list_providers())
 
 # 2. List all endpoint IDs (for direct configuration)
 print(llm_providers_list.list_endpoints())
-# Output: ['aliyun', 'anthropic', 'moonshot', 'moonshot_global', ...]
+# Output: ['aliyun:cn', 'anthropic:global', 'moonshot:cn', 'moonshot:global', ...]
 
 # 3. Get endpoint details by ID
-family_id, ep = llm_providers_list.get_endpoint("moonshot_global")
+family_id, ep = llm_providers_list.get_endpoint("moonshot:global")
 print(f"Family: {family_id}, Base URL: {ep.base_url}, Region: {ep.region}")
 
 # 4. Get specific model details
