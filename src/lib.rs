@@ -168,7 +168,7 @@ pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
     results.sort_by(|a, b| {
         let p_cmp = a.0.cmp(&b.0);
         if p_cmp == std::cmp::Ordering::Equal {
-            a.1.id.cmp(&b.1.id)
+            a.1.id.cmp(b.1.id)
         } else {
             p_cmp
         }
