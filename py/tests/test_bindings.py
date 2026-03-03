@@ -28,9 +28,6 @@ class TestLLMProviders(unittest.TestCase):
         self.assertEqual(model.id, "gpt-4o")
         self.assertEqual(model.name, "GPT-4o")
         self.assertTrue(model.supports_tools)
-        # Test new field
-        self.assertTrue(hasattr(model, "price_currency"))
-        self.assertEqual(model.price_currency, "USD")
         
         # Test non-existing model
         with self.assertRaises(ValueError):
@@ -41,14 +38,15 @@ class TestLLMProviders(unittest.TestCase):
         # Test existing provider
         openai = llm_providers_list.get_provider("openai")
         self.assertEqual(openai.label, "OpenAI")
-        self.assertTrue(openai.base_url.startswith("https://api.openai.com"))
+        self.assertIsInstance(openai.endpoints, dict)
+        self.assertIn("global", openai.endpoints)
+        
+        endpoint = openai.endpoints["global"]
+        self.assertTrue(endpoint.base_url.startswith("https://api.openai.com"))
+        self.assertEqual(endpoint.price_currency, "USD")
+        
         self.assertIsInstance(openai.models, list)
         self.assertTrue(len(openai.models) > 0)
-        
-        # Test new provider fields
-        self.assertTrue(hasattr(openai, "provider_family"))
-        self.assertTrue(hasattr(openai, "region"))
-        self.assertTrue(hasattr(openai, "docs_url"))
         
         # Test model attributes
         model = openai.models[0]
@@ -59,7 +57,6 @@ class TestLLMProviders(unittest.TestCase):
         self.assertTrue(hasattr(model, "context_length"))
         self.assertTrue(hasattr(model, "input_price"))
         self.assertTrue(hasattr(model, "output_price"))
-        self.assertTrue(hasattr(model, "price_currency"))
 
         # Test non-existing provider
         with self.assertRaises(ValueError):
@@ -85,8 +82,12 @@ class TestLLMProviders(unittest.TestCase):
         info = json.loads(info_json)
         self.assertEqual(info["label"], "OpenAI")
         self.assertIn("models", info)
-        self.assertIn("provider_family", info)
-        self.assertIn("region", info)
+        self.assertIn("endpoints", info)
+        self.assertIn("global", info["endpoints"])
+        
+        endpoint = info["endpoints"]["global"]
+        self.assertEqual(endpoint["region"], "global")
+        self.assertTrue(endpoint["base_url"].startswith("https://api.openai.com"))
         
         # Test non-existing provider
         with self.assertRaises(ValueError):
