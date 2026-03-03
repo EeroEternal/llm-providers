@@ -1,6 +1,6 @@
 [package]
 name = "llm_providers"
-version = "0.7.2"
+version = "0.7.3"
 edition = "2021"
 description = "A unified source of truth for LLM providers, models, pricing, and capabilities."
 license = "MIT"

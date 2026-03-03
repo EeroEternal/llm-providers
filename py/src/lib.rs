@@ -1,9 +1,6 @@
 use llm_providers::{
-    get_providers_data,
-    Model as RustModel,
+    get_providers_data, Endpoint as RustEndpoint, Model as RustModel, ModelFilter,
     Provider as RustProvider,
-    Endpoint as RustEndpoint,
-    ModelFilter,
 };
 use pyo3::prelude::*;
 use std::collections::HashMap;
@@ -113,17 +110,14 @@ fn list_endpoints() -> Vec<String> {
 fn get_endpoint(endpoint_id: &str) -> PyResult<(String, Endpoint)> {
     llm_providers::get_endpoint(endpoint_id)
         .map(|(fid, ep)| (fid.to_string(), Endpoint::from(ep)))
-        .ok_or_else(|| {
-            pyo3::exceptions::PyValueError::new_err("Endpoint not found")
-        })
+        .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Endpoint not found"))
 }
 
 /// List all model IDs for a specific provider
 #[pyfunction]
 fn list_models(provider_id: &str) -> PyResult<Vec<String>> {
-    llm_providers::list_models(provider_id).ok_or_else(|| {
-        pyo3::exceptions::PyValueError::new_err("Provider not found")
-    })
+    llm_providers::list_models(provider_id)
+        .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Provider not found"))
 }
 
 /// Get detailed information for a specific model
@@ -131,9 +125,7 @@ fn list_models(provider_id: &str) -> PyResult<Vec<String>> {
 fn get_model(provider_id: &str, model_id: &str) -> PyResult<Model> {
     llm_providers::get_model(provider_id, model_id)
         .map(|m| Model::from(&m))
-        .ok_or_else(|| {
-            pyo3::exceptions::PyValueError::new_err("Model not found")
-        })
+        .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Model not found"))
 }
 
 /// Filter models based on criteria.
@@ -152,7 +144,7 @@ fn filter_models(
         supports_tools,
         min_context_length,
     };
-    
+
     llm_providers::filter_models(filter)
         .into_iter()
         .map(|(pid, m)| (pid, Model::from(&m)))

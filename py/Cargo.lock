@@ -43,7 +43,7 @@ checksum = "6800badb6cb2082ffd7b6a67e6125bb39f18782f793520caee8cb8846be06112"
 
 [[package]]
 name = "llm_providers"
-version = "0.7.1"
+version = "0.7.2"
 dependencies = [
  "phf",
  "serde",
@@ -52,7 +52,7 @@ dependencies = [
 
 [[package]]
 name = "llm_providers_list"
-version = "0.7.1"
+version = "0.7.2"
 dependencies = [
  "llm_providers",
  "pyo3",
