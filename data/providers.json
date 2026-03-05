@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated_at": "2026-03-03T10:00:00.000000Z",
+  "updated_at": "2026-03-05T09:37:45.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -24,13 +24,58 @@
           "output_price": 20.0
         },
         {
+          "id": "gemini-3.1-pro-preview",
+          "name": "Gemini 3.1 Pro Preview",
+          "description": "Preview model",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": 2.0,
+          "output_price": 12.0
+        },
+        {
+          "id": "gemini-3.1-pro-preview-customtools",
+          "name": "Gemini 3.1 Pro Preview Custom Tools",
+          "description": "Preview model with custom tools",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": 2.0,
+          "output_price": 12.0
+        },
+        {
+          "id": "gemini-3-pro-image-preview",
+          "name": "Gemini 3 Pro Image Preview",
+          "description": "Preview image generation model",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": 2.0,
+          "output_price": 12.0
+        },
+        {
+          "id": "gemini-3-flash-preview",
+          "name": "Gemini 3 Flash Preview",
+          "description": "Preview flash model",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": 0.5,
+          "output_price": 3.0
+        },
+        {
+          "id": "gemini-embedding-001",
+          "name": "Gemini Embedding 001",
+          "description": "Embedding model",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": 0.15,
+          "output_price": 0.15
+        },
+        {
           "id": "gemini-2.5-pro",
           "name": "Gemini 2.5 Pro",
           "description": "Highly capable multimodal model for complex reasoning and tasks",
           "supports_tools": true,
           "context_length": 2000000,
-          "input_price": 3.5,
-          "output_price": 10.5
+          "input_price": 1.25,
+          "output_price": 10.0
         },
         {
           "id": "gemini-2.5-flash",
@@ -259,14 +304,14 @@
           "region": "cn",
           "base_url": "https://api.deepseek.com/v1",
           "price_currency": "CNY",
-          "docs_url": "https://api-docs.deepseek.com/zh-cn/information/model_list"
+          "docs_url": "https://api-docs.deepseek.com/api/list-models"
         },
         "global": {
           "label": "DeepSeek",
           "region": "global",
           "base_url": "https://api.deepseek.com/v1",
           "price_currency": "USD",
-          "docs_url": "https://api-docs.deepseek.com/zh-cn/information/model_list"
+          "docs_url": "https://api-docs.deepseek.com/api/list-models"
         }
       },
       "models": [
@@ -308,8 +353,8 @@
           "description": "Latest flagship, best for agentic coding and tool calling",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0025,
-          "output_price": 0.01
+          "input_price": 2.5,
+          "output_price": 10.0
         },
         {
           "id": "qwen3.5-plus",
@@ -317,8 +362,17 @@
           "description": "Balanced performance, speed and cost, text/image/video input",
           "supports_tools": true,
           "context_length": 1000000,
-          "input_price": 0.0008,
-          "output_price": 0.002
+          "input_price": 0.8,
+          "output_price": 4.8
+        },
+        {
+          "id": "qwen3.5-flash",
+          "name": "Qwen3.5 Flash",
+          "description": "Fast model with low cost",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 0.2,
+          "output_price": 2.0
         },
         {
           "id": "qwen-max",
@@ -326,8 +380,8 @@
           "description": "Previous flagship for complex multi-step tasks",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0032,
-          "output_price": 0.0128
+          "input_price": 2.4,
+          "output_price": 9.6
         },
         {
           "id": "qwen-plus",
@@ -335,8 +389,8 @@
           "description": "Balanced performance, speed and cost, suitable for medium complexity tasks",
           "supports_tools": true,
           "context_length": 1000000,
-          "input_price": 0.0008,
-          "output_price": 0.002
+          "input_price": 0.8,
+          "output_price": 2.0
         },
         {
           "id": "qwen-flash",
@@ -344,8 +398,8 @@
           "description": "Suitable for simple tasks with fast speed and low cost",
           "supports_tools": true,
           "context_length": 1000000,
-          "input_price": 0.00015,
-          "output_price": 0.0015
+          "input_price": 0.15,
+          "output_price": 1.5
         },
         {
           "id": "qwen-coder-turbo",
@@ -402,14 +456,14 @@
           "region": "cn",
           "base_url": "https://api.moonshot.cn/v1",
           "price_currency": "CNY",
-          "docs_url": "https://platform.moonshot.cn/docs/guide/model-list"
+          "docs_url": "https://platform.moonshot.cn/docs/pricing/chat"
         },
         "global": {
           "label": "Moonshot AI Global",
           "region": "global",
           "base_url": "https://api.moonshot.ai/v1",
           "price_currency": "USD",
-          "docs_url": "https://platform.moonshot.ai/docs/overview"
+          "docs_url": "https://platform.moonshot.ai/docs/pricing/chat#generation-model-kimi-k2"
         }
       },
       "models": [
@@ -486,6 +540,15 @@
           "output_price": 10.0
         },
         {
+          "id": "moonshot-v1-8k-vision-preview",
+          "name": "Moonshot V1 8K Vision Preview",
+          "description": "Vision model, understands image content and outputs text, context length 8K",
+          "supports_tools": true,
+          "context_length": 8192,
+          "input_price": 2.0,
+          "output_price": 10.0
+        },
+        {
           "id": "moonshot-v1-32k",
           "name": "Moonshot V1 32K",
           "description": "Classic v1 model with 32K context",
@@ -495,9 +558,27 @@
           "output_price": 20.0
         },
         {
+          "id": "moonshot-v1-32k-vision-preview",
+          "name": "Moonshot V1 32K Vision Preview",
+          "description": "Vision model, understands image content and outputs text, context length 32K",
+          "supports_tools": true,
+          "context_length": 32768,
+          "input_price": 5.0,
+          "output_price": 20.0
+        },
+        {
           "id": "moonshot-v1-128k",
           "name": "Moonshot V1 128K",
           "description": "Classic v1 model with 128K context",
+          "supports_tools": true,
+          "context_length": 131072,
+          "input_price": 10.0,
+          "output_price": 30.0
+        },
+        {
+          "id": "moonshot-v1-128k-vision-preview",
+          "name": "Moonshot V1 128K Vision Preview",
+          "description": "Vision model, understands image content and outputs text, context length 128K",
           "supports_tools": true,
           "context_length": 131072,
           "input_price": 10.0,
@@ -552,8 +633,8 @@
           "output_price": 0.0
         },
         {
-          "id": "MiniMax-M2.1-lightning",
-          "name": "MiniMax M2.1 Lightning",
+          "id": "MiniMax-M2.1-highspeed",
+          "name": "MiniMax M2.1 Highspeed",
           "description": "Same performance as M2.1 with faster inference speed",
           "supports_tools": true,
           "context_length": 200000,
@@ -566,6 +647,33 @@
           "description": "200K context, 128K output, supports function calling and advanced reasoning",
           "supports_tools": true,
           "context_length": 200000,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "M2-her",
+          "name": "MiniMax M2-her",
+          "description": "Multi-character roleplay, immersive long-horizon interaction",
+          "supports_tools": true,
+          "context_length": 204800,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "speech-2.8-hd",
+          "name": "Speech 2.8 HD",
+          "description": "Ultimate similarity, ultra-high quality voice generation",
+          "supports_tools": false,
+          "context_length": 4096,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "speech-2.8-turbo",
+          "name": "Speech 2.8 Turbo",
+          "description": "Best cost-performance, low latency voice generation",
+          "supports_tools": false,
+          "context_length": 4096,
           "input_price": 0.0,
           "output_price": 0.0
         },
@@ -633,6 +741,42 @@
           "output_price": 0.0
         },
         {
+          "id": "image-01",
+          "name": "Image 01",
+          "description": "Text-to-image generation",
+          "supports_tools": false,
+          "context_length": 4096,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "image-01-live",
+          "name": "Image 01 Live",
+          "description": "Text-to-image generation (live)",
+          "supports_tools": false,
+          "context_length": 4096,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "music-2.5+",
+          "name": "Music 2.5+",
+          "description": "Text-to-music generation",
+          "supports_tools": false,
+          "context_length": 4096,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "music-2.5",
+          "name": "Music 2.5",
+          "description": "Text-to-music generation",
+          "supports_tools": false,
+          "context_length": 4096,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
           "id": "Music-2.0",
           "name": "Music 2.0",
           "description": "Text-to-music with enhanced musicality, natural vocals and smooth melodies",
@@ -651,7 +795,7 @@
           "region": "cn",
           "base_url": "https://open.bigmodel.cn/api/paas/v4",
           "price_currency": "CNY",
-          "docs_url": "https://open.bigmodel.cn/dev/howuse/model"
+          "docs_url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         },
         "global": {
           "label": "Z.ai (Zhipu Global)",
@@ -660,6 +804,327 @@
           "price_currency": "USD",
           "docs_url": "https://docs.z.ai/api-reference/introduction"
         }
+      },
+      "endpoint_models": {
+        "cn": [
+          {
+            "id": "glm-5",
+            "name": "GLM-5",
+            "description": "Fifth gen flagship, 745B params, 200K context, SOTA reasoning",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 4.0,
+            "output_price": 18.0
+          },
+          {
+            "id": "glm-5-code",
+            "name": "GLM-5-Code",
+            "description": "Coding optimized model",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 6.0,
+            "output_price": 28.0
+          },
+          {
+            "id": "glm-4.7",
+            "name": "GLM-4.7",
+            "description": "Latest flagship model, released December 2025",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 2.0,
+            "output_price": 8.0
+          },
+          {
+            "id": "glm-4.7-flashx",
+            "name": "GLM-4.7-FlashX",
+            "description": "Ultra-fast model",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 0.5,
+            "output_price": 3.0
+          },
+          {
+            "id": "glm-4.7-flash",
+            "name": "GLM-4.7-Flash",
+            "description": "Free model",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "glm-4.6",
+            "name": "GLM-4.6",
+            "description": "Flagship model with 200K context, advanced coding ability",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 0.6,
+            "output_price": 2.2
+          },
+          {
+            "id": "glm-4.6v",
+            "name": "GLM-4.6V",
+            "description": "Vision model with multimodal capabilities",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 1.0,
+            "output_price": 3.0
+          },
+          {
+            "id": "glm-4.6v-flashx",
+            "name": "GLM-4.6V-FlashX",
+            "description": "Ultra-fast vision model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.15,
+            "output_price": 1.5
+          },
+          {
+            "id": "glm-4.6v-flash",
+            "name": "GLM-4.6V-Flash",
+            "description": "Free vision model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "glm-4.5",
+            "name": "GLM-4.5",
+            "description": "Strong performance with powerful reasoning and code generation, 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.6,
+            "output_price": 2.2
+          },
+          {
+            "id": "glm-4.5v",
+            "name": "GLM-4.5V",
+            "description": "Vision model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.6,
+            "output_price": 1.8
+          },
+          {
+            "id": "glm-4.5-x",
+            "name": "GLM-4.5-X",
+            "description": "Ultra-fast version with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 2.2,
+            "output_price": 8.9
+          },
+          {
+            "id": "glm-4.5-air",
+            "name": "GLM-4.5 Air",
+            "description": "Best performance at same parameter scale, 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.8,
+            "output_price": 2.0
+          },
+          {
+            "id": "glm-4.5-airx",
+            "name": "GLM-4.5 AirX",
+            "description": "Fast inference with cost-effective pricing",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 1.1,
+            "output_price": 4.5
+          },
+          {
+            "id": "glm-4-32b-0414-128k",
+            "name": "GLM-4-32B-0414-128K",
+            "description": "32B parameter model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.1,
+            "output_price": 0.1
+          },
+          {
+            "id": "glm-4.6v-flash",
+            "name": "GLM-4.6V-Flash",
+            "description": "Free vision model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "glm-4.5v",
+            "name": "GLM-4.5V",
+            "description": "Vision model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 2.0,
+            "output_price": 6.0
+          },
+          {
+            "id": "glm-4.5-flash",
+            "name": "GLM-4.5-Flash",
+            "description": "Free model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          }
+        ],
+        "global": [
+          {
+            "id": "glm-5",
+            "name": "GLM-5",
+            "description": "Fifth gen flagship, 745B params, 200K context, SOTA reasoning",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 1.0,
+            "output_price": 3.2
+          },
+          {
+            "id": "glm-5-code",
+            "name": "GLM-5-Code",
+            "description": "Coding optimized model",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 1.2,
+            "output_price": 5.0
+          },
+          {
+            "id": "glm-4.7",
+            "name": "GLM-4.7",
+            "description": "Latest flagship model, released December 2025",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.6,
+            "output_price": 2.2
+          },
+          {
+            "id": "glm-4.7-flashx",
+            "name": "GLM-4.7-FlashX",
+            "description": "Ultra-fast model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.07,
+            "output_price": 0.4
+          },
+          {
+            "id": "glm-4.6",
+            "name": "GLM-4.6",
+            "description": "Flagship model with 200K context, advanced coding ability",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 0.6,
+            "output_price": 2.2
+          },
+          {
+            "id": "glm-4.5",
+            "name": "GLM-4.5",
+            "description": "Strong performance with powerful reasoning and code generation, 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.6,
+            "output_price": 2.2
+          },
+          {
+            "id": "glm-4.5-x",
+            "name": "GLM-4.5-X",
+            "description": "Ultra-fast version with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 2.2,
+            "output_price": 8.9
+          },
+          {
+            "id": "glm-4.5-air",
+            "name": "GLM-4.5-Air",
+            "description": "Best performance at same parameter scale, 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.2,
+            "output_price": 1.1
+          },
+          {
+            "id": "glm-4.5-airx",
+            "name": "GLM-4.5-AirX",
+            "description": "Fast inference with cost-effective pricing",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 1.1,
+            "output_price": 4.5
+          },
+          {
+            "id": "glm-4-32b-0414-128k",
+            "name": "GLM-4-32B-0414-128K",
+            "description": "32B parameter model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.1,
+            "output_price": 0.1
+          },
+          {
+            "id": "glm-4.7-flash",
+            "name": "GLM-4.7-Flash",
+            "description": "Free model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "glm-4.5-flash",
+            "name": "GLM-4.5-Flash",
+            "description": "Free model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "glm-4.6v",
+            "name": "GLM-4.6V",
+            "description": "Vision model with multimodal capabilities",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.3,
+            "output_price": 0.9
+          },
+          {
+            "id": "glm-ocr",
+            "name": "GLM-OCR",
+            "description": "OCR model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.03,
+            "output_price": 0.03
+          },
+          {
+            "id": "glm-4.6v-flashx",
+            "name": "GLM-4.6V-FlashX",
+            "description": "Ultra-fast vision model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.04,
+            "output_price": 0.4
+          },
+          {
+            "id": "glm-4.5v",
+            "name": "GLM-4.5V",
+            "description": "Vision model with 128K context",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.6,
+            "output_price": 1.8
+          },
+          {
+            "id": "glm-4.6v-flash",
+            "name": "GLM-4.6V-Flash",
+            "description": "Free vision model",
+            "supports_tools": true,
+            "context_length": 128000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          }
+        ]
       },
       "models": [
         {
@@ -799,8 +1264,8 @@
           "description": "Hunyuan 2.0 thinking model with enhanced complex instruction following, multi-turn and long-text understanding, code, agent, and reasoning capabilities",
           "supports_tools": true,
           "context_length": 131072,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 3.975,
+          "output_price": 15.9
         },
         {
           "id": "hunyuan-2.0-instruct-20251111",
@@ -808,8 +1273,8 @@
           "description": "Hunyuan 2.0 instruction model with enhanced instruction following, multi-turn and long-text understanding, creative writing, knowledge accuracy, code and reasoning capabilities",
           "supports_tools": true,
           "context_length": 131072,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 3.18,
+          "output_price": 7.95
         },
         {
           "id": "hunyuan-t1-latest",
@@ -817,8 +1282,8 @@
           "description": "Industry's first large-scale Hybrid-Transformer-Mamba reasoning model with extended reasoning capability and ultra-fast decoding speed",
           "supports_tools": true,
           "context_length": 32768,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 1.0,
+          "output_price": 4.0
         },
         {
           "id": "hunyuan-a13b",
@@ -826,8 +1291,8 @@
           "description": "Hunyuan MoE structure with 80B total parameters, 13B activation, supports fast/slow thinking mode switching",
           "supports_tools": true,
           "context_length": 229376,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 0.5,
+          "output_price": 2.0
         },
         {
           "id": "hunyuan-turbos-latest",
@@ -835,8 +1300,8 @@
           "description": "Latest version of Hunyuan flagship model with stronger thinking capabilities and better experience",
           "supports_tools": true,
           "context_length": 32768,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 0.8,
+          "output_price": 2.0
         },
         {
           "id": "hunyuan-lite",
@@ -853,8 +1318,8 @@
           "description": "Supports 33 language translations and 5 ethnic language translations, ranked 1st in 30 languages at WMT25",
           "supports_tools": false,
           "context_length": 4096,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 1.2,
+          "output_price": 3.6
         },
         {
           "id": "hunyuan-translation-lite",
@@ -862,8 +1327,8 @@
           "description": "Translation specialized model based on Hunyuan 2B-Dense, supports 16+ language translations",
           "supports_tools": false,
           "context_length": 4096,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 1.0,
+          "output_price": 3.0
         },
         {
           "id": "hunyuan-large-role-latest",
@@ -871,8 +1336,8 @@
           "description": "Role-playing specialized model with significantly improved character consistency and dialogue depth",
           "supports_tools": false,
           "context_length": 28672,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 2.4,
+          "output_price": 9.6
         },
         {
           "id": "hunyuan-vision-1.5-instruct",
@@ -880,8 +1345,8 @@
           "description": "Image-to-text fast thinking model with significant improvements in image recognition, analysis and reasoning",
           "supports_tools": true,
           "context_length": 24576,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 3.0,
+          "output_price": 9.0
         },
         {
           "id": "hunyuan-t1-vision-20250916",
@@ -907,8 +1372,17 @@
           "description": "Video understanding model supporting video description, video Q&A and other basic video understanding capabilities",
           "supports_tools": true,
           "context_length": 24576,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 3.0,
+          "output_price": 9.0
+        },
+        {
+          "id": "hunyuan-embedding",
+          "name": "Hunyuan Embedding",
+          "description": "Text embedding model",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": 0.7,
+          "output_price": 0.7
         }
       ]
     },
@@ -920,18 +1394,189 @@
           "region": "cn",
           "base_url": "https://ark.cn-beijing.volces.com/api/v3",
           "price_currency": "CNY",
-          "docs_url": "https://www.volcengine.com/docs/82379/1099475"
+          "docs_url": "https://www.volcengine.com/docs/82379/1330310"
         }
       },
       "models": [
+        {
+          "id": "GLM-4.7",
+          "name": "GLM-4.7",
+          "description": "Zhipu GLM model provided via Ark",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 2.0,
+          "output_price": 8.0
+        },
+        {
+          "id": "deepseek-r1",
+          "name": "DeepSeek R1",
+          "description": "Deep thinking model",
+          "supports_tools": true,
+          "context_length": 131072,
+          "input_price": 4.0,
+          "output_price": 16.0
+        },
+        {
+          "id": "deepseek-v3.1",
+          "name": "DeepSeek V3.1",
+          "description": "Deep thinking, text generation, tool calling",
+          "supports_tools": true,
+          "context_length": 131072,
+          "input_price": 4.0,
+          "output_price": 12.0
+        },
+        {
+          "id": "deepseek-v3",
+          "name": "DeepSeek V3",
+          "description": "Deep thinking, text generation, tool calling",
+          "supports_tools": true,
+          "context_length": 131072,
+          "input_price": 2.0,
+          "output_price": 8.0
+        },
+        {
+          "id": "doubao-1.5-lite-32k",
+          "name": "Doubao 1.5 Lite 32K",
+          "description": "Lite 32K model",
+          "supports_tools": true,
+          "context_length": 32768,
+          "input_price": 0.3,
+          "output_price": 0.6
+        },
+        {
+          "id": "doubao-1.5-pro-32k",
+          "name": "Doubao 1.5 Pro 32K",
+          "description": "Pro 32K model",
+          "supports_tools": true,
+          "context_length": 32768,
+          "input_price": 0.8,
+          "output_price": 2.0
+        },
+        {
+          "id": "doubao-1.5-thinking-pro",
+          "name": "Doubao 1.5 Thinking Pro",
+          "description": "Thinking Pro model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 4.0,
+          "output_price": 16.0
+        },
+        {
+          "id": "doubao-1.5-thinking-vision-pro",
+          "name": "Doubao 1.5 Thinking Vision Pro",
+          "description": "Thinking + vision model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 3.0,
+          "output_price": 9.0
+        },
+        {
+          "id": "doubao-1.5-ui-tars",
+          "name": "Doubao 1.5 UI Tars",
+          "description": "GUI task model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 3.5,
+          "output_price": 12.0
+        },
+        {
+          "id": "doubao-1.5-vision-lite",
+          "name": "Doubao 1.5 Vision Lite",
+          "description": "Vision lite model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 1.5,
+          "output_price": 4.5
+        },
+        {
+          "id": "doubao-1.5-vision-pro",
+          "name": "Doubao 1.5 Vision Pro",
+          "description": "Vision pro model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 3.0,
+          "output_price": 9.0
+        },
+        {
+          "id": "doubao-lite-32k",
+          "name": "Doubao Lite 32K",
+          "description": "Lite 32K model",
+          "supports_tools": true,
+          "context_length": 32768,
+          "input_price": 0.3,
+          "output_price": 0.6
+        },
+        {
+          "id": "doubao-seed-2.0-code",
+          "name": "Doubao Seed 2.0 Code",
+          "description": "Seed 2.0 coding model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 3.2,
+          "output_price": 16.0
+        },
+        {
+          "id": "doubao-seed-2.0-lite",
+          "name": "Doubao Seed 2.0 Lite",
+          "description": "Seed 2.0 lite model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 0.6,
+          "output_price": 3.6
+        },
+        {
+          "id": "doubao-seed-2.0-mini",
+          "name": "Doubao Seed 2.0 Mini",
+          "description": "Seed 2.0 mini model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 0.2,
+          "output_price": 2.0
+        },
+        {
+          "id": "doubao-seed-2.0-pro",
+          "name": "Doubao Seed 2.0 Pro",
+          "description": "Seed 2.0 pro model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 3.2,
+          "output_price": 16.0
+        },
+        {
+          "id": "doubao-seed-code",
+          "name": "Doubao Seed Code",
+          "description": "Programming enhanced model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 1.2,
+          "output_price": 8.0
+        },
+        {
+          "id": "doubao-seed-1.6",
+          "name": "Doubao Seed 1.6",
+          "description": "General model with deep thinking, text generation and tool calling",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 0.8,
+          "output_price": 2.0
+        },
+        {
+          "id": "doubao-seed-1.6-thinking",
+          "name": "Doubao Seed 1.6 Thinking",
+          "description": "Deep thinking model",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 0.8,
+          "output_price": 8.0
+        },
         {
           "id": "doubao-seed-1-8-251215",
           "name": "Doubao Seed 1.8",
           "description": "Most powerful multimodal agent model with enhanced capabilities",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 0.8,
+          "output_price": 2.0
         },
         {
           "id": "doubao-seed-code-preview-251028",
@@ -939,8 +1584,8 @@
           "description": "Programming enhanced - deep thinking, text generation, multimodal understanding, tool calling",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 1.2,
+          "output_price": 8.0
         },
         {
           "id": "doubao-seed-1-6-lite-251015",
@@ -948,8 +1593,8 @@
           "description": "Lightweight model with deep thinking, text generation, multimodal understanding, tool calling",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 0.3,
+          "output_price": 0.6
         },
         {
           "id": "doubao-seed-1-6-flash-250828",
@@ -957,8 +1602,8 @@
           "description": "Fast model with deep thinking, text generation, vision grounding, multimodal understanding",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 0.15,
+          "output_price": 1.5
         },
         {
           "id": "doubao-seed-1-6-vision-250815",
@@ -966,8 +1611,8 @@
           "description": "Vision model with deep thinking, multimodal understanding, GUI task processing",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 0.8,
+          "output_price": 8.0
         },
         {
           "id": "doubao-seed-translation-250915",
@@ -975,8 +1620,8 @@
           "description": "Translation enhanced model",
           "supports_tools": false,
           "context_length": 4096,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 1.2,
+          "output_price": 3.6
         },
         {
           "id": "deepseek-v3-2-251201",
@@ -984,8 +1629,8 @@
           "description": "Deep thinking, text generation, tool calling",
           "supports_tools": true,
           "context_length": 131072,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 2.0,
+          "output_price": 3.0
         },
         {
           "id": "deepseek-v3-1-terminus",
@@ -993,8 +1638,17 @@
           "description": "Deep thinking, text generation, tool calling",
           "supports_tools": true,
           "context_length": 131072,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 4.0,
+          "output_price": 12.0
+        },
+        {
+          "id": "kimi-k2",
+          "name": "Kimi K2",
+          "description": "Kimi K2 model provided via Ark",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 4.0,
+          "output_price": 16.0
         },
         {
           "id": "kimi-k2-thinking-251104",
@@ -1002,8 +1656,8 @@
           "description": "Deep thinking, tool calling",
           "supports_tools": true,
           "context_length": 262144,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 4.0,
+          "output_price": 16.0
         },
         {
           "id": "doubao-seedance-1-5-pro-251215",
@@ -1050,6 +1704,24 @@
           "id": "LongCat-Flash-Thinking",
           "name": "LongCat Flash Thinking",
           "description": "Deep thinking model",
+          "supports_tools": true,
+          "context_length": 32768,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "LongCat-Flash-Thinking-2601",
+          "name": "LongCat Flash Thinking 2601",
+          "description": "Upgraded deep thinking model",
+          "supports_tools": true,
+          "context_length": 32768,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "LongCat-Flash-Lite",
+          "name": "LongCat Flash Lite",
+          "description": "Efficient lightweight MoE model",
           "supports_tools": true,
           "context_length": 32768,
           "input_price": 0.0,

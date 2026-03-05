@@ -25,6 +25,7 @@ pub struct Provider {
     pub label: &'static str,
     pub endpoints: &'static phf::Map<&'static str, Endpoint>,
     pub models: &'static [Model],
+    pub endpoint_models: Option<&'static phf::Map<&'static str, &'static [Model]>>,
 }
 
 include!(concat!(env!("OUT_DIR"), "/registry_generated.rs"));
@@ -103,6 +104,26 @@ pub fn list_models(provider_id: &str) -> Option<Vec<String>> {
         .map(|p| p.models.iter().map(|m| m.id.to_string()).collect())
 }
 
+/// List all model IDs under a specific endpoint.
+///
+/// Endpoint ID format: "{provider_id}:{endpoint_key}".
+///
+/// Behavior:
+/// - If the provider has endpoint-specific models, return those.
+/// - Otherwise fall back to provider-level models.
+pub fn list_models_for_endpoint(endpoint_id: &str) -> Option<Vec<String>> {
+    let (provider_id, endpoint_key) = endpoint_id.split_once(':')?;
+    let provider = get_providers_data().get(provider_id)?;
+
+    if let Some(endpoint_models) = provider.endpoint_models {
+        if let Some(models) = endpoint_models.get(endpoint_key) {
+            return Some(models.iter().map(|m| m.id.to_string()).collect());
+        }
+    }
+
+    Some(provider.models.iter().map(|m| m.id.to_string()).collect())
+}
+
 /// Get model details by (provider_id, model_id)
 pub fn get_model(provider_id: &str, model_id: &str) -> Option<Model> {
     get_model_ref(provider_id, model_id).copied()
@@ -112,6 +133,26 @@ pub fn get_model_ref(provider_id: &str, model_id: &str) -> Option<&'static Model
     get_providers_data()
         .get(provider_id)
         .and_then(|p| p.models.iter().find(|m| m.id == model_id))
+}
+
+/// Get model details by endpoint_id and model_id.
+///
+/// Endpoint ID format: "{provider_id}:{endpoint_key}".
+///
+/// Behavior:
+/// - If endpoint-specific models exist for that endpoint, search within them.
+/// - Otherwise fall back to provider-level models.
+pub fn get_model_for_endpoint(endpoint_id: &str, model_id: &str) -> Option<Model> {
+    let (provider_id, endpoint_key) = endpoint_id.split_once(':')?;
+    let provider = get_providers_data().get(provider_id)?;
+
+    if let Some(endpoint_models) = provider.endpoint_models {
+        if let Some(models) = endpoint_models.get(endpoint_key) {
+            return models.iter().find(|m| m.id == model_id).copied();
+        }
+    }
+
+    provider.models.iter().find(|m| m.id == model_id).copied()
 }
 
 #[derive(Default)]

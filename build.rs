@@ -20,7 +20,10 @@ struct RegistryFile {
 struct ProviderFamily {
     label: String,
     endpoints: BTreeMap<String, EndpointJson>,
+    #[serde(default)]
     models: Vec<ModelJson>,
+    #[serde(default)]
+    endpoint_models: BTreeMap<String, Vec<ModelJson>>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -121,9 +124,38 @@ fn main() {
         if p.endpoints.is_empty() {
             panic!("provider {pid}: endpoints must be non-empty");
         }
-        if p.models.is_empty() {
-            panic!("provider {pid}: models must be non-empty");
+
+        if !p.endpoint_models.is_empty() {
+            for (eid, models) in p.endpoint_models.iter_mut() {
+                if models.is_empty() {
+                    panic!("provider {pid}: endpoint_models[{eid}] must be non-empty");
+                }
+                models.sort_by(|a, b| a.id.cmp(&b.id));
+            }
         }
+
+        if p.models.is_empty() {
+            if p.endpoint_models.is_empty() {
+                panic!("provider {pid}: models must be non-empty");
+            }
+            // Backfill provider-level models as a stable union of endpoint_models (dedupe by id).
+            let mut union: BTreeMap<String, ModelJson> = BTreeMap::new();
+            for models in p.endpoint_models.values() {
+                for m in models.iter() {
+                    union.entry(m.id.clone()).or_insert_with(|| ModelJson {
+                        id: m.id.clone(),
+                        name: m.name.clone(),
+                        description: m.description.clone(),
+                        supports_tools: m.supports_tools,
+                        context_length: m.context_length,
+                        input_price: m.input_price,
+                        output_price: m.output_price,
+                    });
+                }
+            }
+            p.models = union.into_values().collect();
+        }
+
         p.models.sort_by(|a, b| a.id.cmp(&b.id));
     }
 
@@ -156,6 +188,45 @@ fn main() {
         }
         out.push_str("};\n\n");
 
+        if !provider.endpoint_models.is_empty() {
+            let mut slices = String::new();
+            let mut map_entries = String::new();
+            
+            for (endpoint_id, models) in provider.endpoint_models.iter() {
+                let endpoint_prefix = rust_ident_upper(&format!("{provider_id}_{endpoint_id}"));
+                slices.push_str(&format!("pub static {endpoint_prefix}_MODELS: &[Model] = &[\n"));
+                for m in models.iter() {
+                    let desc = m.description.clone().unwrap_or_default();
+                    slices.push_str(&format!(
+                        "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {} }},\n",
+                        rust_str(&m.id),
+                        rust_str(&m.name),
+                        rust_str(&desc),
+                        if m.supports_tools { "true" } else { "false" },
+                        match m.context_length {
+                            Some(v) => format!("Some({v})"),
+                            None => "None".to_string(),
+                        },
+                        rust_f64(m.input_price),
+                        rust_f64(m.output_price),
+                    ));
+                }
+                slices.push_str("];\n\n");
+                
+                map_entries.push_str(&format!(
+                    "    {} => {endpoint_prefix}_MODELS,\n",
+                    rust_str(endpoint_id)
+                ));
+            }
+            
+            out.push_str(&slices);
+            out.push_str(&format!(
+                "pub static {prefix}_ENDPOINT_MODELS: phf::Map<&'static str, &'static [Model]> = phf::phf_map! {{\n"
+            ));
+            out.push_str(&map_entries);
+            out.push_str("};\n\n");
+        }
+
         out.push_str(&format!("pub static {prefix}_MODELS: &[Model] = &[\n"));
         for m in provider.models.iter() {
             let desc = m.description.clone().unwrap_or_default();
@@ -179,10 +250,16 @@ fn main() {
     out.push_str("pub static PROVIDERS: phf::Map<&'static str, Provider> = phf::phf_map! {\n");
     for (provider_id, provider) in reg.providers.iter() {
         let prefix = rust_ident_upper(provider_id);
+        let endpoint_models_ref = if provider.endpoint_models.is_empty() {
+            "None".to_string()
+        } else {
+            format!("Some(&{prefix}_ENDPOINT_MODELS)")
+        };
         out.push_str(&format!(
-            "    {} => Provider {{ label: {}, endpoints: &{prefix}_ENDPOINTS, models: {prefix}_MODELS }},\n",
+            "    {} => Provider {{ label: {}, endpoints: &{prefix}_ENDPOINTS, models: {prefix}_MODELS, endpoint_models: {} }},\n",
             rust_str(provider_id),
             rust_str(&provider.label),
+            endpoint_models_ref,
         ));
     }
     out.push_str("};\n");

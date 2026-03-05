@@ -77,6 +77,8 @@ pub struct Provider {
     pub endpoints: HashMap<String, Endpoint>,
     #[pyo3(get)]
     pub models: Vec<Model>,
+    #[pyo3(get)]
+    pub endpoint_models: Option<HashMap<String, Vec<Model>>>,
 }
 
 impl From<&RustProvider> for Provider {
@@ -89,6 +91,11 @@ impl From<&RustProvider> for Provider {
                 .map(|(k, v)| (k.to_string(), Endpoint::from(v)))
                 .collect(),
             models: p.models.iter().map(Model::from).collect(),
+            endpoint_models: p.endpoint_models.map(|m| {
+                m.entries()
+                    .map(|(k, v)| (k.to_string(), v.iter().map(Model::from).collect()))
+                    .collect()
+            }),
         }
     }
 }
@@ -120,10 +127,25 @@ fn list_models(provider_id: &str) -> PyResult<Vec<String>> {
         .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Provider not found"))
 }
 
+/// List all model IDs for a specific endpoint
+#[pyfunction]
+fn list_models_for_endpoint(endpoint_id: &str) -> PyResult<Vec<String>> {
+    llm_providers::list_models_for_endpoint(endpoint_id)
+        .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Endpoint not found"))
+}
+
 /// Get detailed information for a specific model
 #[pyfunction]
 fn get_model(provider_id: &str, model_id: &str) -> PyResult<Model> {
     llm_providers::get_model(provider_id, model_id)
+        .map(|m| Model::from(&m))
+        .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Model not found"))
+}
+
+/// Get detailed information for a specific model under an endpoint
+#[pyfunction]
+fn get_model_for_endpoint(endpoint_id: &str, model_id: &str) -> PyResult<Model> {
+    llm_providers::get_model_for_endpoint(endpoint_id, model_id)
         .map(|m| Model::from(&m))
         .ok_or_else(|| pyo3::exceptions::PyValueError::new_err("Model not found"))
 }
@@ -200,7 +222,9 @@ fn llm_providers_list(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(list_endpoints, m)?)?;
     m.add_function(wrap_pyfunction!(get_endpoint, m)?)?;
     m.add_function(wrap_pyfunction!(list_models, m)?)?;
+    m.add_function(wrap_pyfunction!(list_models_for_endpoint, m)?)?;
     m.add_function(wrap_pyfunction!(get_model, m)?)?;
+    m.add_function(wrap_pyfunction!(get_model_for_endpoint, m)?)?;
     m.add_function(wrap_pyfunction!(filter_models, m)?)?;
     m.add_function(wrap_pyfunction!(get_provider, m)?)?;
     m.add_function(wrap_pyfunction!(get_all_providers, m)?)?;
