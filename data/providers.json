@@ -260,6 +260,13 @@
           "base_url": "https://api.deepseek.com/v1",
           "price_currency": "CNY",
           "docs_url": "https://api-docs.deepseek.com/zh-cn/information/model_list"
+        },
+        "global": {
+          "label": "DeepSeek",
+          "region": "global",
+          "base_url": "https://api.deepseek.com/v1",
+          "price_currency": "USD",
+          "docs_url": "https://api-docs.deepseek.com/zh-cn/information/model_list"
         }
       },
       "models": [
