@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated_at": "2026-03-05T09:37:45.000000Z",
+  "updated_at": "2026-03-07T04:37:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -1726,6 +1726,306 @@
           "context_length": 32768,
           "input_price": 0.0,
           "output_price": 0.0
+        }
+      ]
+    },
+    "openrouter": {
+      "label": "OpenRouter",
+      "endpoints": {
+        "global": {
+          "label": "OpenRouter",
+          "region": "global",
+          "base_url": "https://openrouter.ai/api/v1",
+          "price_currency": "USD",
+          "docs_url": "https://openrouter.ai/docs"
+        }
+      },
+      "models": [
+        {
+          "id": "openrouter/auto",
+          "name": "OpenRouter Auto",
+          "description": "Aggregator router; downstream model and pricing follow OpenRouter settings",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        }
+      ]
+    },
+    "zenmux": {
+      "label": "Zenmux.ai",
+      "endpoints": {
+        "global": {
+          "label": "Zenmux.ai",
+          "region": "global",
+          "base_url": "https://api.zenmux.ai/v1",
+          "price_currency": "USD",
+          "docs_url": "https://docs.zenmux.ai"
+        }
+      },
+      "models": [
+        {
+          "id": "zenmux/auto",
+          "name": "Zenmux Auto",
+          "description": "Aggregator router; downstream model and pricing follow Zenmux routing",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        }
+      ]
+    },
+    "baseten": {
+      "label": "Baseten",
+      "endpoints": {
+        "global": {
+          "label": "Baseten",
+          "region": "global",
+          "base_url": "https://bridge.baseten.co/v1",
+          "price_currency": "USD",
+          "docs_url": "https://docs.baseten.co"
+        }
+      },
+      "models": [
+        {
+          "id": "baseten/auto",
+          "name": "Baseten Auto",
+          "description": "Router selects deployed Baseten model",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        }
+      ]
+    },
+    "cerebras": {
+      "label": "Cerebras",
+      "endpoints": {
+        "global": {
+          "label": "Cerebras",
+          "region": "global",
+          "base_url": "https://api.cerebras.ai/v1",
+          "price_currency": "USD",
+          "docs_url": "https://inference-docs.cerebras.ai/introduction"
+        }
+      },
+      "models": [
+        {
+          "id": "llama3.1-8b",
+          "name": "Llama 3.1 8B",
+          "description": "Production Llama 3.1 8B served by Cerebras",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        },
+        {
+          "id": "gpt-oss-120b",
+          "name": "OpenAI GPT OSS",
+          "description": "Production OpenAI GPT OSS 120B served by Cerebras",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        },
+        {
+          "id": "qwen-3-235b-a22b-instruct-2507",
+          "name": "Qwen 3 235B Instruct",
+          "description": "Preview Qwen 3 235B Instruct served by Cerebras",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        },
+        {
+          "id": "zai-glm-4.7",
+          "name": "Z.ai GLM 4.7",
+          "description": "Preview Zhipu GLM 4.7 served by Cerebras",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": null,
+          "output_price": null
+        }
+      ]
+    },
+    "grok": {
+      "label": "Grok (xAI)",
+      "endpoints": {
+        "global": {
+          "label": "Grok",
+          "region": "global",
+          "base_url": "https://api.x.ai/v1",
+          "price_currency": "USD",
+          "docs_url": "https://docs.x.ai"
+        }
+      },
+      "models": [
+        {
+          "id": "grok-4.1-fast-reasoning",
+          "name": "grok-4.1-fast-reasoning",
+          "description": "Fast reasoning model (tools, 2M context)",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 0.2,
+          "output_price": 0.5
+        },
+        {
+          "id": "grok-4.1-fast-non-reasoning",
+          "name": "grok-4.1-fast-non-reasoning",
+          "description": "Fast non-reasoning model (tools, 2M context)",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 0.2,
+          "output_price": 0.5
+        },
+        {
+          "id": "grok-code-fast-1",
+          "name": "grok-code-fast-1",
+          "description": "Fast code model (tools)",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 0.2,
+          "output_price": 1.5
+        },
+        {
+          "id": "grok-4-fast-reasoning",
+          "name": "grok-4-fast-reasoning",
+          "description": "Reasoning model (tools, 2M context)",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 0.2,
+          "output_price": 0.5
+        },
+        {
+          "id": "grok-4-fast-non-reasoning",
+          "name": "grok-4-fast-non-reasoning",
+          "description": "Non-reasoning model (tools, 2M context)",
+          "supports_tools": true,
+          "context_length": 2000000,
+          "input_price": 0.2,
+          "output_price": 0.5
+        },
+        {
+          "id": "grok-4-0709",
+          "name": "grok-4-0709",
+          "description": "Grok 4 0709 (tools)",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 3.0,
+          "output_price": 15.0
+        },
+        {
+          "id": "grok-3-mini",
+          "name": "grok-3-mini",
+          "description": "Grok 3 mini (tools)",
+          "supports_tools": true,
+          "context_length": 131072,
+          "input_price": 0.3,
+          "output_price": 0.5
+        },
+        {
+          "id": "grok-3",
+          "name": "grok-3",
+          "description": "Grok 3 (tools)",
+          "supports_tools": true,
+          "context_length": 131072,
+          "input_price": 3.0,
+          "output_price": 15.0
+        },
+        {
+          "id": "grok-imagine-image-pro",
+          "name": "grok-imagine-image-pro",
+          "description": "Image generation pro",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": null,
+          "output_price": 0.07
+        },
+        {
+          "id": "grok-imagine-image",
+          "name": "grok-imagine-image",
+          "description": "Image generation",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": null,
+          "output_price": 0.02
+        },
+        {
+          "id": "grok-imagine-video",
+          "name": "grok-imagine-video",
+          "description": "Video generation",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": null,
+          "output_price": 0.05
+        },
+        {
+          "id": "grok-realtime-api",
+          "name": "Realtime API",
+          "description": "Realtime API (per minute)",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": 0.05,
+          "output_price": 0.05
+        },
+        {
+          "id": "grok-text-to-speech",
+          "name": "Text to Speech",
+          "description": "Text to Speech (per 1M tokens)",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": 4.2,
+          "output_price": 4.2
+        }
+      ]
+    },
+    "mistral": {
+      "label": "Mistral AI",
+      "endpoints": {
+        "global": {
+          "label": "Mistral AI",
+          "region": "global",
+          "base_url": "https://api.mistral.ai/v1",
+          "price_currency": "USD",
+          "docs_url": "https://docs.mistral.ai"
+        }
+      },
+      "models": [
+        {
+          "id": "mistral-large-latest",
+          "name": "Mistral Large Latest",
+          "description": "Flagship reasoning and multimodal model",
+          "supports_tools": true,
+          "context_length": 128000,
+          "input_price": null,
+          "output_price": null
+        },
+        {
+          "id": "mistral-small-latest",
+          "name": "Mistral Small Latest",
+          "description": "Fast and economical general model",
+          "supports_tools": true,
+          "context_length": 32000,
+          "input_price": null,
+          "output_price": null
+        },
+        {
+          "id": "codestral-latest",
+          "name": "Codestral Latest",
+          "description": "Code-specialized model",
+          "supports_tools": true,
+          "context_length": 128000,
+          "input_price": null,
+          "output_price": null
+        },
+        {
+          "id": "pixtral-12b-vision",
+          "name": "Pixtral 12B Vision",
+          "description": "Vision-capable Pixtral model",
+          "supports_tools": true,
+          "context_length": 128000,
+          "input_price": null,
+          "output_price": null
         }
       ]
     }
