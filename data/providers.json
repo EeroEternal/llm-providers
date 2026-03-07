@@ -1747,8 +1747,8 @@
           "description": "Aggregator router; downstream model and pricing follow OpenRouter settings",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         }
       ]
     },
@@ -1770,8 +1770,8 @@
           "description": "Aggregator router; downstream model and pricing follow Zenmux routing",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         }
       ]
     },
@@ -1816,8 +1816,8 @@
           "description": "Production Llama 3.1 8B served by Cerebras",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         },
         {
           "id": "gpt-oss-120b",
@@ -1825,8 +1825,8 @@
           "description": "Production OpenAI GPT OSS 120B served by Cerebras",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         },
         {
           "id": "qwen-3-235b-a22b-instruct-2507",
@@ -1834,8 +1834,8 @@
           "description": "Preview Qwen 3 235B Instruct served by Cerebras",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         },
         {
           "id": "zai-glm-4.7",
@@ -1843,8 +1843,8 @@
           "description": "Preview Zhipu GLM 4.7 served by Cerebras",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         }
       ]
     },
@@ -1933,33 +1933,6 @@
           "output_price": 15.0
         },
         {
-          "id": "grok-imagine-image-pro",
-          "name": "grok-imagine-image-pro",
-          "description": "Image generation pro",
-          "supports_tools": false,
-          "context_length": null,
-          "input_price": null,
-          "output_price": 0.07
-        },
-        {
-          "id": "grok-imagine-image",
-          "name": "grok-imagine-image",
-          "description": "Image generation",
-          "supports_tools": false,
-          "context_length": null,
-          "input_price": null,
-          "output_price": 0.02
-        },
-        {
-          "id": "grok-imagine-video",
-          "name": "grok-imagine-video",
-          "description": "Video generation",
-          "supports_tools": false,
-          "context_length": null,
-          "input_price": null,
-          "output_price": 0.05
-        },
-        {
           "id": "grok-realtime-api",
           "name": "Realtime API",
           "description": "Realtime API (per minute)",
@@ -1997,8 +1970,8 @@
           "description": "Flagship reasoning and multimodal model",
           "supports_tools": true,
           "context_length": 128000,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         },
         {
           "id": "mistral-small-latest",
@@ -2006,8 +1979,8 @@
           "description": "Fast and economical general model",
           "supports_tools": true,
           "context_length": 32000,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         },
         {
           "id": "codestral-latest",
@@ -2015,8 +1988,8 @@
           "description": "Code-specialized model",
           "supports_tools": true,
           "context_length": 128000,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         },
         {
           "id": "pixtral-12b-vision",
@@ -2024,8 +1997,8 @@
           "description": "Vision-capable Pixtral model",
           "supports_tools": true,
           "context_length": 128000,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         }
       ]
     }
