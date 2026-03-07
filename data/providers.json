@@ -1793,8 +1793,8 @@
           "description": "Router selects deployed Baseten model",
           "supports_tools": true,
           "context_length": null,
-          "input_price": null,
-          "output_price": null
+          "input_price": 0.0,
+          "output_price": 0.0
         }
       ]
     },
