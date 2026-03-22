@@ -197,34 +197,17 @@ See [docs/providers.md](docs/providers.md) for a full list of endpoint IDs.
 
 ## Contributing
 
-Contributions are welcome! To add a new provider or update existing models:
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on:
 
-### Guidelines
+- Commit message standards (English required)
+- Provider update procedures  
+- Testing and code style requirements
+- Pull request process
 
-1. **Commit Messages**: Please use English for all commit messages. Follow conventional commit format:
-   - `feat:` for new features
-   - `fix:` for bug fixes  
-   - `chore:` for maintenance tasks
-   - `docs:` for documentation changes
-   - `refactor:` for code refactoring
-
-2. **Provider Updates**: When adding or updating providers:
-   - Edit `data/providers.json`
-   - Use consistent naming conventions (avoid redundant region suffixes in labels)
-   - Ensure all required fields are populated
-   - Verify URLs and documentation links
-
-3. **Testing**: Run tests to ensure validity (this will run `build.rs` to embed the registry at compile time):
-    ```bash
-    cargo test
-    ```
-
-4. **Code Style**: Ensure code follows project formatting:
-    ```bash
-    cargo fmt --all -- --check
-    ```
-
-5. **Submit a Pull Request** with a clear description of changes.
+Quick start:
+1. Edit `data/providers.json`
+2. Run `cargo test` to validate
+3. Submit a Pull Request
 
 ## License
 
