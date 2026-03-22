@@ -191,10 +191,12 @@ fn main() {
         if !provider.endpoint_models.is_empty() {
             let mut slices = String::new();
             let mut map_entries = String::new();
-            
+
             for (endpoint_id, models) in provider.endpoint_models.iter() {
                 let endpoint_prefix = rust_ident_upper(&format!("{provider_id}_{endpoint_id}"));
-                slices.push_str(&format!("pub static {endpoint_prefix}_MODELS: &[Model] = &[\n"));
+                slices.push_str(&format!(
+                    "pub static {endpoint_prefix}_MODELS: &[Model] = &[\n"
+                ));
                 for m in models.iter() {
                     let desc = m.description.clone().unwrap_or_default();
                     slices.push_str(&format!(
@@ -212,13 +214,13 @@ fn main() {
                     ));
                 }
                 slices.push_str("];\n\n");
-                
+
                 map_entries.push_str(&format!(
                     "    {} => {endpoint_prefix}_MODELS,\n",
                     rust_str(endpoint_id)
                 ));
             }
-            
+
             out.push_str(&slices);
             out.push_str(&format!(
                 "pub static {prefix}_ENDPOINT_MODELS: phf::Map<&'static str, &'static [Model]> = phf::phf_map! {{\n"
