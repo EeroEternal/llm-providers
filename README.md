@@ -185,13 +185,13 @@ See [docs/providers.md](docs/providers.md) for a full list of endpoint IDs.
 - **Tencent** (Hunyuan)
 - **Moonshot** (Kimi)
   - *Moonshot AI (CN)*
-  - *Moonshot AI Global*
+  - *Moonshot AI (Global)*
 - **MiniMax**
   - *MiniMax (CN)*
-  - *MiniMax Global*
+  - *MiniMax (Global)*
 - **Zhipu** (GLM-4)
-  - *BigModel (Zhipu CN)*
-  - *Z.ai (Zhipu Global)*
+  - *Zhipu AI (CN)*
+  - *Zhipu AI (Global)*
 - **Volcengine** (Doubao)
 - **LongCat**
 
@@ -199,12 +199,32 @@ See [docs/providers.md](docs/providers.md) for a full list of endpoint IDs.
 
 Contributions are welcome! To add a new provider or update existing models:
 
-1.  Edit `data/providers.json`.
-2.  Run tests to ensure validity (this will run `build.rs` to embed the registry at compile time):
+### Guidelines
+
+1. **Commit Messages**: Please use English for all commit messages. Follow conventional commit format:
+   - `feat:` for new features
+   - `fix:` for bug fixes  
+   - `chore:` for maintenance tasks
+   - `docs:` for documentation changes
+   - `refactor:` for code refactoring
+
+2. **Provider Updates**: When adding or updating providers:
+   - Edit `data/providers.json`
+   - Use consistent naming conventions (avoid redundant region suffixes in labels)
+   - Ensure all required fields are populated
+   - Verify URLs and documentation links
+
+3. **Testing**: Run tests to ensure validity (this will run `build.rs` to embed the registry at compile time):
     ```bash
     cargo test
     ```
-3.  Submit a Pull Request.
+
+4. **Code Style**: Ensure code follows project formatting:
+    ```bash
+    cargo fmt --all -- --check
+    ```
+
+5. **Submit a Pull Request** with a clear description of changes.
 
 ## License
 
