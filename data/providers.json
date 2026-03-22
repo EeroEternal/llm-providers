@@ -459,7 +459,7 @@
           "docs_url": "https://platform.moonshot.cn/docs/pricing/chat"
         },
         "global": {
-          "label": "Moonshot AI Global",
+          "label": "Moonshot AI",
           "region": "global",
           "base_url": "https://api.moonshot.ai/v1",
           "price_currency": "USD",
@@ -597,7 +597,7 @@
           "docs_url": "https://platform.minimaxi.com/docs/guides/models-intro"
         },
         "global": {
-          "label": "MiniMax Global",
+          "label": "MiniMax",
           "region": "global",
           "base_url": "https://api.minimax.io/v1",
           "price_currency": "USD",
@@ -791,14 +791,14 @@
       "label": "Zhipu AI",
       "endpoints": {
         "cn": {
-          "label": "BigModel (Zhipu CN)",
+          "label": "Zhipu AI",
           "region": "cn",
           "base_url": "https://open.bigmodel.cn/api/paas/v4",
           "price_currency": "CNY",
           "docs_url": "https://docs.bigmodel.cn/cn/guide/start/model-overview"
         },
         "global": {
-          "label": "Z.ai (Zhipu Global)",
+          "label": "Zhipu AI",
           "region": "global",
           "base_url": "https://api.z.ai/api/paas/v4",
           "price_currency": "USD",
