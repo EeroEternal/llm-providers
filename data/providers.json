@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated_at": "2026-03-07T04:37:00.000000Z",
+  "updated_at": "2026-04-28T00:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -137,6 +137,15 @@
       },
       "models": [
         {
+          "id": "gpt-5.5",
+          "name": "GPT-5.5",
+          "description": "Flagship model for complex reasoning, coding, and professional work",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 5.0,
+          "output_price": 30.0
+        },
+        {
           "id": "gpt-5.2",
           "name": "GPT-5.2",
           "description": "Best general-purpose, complex reasoning, tool calling, vision",
@@ -250,6 +259,15 @@
       },
       "models": [
         {
+          "id": "claude-opus-4-7",
+          "name": "Claude Opus 4.7",
+          "description": "Most capable generally available model for complex reasoning and agentic coding",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 5.0,
+          "output_price": 25.0
+        },
+        {
           "id": "claude-opus-4-6",
           "name": "Claude Opus 4.6",
           "description": "Most intelligent for agents and coding",
@@ -347,6 +365,33 @@
         }
       },
       "models": [
+        {
+          "id": "qwen3.6-max-preview",
+          "name": "Qwen3.6 Max Preview",
+          "description": "Preview flagship for complex tasks with the strongest capability",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 9.0,
+          "output_price": 54.0
+        },
+        {
+          "id": "qwen3.6-plus",
+          "name": "Qwen3.6 Plus",
+          "description": "Balanced quality, speed, and cost with a 1M-token context window",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 2.0,
+          "output_price": 12.0
+        },
+        {
+          "id": "qwen3.6-flash",
+          "name": "Qwen3.6 Flash",
+          "description": "Fast low-cost model for simple tasks with a 1M-token context window",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 1.2,
+          "output_price": 7.2
+        },
         {
           "id": "qwen3-max",
           "name": "Qwen3 Max",
@@ -467,6 +512,15 @@
         }
       },
       "models": [
+        {
+          "id": "kimi-k2.6",
+          "name": "Kimi K2.6",
+          "description": "Latest flagship with stronger long-context coding stability and multimodal input",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 6.5,
+          "output_price": 27.0
+        },
         {
           "id": "kimi-k2.5",
           "name": "Kimi K2.5",
@@ -605,6 +659,24 @@
         }
       },
       "models": [
+        {
+          "id": "MiniMax-M2.7",
+          "name": "MiniMax M2.7",
+          "description": "Recursive self-improvement for real-world engineering, office delivery, and rich interaction",
+          "supports_tools": true,
+          "context_length": 204800,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "MiniMax-M2.7-highspeed",
+          "name": "MiniMax M2.7 Highspeed",
+          "description": "Same M2.7 performance with significantly faster inference",
+          "supports_tools": true,
+          "context_length": 204800,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
         {
           "id": "MiniMax-M2.5",
           "name": "MiniMax M2.5",
@@ -787,6 +859,276 @@
         }
       ]
     },
+    "xiaomi": {
+      "label": "Xiaomi MiMo",
+      "endpoints": {
+        "cn": {
+          "label": "Xiaomi MiMo",
+          "region": "cn",
+          "base_url": "https://api.xiaomimimo.com/v1",
+          "price_currency": "CNY",
+          "docs_url": "https://platform.xiaomimimo.com/docs/en-US/pricing"
+        },
+        "global": {
+          "label": "Xiaomi MiMo",
+          "region": "global",
+          "base_url": "https://api.xiaomimimo.com/v1",
+          "price_currency": "USD",
+          "docs_url": "https://platform.xiaomimimo.com/docs/en-US/pricing"
+        }
+      },
+      "endpoint_models": {
+        "cn": [
+          {
+            "id": "mimo-v2.5-pro",
+            "name": "MiMo V2.5 Pro",
+            "description": "Enhanced long-range reasoning, higher agent efficiency, and better coding experience",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 7.0,
+            "output_price": 21.0
+          },
+          {
+            "id": "mimo-v2-pro",
+            "name": "MiMo V2 Pro",
+            "description": "Earlier Pro-series reasoning model with 1M context and tool use",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 7.0,
+            "output_price": 21.0
+          },
+          {
+            "id": "mimo-v2.5",
+            "name": "MiMo V2.5",
+            "description": "Native multimodal flagship with 1M context and stronger agentic coding",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 2.8,
+            "output_price": 14.0
+          },
+          {
+            "id": "mimo-v2-omni",
+            "name": "MiMo V2 Omni",
+            "description": "Full-modal understanding model with deep thinking, tool use, and web search",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 2.8,
+            "output_price": 14.0
+          },
+          {
+            "id": "mimo-v2-flash",
+            "name": "MiMo V2 Flash",
+            "description": "Fast low-cost text generation model with deep thinking and function calling",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.7,
+            "output_price": 2.1
+          },
+          {
+            "id": "mimo-v2.5-tts",
+            "name": "MiMo V2.5 TTS",
+            "description": "Speech synthesis model with upgraded voice quality",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "mimo-v2.5-tts-voiceclone",
+            "name": "MiMo V2.5 TTS Voice Clone",
+            "description": "Speech synthesis model for timbre cloning",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "mimo-v2.5-tts-voicedesign",
+            "name": "MiMo V2.5 TTS Voice Design",
+            "description": "Speech synthesis model for custom voice design",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "mimo-v2-tts",
+            "name": "MiMo V2 TTS",
+            "description": "Legacy speech synthesis model",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          }
+        ],
+        "global": [
+          {
+            "id": "mimo-v2.5-pro",
+            "name": "MiMo V2.5 Pro",
+            "description": "Enhanced long-range reasoning, higher agent efficiency, and better coding experience",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 1.0,
+            "output_price": 3.0
+          },
+          {
+            "id": "mimo-v2-pro",
+            "name": "MiMo V2 Pro",
+            "description": "Earlier Pro-series reasoning model with 1M context and tool use",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 1.0,
+            "output_price": 3.0
+          },
+          {
+            "id": "mimo-v2.5",
+            "name": "MiMo V2.5",
+            "description": "Native multimodal flagship with 1M context and stronger agentic coding",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 0.4,
+            "output_price": 2.0
+          },
+          {
+            "id": "mimo-v2-omni",
+            "name": "MiMo V2 Omni",
+            "description": "Full-modal understanding model with deep thinking, tool use, and web search",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.4,
+            "output_price": 2.0
+          },
+          {
+            "id": "mimo-v2-flash",
+            "name": "MiMo V2 Flash",
+            "description": "Fast low-cost text generation model with deep thinking and function calling",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.1,
+            "output_price": 0.3
+          },
+          {
+            "id": "mimo-v2.5-tts",
+            "name": "MiMo V2.5 TTS",
+            "description": "Speech synthesis model with upgraded voice quality",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "mimo-v2.5-tts-voiceclone",
+            "name": "MiMo V2.5 TTS Voice Clone",
+            "description": "Speech synthesis model for timbre cloning",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "mimo-v2.5-tts-voicedesign",
+            "name": "MiMo V2.5 TTS Voice Design",
+            "description": "Speech synthesis model for custom voice design",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
+            "id": "mimo-v2-tts",
+            "name": "MiMo V2 TTS",
+            "description": "Legacy speech synthesis model",
+            "supports_tools": false,
+            "context_length": 8000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          }
+        ]
+      },
+      "models": [
+        {
+          "id": "mimo-v2.5-pro",
+          "name": "MiMo V2.5 Pro",
+          "description": "Enhanced long-range reasoning, higher agent efficiency, and better coding experience",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 7.0,
+          "output_price": 21.0
+        },
+        {
+          "id": "mimo-v2-pro",
+          "name": "MiMo V2 Pro",
+          "description": "Earlier Pro-series reasoning model with 1M context and tool use",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 7.0,
+          "output_price": 21.0
+        },
+        {
+          "id": "mimo-v2.5",
+          "name": "MiMo V2.5",
+          "description": "Native multimodal flagship with 1M context and stronger agentic coding",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 2.8,
+          "output_price": 14.0
+        },
+        {
+          "id": "mimo-v2-omni",
+          "name": "MiMo V2 Omni",
+          "description": "Full-modal understanding model with deep thinking, tool use, and web search",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 2.8,
+          "output_price": 14.0
+        },
+        {
+          "id": "mimo-v2-flash",
+          "name": "MiMo V2 Flash",
+          "description": "Fast low-cost text generation model with deep thinking and function calling",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 0.7,
+          "output_price": 2.1
+        },
+        {
+          "id": "mimo-v2.5-tts",
+          "name": "MiMo V2.5 TTS",
+          "description": "Speech synthesis model with upgraded voice quality",
+          "supports_tools": false,
+          "context_length": 8000,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "mimo-v2.5-tts-voiceclone",
+          "name": "MiMo V2.5 TTS Voice Clone",
+          "description": "Speech synthesis model for timbre cloning",
+          "supports_tools": false,
+          "context_length": 8000,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "mimo-v2.5-tts-voicedesign",
+          "name": "MiMo V2.5 TTS Voice Design",
+          "description": "Speech synthesis model for custom voice design",
+          "supports_tools": false,
+          "context_length": 8000,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "mimo-v2-tts",
+          "name": "MiMo V2 TTS",
+          "description": "Legacy speech synthesis model",
+          "supports_tools": false,
+          "context_length": 8000,
+          "input_price": 0.0,
+          "output_price": 0.0
+        }
+      ]
+    },
     "zhipu": {
       "label": "Zhipu AI",
       "endpoints": {
@@ -807,6 +1149,15 @@
       },
       "endpoint_models": {
         "cn": [
+          {
+            "id": "glm-5.1",
+            "name": "GLM-5.1",
+            "description": "Latest flagship with stronger coding and long-horizon autonomous execution",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 6.0,
+            "output_price": 24.0
+          },
           {
             "id": "glm-5",
             "name": "GLM-5",
@@ -972,6 +1323,15 @@
         ],
         "global": [
           {
+            "id": "glm-5.1",
+            "name": "GLM-5.1",
+            "description": "Latest flagship with stronger coding and long-horizon autonomous execution",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 0.0,
+            "output_price": 0.0
+          },
+          {
             "id": "glm-5",
             "name": "GLM-5",
             "description": "Fifth gen flagship, 745B params, 200K context, SOTA reasoning",
@@ -1127,6 +1487,15 @@
         ]
       },
       "models": [
+        {
+          "id": "glm-5.1",
+          "name": "GLM-5.1",
+          "description": "Latest flagship with stronger coding and long-horizon autonomous execution",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 6.0,
+          "output_price": 24.0
+        },
         {
           "id": "glm-5",
           "name": "GLM-5",
