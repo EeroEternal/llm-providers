@@ -1,7 +1,7 @@
 [package]
 name = "llm_providers"
-version = "0.8.3"
-edition = "2021"
+version = "0.9.0"
+edition = "2024"
 description = "A unified source of truth for LLM providers, models, pricing, and capabilities."
 license = "MIT"
 repository = "https://github.com/lipish/llm-providers"
