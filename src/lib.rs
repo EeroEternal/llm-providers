@@ -9,6 +9,7 @@ pub struct Model {
     pub context_length: Option<u64>,
     pub input_price: f64,
     pub output_price: f64,
+    pub published_at: Option<&'static str>,
 }
 
 #[derive(Debug, Serialize, Clone, Copy)]
@@ -155,12 +156,21 @@ pub fn get_model_for_endpoint(endpoint_id: &str, model_id: &str) -> Option<Model
     provider.models.iter().find(|m| m.id == model_id).copied()
 }
 
+#[derive(Default, Clone, Copy, PartialEq, Eq)]
+pub enum OrderBy {
+    #[default]
+    ProviderAndModelId,
+    PublishedAtAsc,
+    PublishedAtDesc,
+}
+
 #[derive(Default)]
 pub struct ModelFilter {
     pub provider_id: Option<String>,
     pub region: Option<String>,
     pub supports_tools: Option<bool>,
     pub min_context_length: Option<u64>,
+    pub order_by: Option<OrderBy>,
 }
 
 /// Advanced filtering: returns a list of (provider_id, Model)
@@ -205,15 +215,54 @@ pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
         }
     }
 
-    // Sort for deterministic output (by provider_id, then model_id)
-    results.sort_by(|a, b| {
-        let p_cmp = a.0.cmp(&b.0);
-        if p_cmp == std::cmp::Ordering::Equal {
-            a.1.id.cmp(b.1.id)
-        } else {
-            p_cmp
+    // Sort results based on order_by
+    match filter.order_by {
+        Some(OrderBy::PublishedAtAsc) => {
+            results.sort_by(|a, b| {
+                match (a.1.published_at, b.1.published_at) {
+                    (Some(a_date), Some(b_date)) => a_date.cmp(b_date),
+                    (Some(_), None) => std::cmp::Ordering::Less,
+                    (None, Some(_)) => std::cmp::Ordering::Greater,
+                    (None, None) => {
+                        let p_cmp = a.0.cmp(&b.0);
+                        if p_cmp == std::cmp::Ordering::Equal {
+                            a.1.id.cmp(b.1.id)
+                        } else {
+                            p_cmp
+                        }
+                    }
+                }
+            });
         }
-    });
+        Some(OrderBy::PublishedAtDesc) => {
+            results.sort_by(|a, b| {
+                match (a.1.published_at, b.1.published_at) {
+                    (Some(a_date), Some(b_date)) => b_date.cmp(a_date),
+                    (Some(_), None) => std::cmp::Ordering::Less,
+                    (None, Some(_)) => std::cmp::Ordering::Greater,
+                    (None, None) => {
+                        let p_cmp = a.0.cmp(&b.0);
+                        if p_cmp == std::cmp::Ordering::Equal {
+                            a.1.id.cmp(b.1.id)
+                        } else {
+                            p_cmp
+                        }
+                    }
+                }
+            });
+        }
+        _ => {
+            // Default: sort by provider_id, then model_id
+            results.sort_by(|a, b| {
+                let p_cmp = a.0.cmp(&b.0);
+                if p_cmp == std::cmp::Ordering::Equal {
+                    a.1.id.cmp(b.1.id)
+                } else {
+                    p_cmp
+                }
+            });
+        }
+    }
 
     results
 }
@@ -255,14 +304,54 @@ pub fn filter_models_ref(filter: ModelFilter) -> Vec<(&'static str, &'static Mod
         }
     }
 
-    results.sort_by(|a, b| {
-        let p_cmp = a.0.cmp(b.0);
-        if p_cmp == std::cmp::Ordering::Equal {
-            a.1.id.cmp(b.1.id)
-        } else {
-            p_cmp
+    // Sort results based on order_by
+    match filter.order_by {
+        Some(OrderBy::PublishedAtAsc) => {
+            results.sort_by(|a, b| {
+                match (a.1.published_at, b.1.published_at) {
+                    (Some(a_date), Some(b_date)) => a_date.cmp(b_date),
+                    (Some(_), None) => std::cmp::Ordering::Less,
+                    (None, Some(_)) => std::cmp::Ordering::Greater,
+                    (None, None) => {
+                        let p_cmp = a.0.cmp(&b.0);
+                        if p_cmp == std::cmp::Ordering::Equal {
+                            a.1.id.cmp(b.1.id)
+                        } else {
+                            p_cmp
+                        }
+                    }
+                }
+            });
         }
-    });
+        Some(OrderBy::PublishedAtDesc) => {
+            results.sort_by(|a, b| {
+                match (a.1.published_at, b.1.published_at) {
+                    (Some(a_date), Some(b_date)) => b_date.cmp(a_date),
+                    (Some(_), None) => std::cmp::Ordering::Less,
+                    (None, Some(_)) => std::cmp::Ordering::Greater,
+                    (None, None) => {
+                        let p_cmp = a.0.cmp(&b.0);
+                        if p_cmp == std::cmp::Ordering::Equal {
+                            a.1.id.cmp(b.1.id)
+                        } else {
+                            p_cmp
+                        }
+                    }
+                }
+            });
+        }
+        _ => {
+            // Default: sort by provider_id, then model_id
+            results.sort_by(|a, b| {
+                let p_cmp = a.0.cmp(&b.0);
+                if p_cmp == std::cmp::Ordering::Equal {
+                    a.1.id.cmp(b.1.id)
+                } else {
+                    p_cmp
+                }
+            });
+        }
+    }
 
     results
 }
@@ -369,5 +458,55 @@ mod tests {
             let has_gpt4o = openai.models.iter().any(|m| m.id == "gpt-4o");
             assert!(has_gpt4o, "OpenAI provider should have gpt-4o");
         }
+    }
+
+    #[test]
+    fn test_filter_models_order_by_published_at_desc() {
+        // Test sorting by published_at descending (newest first)
+        let models = filter_models(ModelFilter {
+            order_by: Some(OrderBy::PublishedAtDesc),
+            ..Default::default()
+        });
+
+        // Find indices of models with known published_at dates
+        let gpt55_idx = models.iter().position(|(_, m)| m.id == "gpt-5.5");
+        let _gpt52_idx = models.iter().position(|(_, m)| m.id == "gpt-5.2");
+        let _gemini3_idx = models.iter().position(|(_, m)| m.id == "gemini-3");
+        let gemini25pro_idx = models.iter().position(|(_, m)| m.id == "gemini-2.5-pro");
+
+        // Models with published_at should come before models without
+        // And among models with dates, newer ones should come first
+        if let (Some(idx1), Some(idx2)) = (gpt55_idx, gemini25pro_idx) {
+            // gpt-5.5 (2025-03-01) is newer than gemini-2.5-pro (2024-09-24)
+            assert!(idx1 < idx2, "gpt-5.5 should come before gemini-2.5-pro when sorting desc");
+        }
+    }
+
+    #[test]
+    fn test_filter_models_order_by_published_at_asc() {
+        // Test sorting by published_at ascending (oldest first)
+        let models = filter_models(ModelFilter {
+            order_by: Some(OrderBy::PublishedAtAsc),
+            ..Default::default()
+        });
+
+        // Find indices of models with known published_at dates
+        let gpt55_idx = models.iter().position(|(_, m)| m.id == "gpt-5.5");
+        let gemini25pro_idx = models.iter().position(|(_, m)| m.id == "gemini-2.5-pro");
+
+        // Among models with dates, older ones should come first
+        if let (Some(idx1), Some(idx2)) = (gemini25pro_idx, gpt55_idx) {
+            // gemini-2.5-pro (2024-09-24) is older than gpt-5.5 (2025-03-01)
+            assert!(idx1 < idx2, "gemini-2.5-pro should come before gpt-5.5 when sorting asc");
+        }
+    }
+
+    #[test]
+    fn test_model_published_at_field() {
+        // Test that the published_at field is correctly loaded from JSON
+        let gpt55 = get_model("openai", "gpt-5.5");
+        assert!(gpt55.is_some(), "gpt-5.5 should exist");
+        let model = gpt55.unwrap();
+        assert_eq!(model.published_at, Some("2025-03-01"));
     }
 }

@@ -47,6 +47,8 @@ struct ModelJson {
     context_length: Option<u64>,
     input_price: f64,
     output_price: f64,
+    #[serde(default)]
+    published_at: Option<String>,
 }
 
 fn rust_str(s: &str) -> String {
@@ -150,6 +152,7 @@ fn main() {
                         context_length: m.context_length,
                         input_price: m.input_price,
                         output_price: m.output_price,
+                        published_at: m.published_at.clone(),
                     });
                 }
             }
@@ -200,7 +203,7 @@ fn main() {
                 for m in models.iter() {
                     let desc = m.description.clone().unwrap_or_default();
                     slices.push_str(&format!(
-                        "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {} }},\n",
+                        "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {}, published_at: {} }},\n",
                         rust_str(&m.id),
                         rust_str(&m.name),
                         rust_str(&desc),
@@ -211,6 +214,7 @@ fn main() {
                         },
                         rust_f64(m.input_price),
                         rust_f64(m.output_price),
+                        rust_opt_str(&m.published_at),
                     ));
                 }
                 slices.push_str("];\n\n");
@@ -233,7 +237,7 @@ fn main() {
         for m in provider.models.iter() {
             let desc = m.description.clone().unwrap_or_default();
             out.push_str(&format!(
-                "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {} }},\n",
+                "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {}, published_at: {} }},\n",
                 rust_str(&m.id),
                 rust_str(&m.name),
                 rust_str(&desc),
@@ -244,6 +248,7 @@ fn main() {
                 },
                 rust_f64(m.input_price),
                 rust_f64(m.output_price),
+                rust_opt_str(&m.published_at),
             ));
         }
         out.push_str("];\n\n");

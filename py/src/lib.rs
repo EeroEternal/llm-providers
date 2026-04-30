@@ -1,6 +1,6 @@
 use llm_providers::{
     get_providers_data, Endpoint as RustEndpoint, Model as RustModel, ModelFilter,
-    Provider as RustProvider,
+    OrderBy, Provider as RustProvider,
 };
 use pyo3::prelude::*;
 use std::collections::HashMap;
@@ -23,6 +23,8 @@ pub struct Model {
     pub input_price: f64,
     #[pyo3(get)]
     pub output_price: f64,
+    #[pyo3(get)]
+    pub published_at: Option<String>,
 }
 
 impl From<&RustModel> for Model {
@@ -35,6 +37,7 @@ impl From<&RustModel> for Model {
             context_length: m.context_length,
             input_price: m.input_price,
             output_price: m.output_price,
+            published_at: m.published_at.map(|s| s.to_string()),
         }
     }
 }
@@ -152,25 +155,41 @@ fn get_model_for_endpoint(endpoint_id: &str, model_id: &str) -> PyResult<Model> 
 
 /// Filter models based on criteria.
 /// Returns a list of tuples (provider_id, Model).
+/// order_by: None/"provider_model" (default), "published_at_asc", "published_at_desc"
 #[pyfunction]
-#[pyo3(signature = (provider_id=None, region=None, supports_tools=None, min_context_length=None))]
+#[pyo3(signature = (provider_id=None, region=None, supports_tools=None, min_context_length=None, order_by=None))]
 fn filter_models(
     provider_id: Option<String>,
     region: Option<String>,
     supports_tools: Option<bool>,
     min_context_length: Option<u64>,
-) -> Vec<(String, Model)> {
+    order_by: Option<String>,
+) -> PyResult<Vec<(String, Model)>> {
+    let order_by_enum = match order_by.as_deref() {
+        None | Some("provider_model") => None,
+        Some("published_at_asc") => Some(OrderBy::PublishedAtAsc),
+        Some("published_at_desc") => Some(OrderBy::PublishedAtDesc),
+        Some(s) => {
+            return Err(pyo3::exceptions::PyValueError::new_err(format!(
+                "Invalid order_by: '{}'. Valid values: None, 'provider_model', 'published_at_asc', 'published_at_desc'",
+                s
+            )))
+        }
+    };
+
     let filter = ModelFilter {
         provider_id,
         region,
         supports_tools,
         min_context_length,
+        order_by: order_by_enum,
     };
 
-    llm_providers::filter_models(filter)
+    let results = llm_providers::filter_models(filter);
+    Ok(results
         .into_iter()
         .map(|(pid, m)| (pid, Model::from(&m)))
-        .collect()
+        .collect())
 }
 
 /// Get detailed information for a specific provider as a Provider object

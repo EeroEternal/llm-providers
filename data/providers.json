@@ -21,7 +21,8 @@
           "supports_tools": true,
           "context_length": 2000000,
           "input_price": 5.0,
-          "output_price": 20.0
+          "output_price": 20.0,
+          "published_at": "2025-01-15"
         },
         {
           "id": "gemini-3.1-pro-preview",
@@ -75,7 +76,8 @@
           "supports_tools": true,
           "context_length": 2000000,
           "input_price": 1.25,
-          "output_price": 10.0
+          "output_price": 10.0,
+          "published_at": "2024-09-24"
         },
         {
           "id": "gemini-2.5-flash",
@@ -102,7 +104,8 @@
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 0.1,
-          "output_price": 0.4
+          "output_price": 0.4,
+          "published_at": "2024-02-15"
         },
         {
           "id": "gemini-1.5-pro",
@@ -143,7 +146,8 @@
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 5.0,
-          "output_price": 30.0
+          "output_price": 30.0,
+          "published_at": "2025-03-01"
         },
         {
           "id": "gpt-5.2",
@@ -152,7 +156,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 2.5,
-          "output_price": 10.0
+          "output_price": 10.0,
+          "published_at": "2024-11-01"
         },
         {
           "id": "gpt-5.2-pro",
@@ -161,7 +166,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 5.0,
-          "output_price": 20.0
+          "output_price": 20.0,
+          "published_at": "2024-12-01"
         },
         {
           "id": "gpt-5.2-codex",
@@ -170,7 +176,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 2.5,
-          "output_price": 10.0
+          "output_price": 10.0,
+          "published_at": "2024-11-15"
         },
         {
           "id": "gpt-5-mini",
@@ -179,7 +186,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 0.4,
-          "output_price": 1.6
+          "output_price": 1.6,
+          "published_at": "2024-10-01"
         },
         {
           "id": "gpt-5-nano",
@@ -188,7 +196,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 0.1,
-          "output_price": 0.4
+          "output_price": 0.4,
+          "published_at": "2024-10-01"
         },
         {
           "id": "gpt-4o",
@@ -197,7 +206,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 2.5,
-          "output_price": 10.0
+          "output_price": 10.0,
+          "published_at": "2024-05-13"
         },
         {
           "id": "gpt-4o-mini",
@@ -206,7 +216,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 0.15,
-          "output_price": 0.6
+          "output_price": 0.6,
+          "published_at": "2024-07-18"
         },
         {
           "id": "gpt-4.1",
@@ -215,7 +226,8 @@
           "supports_tools": true,
           "context_length": 128000,
           "input_price": 2.5,
-          "output_price": 10.0
+          "output_price": 10.0,
+          "published_at": "2024-08-01"
         },
         {
           "id": "o1",
@@ -224,13 +236,15 @@
           "supports_tools": false,
           "context_length": 200000,
           "input_price": 15.0,
-          "output_price": 60.0
+          "output_price": 60.0,
+          "published_at": "2024-09-12"
         },
         {
           "id": "o1-mini",
           "name": "o1 Mini",
           "description": "Efficient reasoning",
           "supports_tools": false,
+          "published_at": "2024-09-12",
           "context_length": 128000,
           "input_price": 3.0,
           "output_price": 12.0
@@ -265,7 +279,8 @@
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 5.0,
-          "output_price": 25.0
+          "output_price": 25.0,
+          "published_at": "2025-02-01"
         },
         {
           "id": "claude-opus-4-6",
@@ -274,7 +289,8 @@
           "supports_tools": true,
           "context_length": 200000,
           "input_price": 5.0,
-          "output_price": 25.0
+          "output_price": 25.0,
+          "published_at": "2024-10-01"
         },
         {
           "id": "claude-sonnet-4-6",
@@ -283,7 +299,8 @@
           "supports_tools": true,
           "context_length": 200000,
           "input_price": 3.0,
-          "output_price": 15.0
+          "output_price": 15.0,
+          "published_at": "2024-10-01"
         },
         {
           "id": "claude-haiku-4-5-20251001",
@@ -340,7 +357,8 @@
           "supports_tools": true,
           "context_length": 131072,
           "input_price": 2.0,
-          "output_price": 8.0
+          "output_price": 8.0,
+          "published_at": "2024-05-01"
         },
         {
           "id": "deepseek-reasoner",
@@ -349,7 +367,8 @@
           "supports_tools": false,
           "context_length": 131072,
           "input_price": 4.0,
-          "output_price": 16.0
+          "output_price": 16.0,
+          "published_at": "2025-01-01"
         }
       ]
     },
@@ -372,7 +391,8 @@
           "supports_tools": true,
           "context_length": 262144,
           "input_price": 9.0,
-          "output_price": 54.0
+          "output_price": 54.0,
+          "published_at": "2025-04-01"
         },
         {
           "id": "qwen3.6-plus",
