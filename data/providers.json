@@ -1648,6 +1648,16 @@
       },
       "models": [
         {
+          "id": "hy3-preview",
+          "name": "Hunyuan Hy3 Preview",
+          "description": "Latest flagship model with 295B parameters (21B activated), 256K context, supporting fast and slow thinking fusion, optimized for agentic tasks",
+          "supports_tools": true,
+          "context_length": 262144,
+          "input_price": 1.2,
+          "output_price": 4.0,
+          "published_at": "2026-04-23"
+        },
+        {
           "id": "hunyuan-2.0-thinking-20251109",
           "name": "Tencent HY 2.0 Think",
           "description": "Hunyuan 2.0 thinking model with enhanced complex instruction following, multi-turn and long-text understanding, code, agent, and reasoning capabilities",
