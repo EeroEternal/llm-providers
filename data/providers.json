@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated_at": "2026-04-28T00:00:00.000000Z",
+  "updated_at": "2026-05-04T00:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -1636,152 +1636,185 @@
       ]
     },
     "tencent": {
-      "label": "Tencent Hunyuan",
+      "label": "Tencent TokenHub",
       "endpoints": {
         "cn": {
-          "label": "Tencent Hunyuan",
+          "label": "Tencent TokenHub",
           "region": "cn",
-          "base_url": "https://hunyuan.tencentcloudapi.com",
+          "base_url": "https://tokenhub.tencentmaas.com/v1",
           "price_currency": "CNY",
-          "docs_url": "https://cloud.tencent.com/document/product/1729/104753"
+          "docs_url": "https://cloud.tencent.com/document/product/1823/130078"
+        },
+        "global": {
+          "label": "Tencent TokenHub",
+          "region": "global",
+          "base_url": "https://tokenhub-intl.tencentmaas.com/v1",
+          "price_currency": "USD",
+          "docs_url": "https://cloud.tencent.com/document/product/1823/130078"
         }
       },
       "models": [
         {
           "id": "hy3-preview",
-          "name": "Hunyuan Hy3 Preview",
-          "description": "Latest flagship model with 295B parameters (21B activated), 256K context, supporting fast and slow thinking fusion, optimized for agentic tasks",
+          "name": "Hy3 Preview",
+          "description": "Latest flagship model with 256K context, supporting fast and slow thinking fusion, optimized for agentic tasks",
           "supports_tools": true,
-          "context_length": 262144,
+          "context_length": 256000,
           "input_price": 1.2,
-          "output_price": 4.0,
-          "published_at": "2026-04-23"
+          "output_price": 4.0
         },
         {
           "id": "hunyuan-2.0-thinking-20251109",
-          "name": "Tencent HY 2.0 Think",
+          "name": "HY 2.0 Think",
           "description": "Hunyuan 2.0 thinking model with enhanced complex instruction following, multi-turn and long-text understanding, code, agent, and reasoning capabilities",
           "supports_tools": true,
-          "context_length": 131072,
+          "context_length": 192000,
           "input_price": 3.975,
           "output_price": 15.9
         },
         {
           "id": "hunyuan-2.0-instruct-20251111",
-          "name": "Tencent HY 2.0 Instruct",
+          "name": "HY 2.0 Instruct",
           "description": "Hunyuan 2.0 instruction model with enhanced instruction following, multi-turn and long-text understanding, creative writing, knowledge accuracy, code and reasoning capabilities",
           "supports_tools": true,
-          "context_length": 131072,
+          "context_length": 144000,
           "input_price": 3.18,
           "output_price": 7.95
         },
         {
-          "id": "hunyuan-t1-latest",
-          "name": "Hunyuan T1 Latest",
-          "description": "Industry's first large-scale Hybrid-Transformer-Mamba reasoning model with extended reasoning capability and ultra-fast decoding speed",
-          "supports_tools": true,
-          "context_length": 32768,
-          "input_price": 1.0,
-          "output_price": 4.0
-        },
-        {
-          "id": "hunyuan-a13b",
-          "name": "Hunyuan A13B",
-          "description": "Hunyuan MoE structure with 80B total parameters, 13B activation, supports fast/slow thinking mode switching",
-          "supports_tools": true,
-          "context_length": 229376,
-          "input_price": 0.5,
-          "output_price": 2.0
-        },
-        {
-          "id": "hunyuan-turbos-latest",
-          "name": "Hunyuan TurboS Latest",
-          "description": "Latest version of Hunyuan flagship model with stronger thinking capabilities and better experience",
-          "supports_tools": true,
-          "context_length": 32768,
-          "input_price": 0.8,
-          "output_price": 2.0
-        },
-        {
-          "id": "hunyuan-lite",
-          "name": "Hunyuan Lite",
-          "description": "Upgraded to MOE structure with 256K context window, leading many open-source models in multiple benchmarks",
-          "supports_tools": true,
-          "context_length": 256000,
-          "input_price": 0.0,
-          "output_price": 0.0
-        },
-        {
-          "id": "hunyuan-translation",
-          "name": "Hunyuan Translation",
-          "description": "Supports 33 language translations and 5 ethnic language translations, ranked 1st in 30 languages at WMT25",
-          "supports_tools": false,
-          "context_length": 4096,
-          "input_price": 1.2,
-          "output_price": 3.6
-        },
-        {
-          "id": "hunyuan-translation-lite",
-          "name": "Hunyuan Translation Lite",
-          "description": "Translation specialized model based on Hunyuan 2B-Dense, supports 16+ language translations",
-          "supports_tools": false,
-          "context_length": 4096,
-          "input_price": 1.0,
-          "output_price": 3.0
-        },
-        {
-          "id": "hunyuan-large-role-latest",
-          "name": "Hunyuan Large Role Latest",
+          "id": "hunyuan-role-latest",
+          "name": "Hunyuan Role Latest",
           "description": "Role-playing specialized model with significantly improved character consistency and dialogue depth",
           "supports_tools": false,
-          "context_length": 28672,
+          "context_length": 32000,
           "input_price": 2.4,
           "output_price": 9.6
         },
         {
-          "id": "hunyuan-vision-1.5-instruct",
-          "name": "Tencent HY Vision 1.5 Instruct",
-          "description": "Image-to-text fast thinking model with significant improvements in image recognition, analysis and reasoning",
+          "id": "deepseek-v4-flash",
+          "name": "DeepSeek V4 Flash",
+          "description": "DeepSeek V4 Flash model with 1M context window, supporting deep thinking and structured output",
           "supports_tools": true,
-          "context_length": 24576,
-          "input_price": 3.0,
-          "output_price": 9.0
+          "context_length": 1000000,
+          "input_price": 1.0,
+          "output_price": 2.0
         },
         {
-          "id": "hunyuan-t1-vision-20250916",
-          "name": "Hunyuan T1 Vision",
-          "description": "Vision deep thinking model with comprehensive improvements in general image-text Q&A, visual grounding, OCR, charts, problem solving, and image-based creation",
+          "id": "deepseek-v4-pro",
+          "name": "DeepSeek V4 Pro",
+          "description": "DeepSeek V4 Pro model with 1M context window, supporting deep thinking and structured output",
           "supports_tools": true,
-          "context_length": 28672,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "context_length": 1000000,
+          "input_price": 12.0,
+          "output_price": 24.0
         },
         {
-          "id": "hunyuan-large-vision",
-          "name": "Hunyuan Large Vision",
-          "description": "Vision-language model based on Hunyuan Large, supports arbitrary resolution multiple images + text input",
+          "id": "deepseek-v3.2",
+          "name": "DeepSeek V3.2",
+          "description": "DeepSeek V3.2 model with 128K context, supporting deep thinking and structured output",
           "supports_tools": true,
-          "context_length": 24576,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "context_length": 128000,
+          "input_price": 2.0,
+          "output_price": 3.0
         },
         {
-          "id": "hunyuan-turbos-vision-video",
-          "name": "Hunyuan TurboS Vision Video",
-          "description": "Video understanding model supporting video description, video Q&A and other basic video understanding capabilities",
+          "id": "deepseek-v3.1-terminus",
+          "name": "DeepSeek V3.1 Terminus",
+          "description": "DeepSeek V3.1 Terminus model with 128K context, supporting deep thinking and structured output",
           "supports_tools": true,
-          "context_length": 24576,
-          "input_price": 3.0,
-          "output_price": 9.0
+          "context_length": 128000,
+          "input_price": 4.0,
+          "output_price": 12.0
         },
         {
-          "id": "hunyuan-embedding",
-          "name": "Hunyuan Embedding",
-          "description": "Text embedding model",
-          "supports_tools": false,
-          "context_length": null,
-          "input_price": 0.7,
-          "output_price": 0.7
+          "id": "deepseek-r1-0528",
+          "name": "DeepSeek R1 0528",
+          "description": "DeepSeek R1 0528 reasoning model with 128K context, supporting deep thinking and structured output",
+          "supports_tools": true,
+          "context_length": 128000,
+          "input_price": 4.0,
+          "output_price": 16.0
+        },
+        {
+          "id": "deepseek-v3-0324",
+          "name": "DeepSeek V3 0324",
+          "description": "DeepSeek V3 0324 model with 128K context, supporting function calling",
+          "supports_tools": true,
+          "context_length": 128000,
+          "input_price": 2.0,
+          "output_price": 8.0
+        },
+        {
+          "id": "glm-5.1",
+          "name": "GLM 5.1",
+          "description": "GLM 5.1 model with 200K context, supporting deep thinking, structured output and cache",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 6.0,
+          "output_price": 24.0
+        },
+        {
+          "id": "glm-5v-turbo",
+          "name": "GLM 5V Turbo",
+          "description": "GLM 5V Turbo model with 200K context, supporting deep thinking, structured output and cache",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 5.0,
+          "output_price": 22.0
+        },
+        {
+          "id": "glm-5-turbo",
+          "name": "GLM 5 Turbo",
+          "description": "GLM 5 Turbo model with 200K context, supporting deep thinking, structured output and cache",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 5.0,
+          "output_price": 22.0
+        },
+        {
+          "id": "glm-5",
+          "name": "GLM 5",
+          "description": "GLM 5 model with 200K context, supporting deep thinking and cache",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 4.0,
+          "output_price": 18.0
+        },
+        {
+          "id": "kimi-k2.6",
+          "name": "Kimi K2.6",
+          "description": "Kimi K2.6 model with 256K context, supporting deep thinking, structured output and cache",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 6.5,
+          "output_price": 27.0
+        },
+        {
+          "id": "kimi-k2.5",
+          "name": "Kimi K2.5",
+          "description": "Kimi K2.5 model with 256K context, supporting deep thinking, structured output and cache",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 4.0,
+          "output_price": 21.0
+        },
+        {
+          "id": "minimax-m2.7",
+          "name": "MiniMax M2.7",
+          "description": "MiniMax M2.7 model with 200K context, supporting deep thinking and cache",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 2.1,
+          "output_price": 8.4
+        },
+        {
+          "id": "minimax-m2.5",
+          "name": "MiniMax M2.5",
+          "description": "MiniMax M2.5 model with 200K context, supporting deep thinking and cache",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 2.1,
+          "output_price": 8.4
         }
       ]
     },
