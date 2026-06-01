@@ -1,23 +1,18 @@
-use llm_providers::{filter_models, ModelFilter};
+use llm_providers::{ModelFilter, filter_offerings, list_catalog_models};
 
 fn main() {
-    // 1. Find all models in CN region
-    let cn_models = filter_models(ModelFilter {
+    let catalog = list_catalog_models();
+    println!("Catalog models (deduped): {}", catalog.len());
+
+    let cn_offerings = filter_offerings(ModelFilter {
         region: Some("cn".to_string()),
         ..Default::default()
     });
-    println!("Found {} models in CN region:", cn_models.len());
-    for (pid, model) in cn_models.iter().take(5) {
-        println!("- [{}] {}", pid, model.name);
-    }
-
-    // 2. Find models that support tools
-    let tool_models = filter_models(ModelFilter {
-        supports_tools: Some(true),
-        ..Default::default()
-    });
-    println!("\nFound {} models supporting tools:", tool_models.len());
-    for (pid, model) in tool_models.iter().take(5) {
-        println!("- [{}] {}", pid, model.name);
+    println!("Active CN offerings: {}", cn_offerings.len());
+    for offering in cn_offerings.iter().take(5) {
+        println!(
+            "- [{}] {} ({})",
+            offering.endpoint_id, offering.model.name, offering.price_currency
+        );
     }
 }

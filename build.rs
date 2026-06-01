@@ -4,7 +4,7 @@ use std::path::Path;
 
 use serde::Deserialize;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct RegistryFile {
     #[serde(default)]
     version: Option<String>,
@@ -16,7 +16,7 @@ struct RegistryFile {
     providers: BTreeMap<String, ProviderFamily>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct ProviderFamily {
     label: String,
     endpoints: BTreeMap<String, EndpointJson>,
@@ -26,7 +26,7 @@ struct ProviderFamily {
     endpoint_models: BTreeMap<String, Vec<ModelJson>>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct EndpointJson {
     label: String,
     region: String,
@@ -36,7 +36,7 @@ struct EndpointJson {
     docs_url: Option<String>,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 struct ModelJson {
     id: String,
     name: String,
@@ -44,11 +44,27 @@ struct ModelJson {
     description: Option<String>,
     supports_tools: bool,
     #[serde(default)]
+    supports_vision: bool,
+    #[serde(default)]
+    supports_reasoning: bool,
+    #[serde(default)]
     context_length: Option<u64>,
     input_price: f64,
     output_price: f64,
     #[serde(default)]
+    cache_read_price: Option<f64>,
+    #[serde(default)]
+    cache_write_price: Option<f64>,
+    #[serde(default)]
+    reasoning_price: Option<f64>,
+    #[serde(default)]
+    category: Option<String>,
+    #[serde(default)]
     published_at: Option<String>,
+    #[serde(default)]
+    deprecated_at: Option<String>,
+    #[serde(default)]
+    replacement_id: Option<String>,
 }
 
 fn rust_str(s: &str) -> String {
@@ -62,12 +78,19 @@ fn rust_opt_str(v: &Option<String>) -> String {
     }
 }
 
+fn rust_opt_f64(v: &Option<f64>) -> String {
+    match v {
+        Some(n) if n.is_finite() => format!("Some({})", rust_f64(*n)),
+        Some(n) => panic!("price must be finite, got {n}"),
+        None => "None".to_string(),
+    }
+}
+
 fn rust_f64(v: f64) -> String {
     if v.is_finite() {
         if v.fract() == 0.0 {
             format!("{:.1}", v)
         } else {
-            // Keep it unambiguous as a float literal
             let s = format!("{}", v);
             if s.contains('.') || s.contains('e') || s.contains('E') {
                 s
@@ -102,6 +125,49 @@ fn rust_ident_upper(s: &str) -> String {
     out
 }
 
+fn emit_model_literal(m: &ModelJson) -> String {
+    let desc = m.description.clone().unwrap_or_default();
+    format!(
+        "Model {{ id: {}, name: {}, description: {}, supports_tools: {}, supports_vision: {}, supports_reasoning: {}, context_length: {}, input_price: {}, output_price: {}, cache_read_price: {}, cache_write_price: {}, reasoning_price: {}, category: {}, published_at: {}, deprecated_at: {}, replacement_id: {} }}",
+        rust_str(&m.id),
+        rust_str(&m.name),
+        rust_str(&desc),
+        if m.supports_tools { "true" } else { "false" },
+        if m.supports_vision { "true" } else { "false" },
+        if m.supports_reasoning {
+            "true"
+        } else {
+            "false"
+        },
+        match m.context_length {
+            Some(v) => format!("Some({v})"),
+            None => "None".to_string(),
+        },
+        rust_f64(m.input_price),
+        rust_f64(m.output_price),
+        rust_opt_f64(&m.cache_read_price),
+        rust_opt_f64(&m.cache_write_price),
+        rust_opt_f64(&m.reasoning_price),
+        rust_opt_str(&m.category),
+        rust_opt_str(&m.published_at),
+        rust_opt_str(&m.deprecated_at),
+        rust_opt_str(&m.replacement_id),
+    )
+}
+
+fn clone_model_json(m: &ModelJson) -> ModelJson {
+    m.clone()
+}
+
+fn validate_model(provider_id: &str, m: &ModelJson) {
+    if m.deprecated_at.is_none() && m.published_at.is_none() {
+        eprintln!(
+            "warning: provider {provider_id} model {} missing published_at",
+            m.id
+        );
+    }
+}
+
 fn main() {
     let manifest_dir = std::env::var("CARGO_MANIFEST_DIR").expect("CARGO_MANIFEST_DIR");
     let input_path = Path::new(&manifest_dir).join("data").join("providers.json");
@@ -115,12 +181,11 @@ fn main() {
     let mut reg: RegistryFile =
         serde_json::from_str(&content).unwrap_or_else(|e| panic!("invalid providers.json: {e}"));
 
-    // Normalize
     let version = reg
         .registry_version
         .take()
         .or(reg.version.take())
-        .unwrap_or_else(|| "2.0".to_string());
+        .unwrap_or_else(|| "3.0".to_string());
 
     for (pid, p) in reg.providers.iter_mut() {
         if p.endpoints.is_empty() {
@@ -133,6 +198,9 @@ fn main() {
                     panic!("provider {pid}: endpoint_models[{eid}] must be non-empty");
                 }
                 models.sort_by(|a, b| a.id.cmp(&b.id));
+                for m in models.iter() {
+                    validate_model(pid, m);
+                }
             }
         }
 
@@ -140,23 +208,19 @@ fn main() {
             if p.endpoint_models.is_empty() {
                 panic!("provider {pid}: models must be non-empty");
             }
-            // Backfill provider-level models as a stable union of endpoint_models (dedupe by id).
             let mut union: BTreeMap<String, ModelJson> = BTreeMap::new();
             for models in p.endpoint_models.values() {
                 for m in models.iter() {
-                    union.entry(m.id.clone()).or_insert_with(|| ModelJson {
-                        id: m.id.clone(),
-                        name: m.name.clone(),
-                        description: m.description.clone(),
-                        supports_tools: m.supports_tools,
-                        context_length: m.context_length,
-                        input_price: m.input_price,
-                        output_price: m.output_price,
-                        published_at: m.published_at.clone(),
-                    });
+                    union
+                        .entry(m.id.clone())
+                        .or_insert_with(|| clone_model_json(m));
                 }
             }
             p.models = union.into_values().collect();
+        } else {
+            for m in p.models.iter() {
+                validate_model(pid, m);
+            }
         }
 
         p.models.sort_by(|a, b| a.id.cmp(&b.id));
@@ -201,21 +265,7 @@ fn main() {
                     "pub static {endpoint_prefix}_MODELS: &[Model] = &[\n"
                 ));
                 for m in models.iter() {
-                    let desc = m.description.clone().unwrap_or_default();
-                    slices.push_str(&format!(
-                        "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {}, published_at: {} }},\n",
-                        rust_str(&m.id),
-                        rust_str(&m.name),
-                        rust_str(&desc),
-                        if m.supports_tools { "true" } else { "false" },
-                        match m.context_length {
-                            Some(v) => format!("Some({v})"),
-                            None => "None".to_string(),
-                        },
-                        rust_f64(m.input_price),
-                        rust_f64(m.output_price),
-                        rust_opt_str(&m.published_at),
-                    ));
+                    slices.push_str(&format!("    {},\n", emit_model_literal(m)));
                 }
                 slices.push_str("];\n\n");
 
@@ -235,21 +285,7 @@ fn main() {
 
         out.push_str(&format!("pub static {prefix}_MODELS: &[Model] = &[\n"));
         for m in provider.models.iter() {
-            let desc = m.description.clone().unwrap_or_default();
-            out.push_str(&format!(
-                "    Model {{ id: {}, name: {}, description: {}, supports_tools: {}, context_length: {}, input_price: {}, output_price: {}, published_at: {} }},\n",
-                rust_str(&m.id),
-                rust_str(&m.name),
-                rust_str(&desc),
-                if m.supports_tools { "true" } else { "false" },
-                match m.context_length {
-                    Some(v) => format!("Some({v})"),
-                    None => "None".to_string(),
-                },
-                rust_f64(m.input_price),
-                rust_f64(m.output_price),
-                rust_opt_str(&m.published_at),
-            ));
+            out.push_str(&format!("    {},\n", emit_model_literal(m)));
         }
         out.push_str("];\n\n");
     }

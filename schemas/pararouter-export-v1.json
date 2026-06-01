@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/lipish/llm-providers/schemas/pararouter-export-v1.json",
+  "title": "ParaRouter LLM Providers Export v1",
+  "type": "object",
+  "required": ["registry_version", "registry_updated_at", "catalog", "offerings"],
+  "additionalProperties": false,
+  "properties": {
+    "registry_version": { "type": "string" },
+    "registry_updated_at": { "type": "string", "format": "date-time" },
+    "catalog": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/catalogEntry" }
+    },
+    "offerings": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/offering" }
+    }
+  },
+  "$defs": {
+    "globalPricing": {
+      "type": "object",
+      "required": ["prompt", "completion", "cache_read", "cache_write", "reasoning"],
+      "additionalProperties": false,
+      "properties": {
+        "prompt": { "type": "number" },
+        "completion": { "type": "number" },
+        "cache_read": { "type": ["number", "null"] },
+        "cache_write": { "type": ["number", "null"] },
+        "reasoning": { "type": ["number", "null"] }
+      }
+    },
+    "catalogEntry": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "description",
+        "supports_tools",
+        "supports_vision",
+        "supports_reasoning",
+        "primary_provider_id",
+        "primary_endpoint_id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": ["string", "null"] },
+        "supports_tools": { "type": "boolean" },
+        "supports_vision": { "type": "boolean" },
+        "supports_reasoning": { "type": "boolean" },
+        "context_length": { "type": ["integer", "null"], "minimum": 0 },
+        "published_at": { "type": ["string", "null"], "format": "date" },
+        "deprecated_at": { "type": ["string", "null"], "format": "date" },
+        "replacement_id": { "type": ["string", "null"] },
+        "primary_provider_id": { "type": "string" },
+        "primary_endpoint_id": { "type": "string" }
+      }
+    },
+    "offering": {
+      "type": "object",
+      "required": [
+        "provider_id",
+        "endpoint_id",
+        "model_id",
+        "canonical_model_id",
+        "price_currency",
+        "region",
+        "base_url",
+        "global_pricing",
+        "supports_tools",
+        "supports_vision",
+        "supports_reasoning"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "provider_id": { "type": "string" },
+        "endpoint_id": { "type": "string" },
+        "model_id": { "type": "string" },
+        "canonical_model_id": { "type": "string" },
+        "price_currency": { "type": "string", "enum": ["USD", "CNY"] },
+        "region": { "type": "string" },
+        "base_url": { "type": "string", "format": "uri" },
+        "global_pricing": { "$ref": "#/$defs/globalPricing" },
+        "supports_tools": { "type": "boolean" },
+        "supports_vision": { "type": "boolean" },
+        "supports_reasoning": { "type": "boolean" },
+        "context_length": { "type": ["integer", "null"], "minimum": 0 },
+        "category": { "type": ["string", "null"] },
+        "published_at": { "type": ["string", "null"], "format": "date" },
+        "deprecated_at": { "type": ["string", "null"], "format": "date" },
+        "replacement_id": { "type": ["string", "null"] }
+      }
+    }
+  }
+}

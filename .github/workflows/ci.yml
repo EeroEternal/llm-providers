@@ -24,27 +24,8 @@ jobs:
         run: cargo test --verbose
       - name: Check Examples
         run: cargo check --examples
-
-  test-python-bindings:
-    name: Test Python Bindings
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-      - name: Install maturin
-        run: pip install maturin
-      - name: Build and Test Bindings
-        run: |
-          cd py
-          python -m venv .venv
-          source .venv/bin/activate
-          pip install maturin
-          cargo test --verbose
-          maturin develop
-          python3 tests/test_bindings.py
+      - name: Check Export CLI
+        run: cargo run -- export --format pararouter | python3 -c "import json,sys; json.load(sys.stdin)"
 
   lint:
     name: Lint & Validate
@@ -54,11 +35,6 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
 
       - run: cargo fmt --all -- --check
       - run: cargo clippy -- -D warnings
-      - run: cd py && cargo fmt --all -- --check
-      - run: cd py && cargo clippy -- -D warnings

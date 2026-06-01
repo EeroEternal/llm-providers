@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "updated_at": "2026-05-31T12:00:00.000000Z",
+  "version": "3.0",
+  "updated_at": "2026-06-01T00:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -378,6 +378,8 @@
           "context_length": 1000000,
           "input_price": 3.0,
           "output_price": 15.0,
+          "cache_read_price": 0.3,
+          "cache_write_price": 3.75,
           "published_at": "2026-02-01"
         },
         {
@@ -457,7 +459,9 @@
             "context_length": 1000000,
             "input_price": 1.0,
             "output_price": 2.0,
-            "published_at": "2024-05-01"
+            "published_at": "2024-05-01",
+            "deprecated_at": "2026-07-24",
+            "replacement_id": "deepseek-v4-flash"
           },
           {
             "id": "deepseek-reasoner",
@@ -467,7 +471,9 @@
             "context_length": 1000000,
             "input_price": 1.0,
             "output_price": 2.0,
-            "published_at": "2025-01-01"
+            "published_at": "2025-01-01",
+            "deprecated_at": "2026-07-24",
+            "replacement_id": "deepseek-v4-flash"
           }
         ],
         "global": [
@@ -499,7 +505,9 @@
             "context_length": 1000000,
             "input_price": 0.14,
             "output_price": 0.28,
-            "published_at": "2024-05-01"
+            "published_at": "2024-05-01",
+            "deprecated_at": "2026-07-24",
+            "replacement_id": "deepseek-v4-flash"
           },
           {
             "id": "deepseek-reasoner",
@@ -509,7 +517,9 @@
             "context_length": 1000000,
             "input_price": 0.14,
             "output_price": 0.28,
-            "published_at": "2025-01-01"
+            "published_at": "2025-01-01",
+            "deprecated_at": "2026-07-24",
+            "replacement_id": "deepseek-v4-flash"
           }
         ]
       },
@@ -542,7 +552,9 @@
           "context_length": 1000000,
           "input_price": 1.0,
           "output_price": 2.0,
-          "published_at": "2024-05-01"
+          "published_at": "2024-05-01",
+          "deprecated_at": "2026-07-24",
+          "replacement_id": "deepseek-v4-flash"
         },
         {
           "id": "deepseek-reasoner",
@@ -552,7 +564,9 @@
           "context_length": 1000000,
           "input_price": 1.0,
           "output_price": 2.0,
-          "published_at": "2025-01-01"
+          "published_at": "2025-01-01",
+          "deprecated_at": "2026-07-24",
+          "replacement_id": "deepseek-v4-flash"
         }
       ]
     },

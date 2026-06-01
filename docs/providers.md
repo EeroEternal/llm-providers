@@ -29,17 +29,6 @@ All available Endpoint IDs with their label, region, and base URL. Use these IDs
 
 Use the Endpoint ID to directly access a specific API entry point:
 
-### Python
-
-```python
-import llm_providers_list
-
-family_id, ep = llm_providers_list.get_endpoint("moonshot:global")
-print(f"Family: {family_id}")
-print(f"Base URL: {ep.base_url}")
-print(f"Region: {ep.region}")
-```
-
 ### Rust
 
 ```rust

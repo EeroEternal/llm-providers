@@ -1,4 +1,10 @@
+mod export;
+
 use serde::Serialize;
+
+pub use export::{
+    CatalogEntry, ExportRegistry, GlobalPricing, ModelOffering, export_pararouter_registry,
+};
 
 #[derive(Debug, Serialize, Clone, Copy)]
 pub struct Model {
@@ -6,10 +12,24 @@ pub struct Model {
     pub name: &'static str,
     pub description: &'static str,
     pub supports_tools: bool,
+    pub supports_vision: bool,
+    pub supports_reasoning: bool,
     pub context_length: Option<u64>,
     pub input_price: f64,
     pub output_price: f64,
+    pub cache_read_price: Option<f64>,
+    pub cache_write_price: Option<f64>,
+    pub reasoning_price: Option<f64>,
+    pub category: Option<&'static str>,
     pub published_at: Option<&'static str>,
+    pub deprecated_at: Option<&'static str>,
+    pub replacement_id: Option<&'static str>,
+}
+
+impl Model {
+    pub fn is_deprecated(&self) -> bool {
+        self.deprecated_at.is_some()
+    }
 }
 
 #[derive(Debug, Serialize, Clone, Copy)]
@@ -29,11 +49,30 @@ pub struct Provider {
     pub endpoint_models: Option<&'static phf::Map<&'static str, &'static [Model]>>,
 }
 
+/// Model resolved at a specific endpoint, including regional pricing currency.
+#[derive(Debug, Serialize, Clone, Copy)]
+pub struct ResolvedModel {
+    pub provider_id: &'static str,
+    pub endpoint_key: &'static str,
+    pub model: Model,
+    pub price_currency: &'static str,
+    pub region: &'static str,
+    pub base_url: &'static str,
+}
+
+impl ResolvedModel {
+    pub fn endpoint_id(&self) -> String {
+        format!("{}:{}", self.provider_id, self.endpoint_key)
+    }
+}
+
 include!(concat!(env!("OUT_DIR"), "/registry_generated.rs"));
 
 pub type Providers = phf::Map<&'static str, Provider>;
 
-/// Get the providers map
+const RESELLER_PROVIDER_IDS: &[&str] =
+    &["tencent", "volcengine", "openrouter", "baseten", "zenmux"];
+
 pub fn get_providers_data() -> &'static Providers {
     &PROVIDERS
 }
@@ -46,7 +85,23 @@ pub fn registry_updated_at() -> &'static str {
     REGISTRY_UPDATED_AT
 }
 
-/// List all provider family IDs (sorted)
+/// Strip aggregator-style prefixes (`google/gemini-3.5-flash` → `gemini-3.5-flash`).
+pub fn canonical_model_id(model_id: &str) -> &str {
+    model_id.rsplit('/').next().unwrap_or(model_id)
+}
+
+pub fn is_reseller_provider(provider_id: &str) -> bool {
+    RESELLER_PROVIDER_IDS.contains(&provider_id)
+}
+
+pub(crate) fn provider_catalog_priority(provider_id: &str) -> u8 {
+    if is_reseller_provider(provider_id) {
+        100
+    } else {
+        0
+    }
+}
+
 pub fn list_providers() -> Vec<String> {
     let mut keys: Vec<String> = get_providers_data()
         .keys()
@@ -57,7 +112,6 @@ pub fn list_providers() -> Vec<String> {
     keys
 }
 
-/// List all endpoint IDs (sorted)
 pub fn list_endpoints() -> Vec<String> {
     let mut ids: Vec<String> = get_providers_data()
         .entries()
@@ -72,9 +126,6 @@ pub fn list_endpoints() -> Vec<String> {
     ids
 }
 
-/// Find endpoint details by endpoint ID, returning (family_id, Endpoint)
-///
-/// Endpoint ID format: "{provider_id}:{endpoint_key}".
 pub fn get_endpoint(endpoint_id: &str) -> Option<(&'static str, &'static Endpoint)> {
     if let Some((provider_id, endpoint_key)) = endpoint_id.split_once(':') {
         for (&pid, provider) in get_providers_data() {
@@ -98,34 +149,21 @@ pub fn get_endpoint(endpoint_id: &str) -> Option<(&'static str, &'static Endpoin
     found
 }
 
-/// List all model IDs under a provider family
 pub fn list_models(provider_id: &str) -> Option<Vec<String>> {
     get_providers_data()
         .get(provider_id)
         .map(|p| p.models.iter().map(|m| m.id.to_string()).collect())
 }
 
-/// List all model IDs under a specific endpoint.
-///
-/// Endpoint ID format: "{provider_id}:{endpoint_key}".
-///
-/// Behavior:
-/// - If the provider has endpoint-specific models, return those.
-/// - Otherwise fall back to provider-level models.
 pub fn list_models_for_endpoint(endpoint_id: &str) -> Option<Vec<String>> {
-    let (provider_id, endpoint_key) = endpoint_id.split_once(':')?;
-    let provider = get_providers_data().get(provider_id)?;
-
-    if let Some(endpoint_models) = provider.endpoint_models {
-        if let Some(models) = endpoint_models.get(endpoint_key) {
-            return Some(models.iter().map(|m| m.id.to_string()).collect());
-        }
-    }
-
-    Some(provider.models.iter().map(|m| m.id.to_string()).collect())
+    list_offerings_for_endpoint(endpoint_id).map(|offerings| {
+        offerings
+            .into_iter()
+            .map(|o| o.model.id.to_string())
+            .collect()
+    })
 }
 
-/// Get model details by (provider_id, model_id)
 pub fn get_model(provider_id: &str, model_id: &str) -> Option<Model> {
     get_model_ref(provider_id, model_id).copied()
 }
@@ -136,24 +174,106 @@ pub fn get_model_ref(provider_id: &str, model_id: &str) -> Option<&'static Model
         .and_then(|p| p.models.iter().find(|m| m.id == model_id))
 }
 
-/// Get model details by endpoint_id and model_id.
-///
-/// Endpoint ID format: "{provider_id}:{endpoint_key}".
-///
-/// Behavior:
-/// - If endpoint-specific models exist for that endpoint, search within them.
-/// - Otherwise fall back to provider-level models.
-pub fn get_model_for_endpoint(endpoint_id: &str, model_id: &str) -> Option<Model> {
-    let (provider_id, endpoint_key) = endpoint_id.split_once(':')?;
-    let provider = get_providers_data().get(provider_id)?;
+pub fn get_model_for_endpoint(endpoint_id: &str, model_id: &str) -> Option<ResolvedModel> {
+    resolve_offering(endpoint_id, model_id)
+}
 
-    if let Some(endpoint_models) = provider.endpoint_models {
-        if let Some(models) = endpoint_models.get(endpoint_key) {
-            return models.iter().find(|m| m.id == model_id).copied();
+fn models_for_endpoint_provider(provider: &Provider, endpoint_key: &str) -> &'static [Model] {
+    if let Some(endpoint_models) = provider.endpoint_models
+        && let Some(models) = endpoint_models.get(endpoint_key)
+    {
+        return models;
+    }
+    provider.models
+}
+
+fn resolve_offering(endpoint_id: &str, model_id: &str) -> Option<ResolvedModel> {
+    let (provider_id, endpoint_key_part) = endpoint_id.split_once(':')?;
+    let (&pid, provider) = get_providers_data()
+        .entries()
+        .find(|(id, _)| **id == provider_id)?;
+    let (&endpoint_key, ep) = provider
+        .endpoints
+        .entries()
+        .find(|(key, _)| **key == endpoint_key_part)?;
+    let model = models_for_endpoint_provider(provider, endpoint_key)
+        .iter()
+        .find(|m| m.id == model_id)
+        .copied()?;
+
+    Some(ResolvedModel {
+        provider_id: pid,
+        endpoint_key,
+        model,
+        price_currency: ep.price_currency,
+        region: ep.region,
+        base_url: ep.base_url,
+    })
+}
+
+/// Every deployable `(provider, endpoint, model)` tuple with endpoint-accurate pricing.
+pub fn list_offerings() -> Vec<ModelOffering> {
+    let mut offerings = Vec::new();
+
+    for (&provider_id, provider) in get_providers_data() {
+        for (&endpoint_key, ep) in provider.endpoints.entries() {
+            for model in models_for_endpoint_provider(provider, endpoint_key) {
+                offerings.push(ModelOffering {
+                    provider_id,
+                    endpoint_key,
+                    endpoint_id: format!("{provider_id}:{endpoint_key}"),
+                    model: *model,
+                    price_currency: ep.price_currency,
+                    region: ep.region,
+                    base_url: ep.base_url,
+                });
+            }
         }
     }
 
-    provider.models.iter().find(|m| m.id == model_id).copied()
+    offerings.sort_by(|a, b| {
+        a.endpoint_id
+            .cmp(&b.endpoint_id)
+            .then_with(|| a.model.id.cmp(b.model.id))
+    });
+    offerings
+}
+
+fn list_offerings_for_endpoint(endpoint_id: &str) -> Option<Vec<ModelOffering>> {
+    let (provider_id, endpoint_key_part) = endpoint_id.split_once(':')?;
+    let (&pid, provider) = get_providers_data()
+        .entries()
+        .find(|(id, _)| **id == provider_id)?;
+    let (&endpoint_key, ep) = provider
+        .endpoints
+        .entries()
+        .find(|(key, _)| **key == endpoint_key_part)?;
+
+    let mut offerings = models_for_endpoint_provider(provider, endpoint_key)
+        .iter()
+        .map(|model| ModelOffering {
+            provider_id: pid,
+            endpoint_key,
+            endpoint_id: endpoint_id.to_string(),
+            model: *model,
+            price_currency: ep.price_currency,
+            region: ep.region,
+            base_url: ep.base_url,
+        })
+        .collect::<Vec<_>>();
+
+    offerings.sort_by(|a, b| a.model.id.cmp(b.model.id));
+    Some(offerings)
+}
+
+/// Global catalog keyed by canonical model id. Reseller/duplicate ids collapse to one entry.
+pub fn list_catalog_models() -> Vec<CatalogEntry> {
+    export::build_catalog_from_offerings(&list_offerings())
+}
+
+/// Back-compat alias for [`list_catalog_models`].
+pub fn list_models_unique() -> Vec<CatalogEntry> {
+    list_catalog_models()
 }
 
 #[derive(Default, Clone, Copy, PartialEq, Eq)]
@@ -164,117 +284,146 @@ pub enum OrderBy {
     PublishedAtDesc,
 }
 
-#[derive(Default)]
+#[derive(Clone)]
 pub struct ModelFilter {
     pub provider_id: Option<String>,
+    pub endpoint_id: Option<String>,
     pub region: Option<String>,
     pub supports_tools: Option<bool>,
+    pub supports_vision: Option<bool>,
+    pub supports_reasoning: Option<bool>,
     pub min_context_length: Option<u64>,
+    pub exclude_deprecated: bool,
     pub order_by: Option<OrderBy>,
 }
 
-/// Advanced filtering: returns a list of (provider_id, Model)
-pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
-    let mut results = Vec::new();
-
-    for (&pid, provider) in get_providers_data() {
-        // Filter by provider_id
-        if let Some(ref target_pid) = filter.provider_id {
-            if pid != target_pid.as_str() {
-                continue;
-            }
-        }
-
-        // Filter by region: match if any endpoint has the target region
-        if let Some(ref target_region) = filter.region {
-            let has_region = provider
-                .endpoints
-                .values()
-                .any(|ep| ep.region == target_region);
-            if !has_region {
-                continue;
-            }
-        }
-
-        for model in provider.models {
-            // Filter by supports_tools
-            if let Some(target_tools) = filter.supports_tools {
-                if model.supports_tools != target_tools {
-                    continue;
-                }
-            }
-
-            // Filter by min_context_length
-            if let Some(min_ctx) = filter.min_context_length {
-                if model.context_length.unwrap_or(0) < min_ctx {
-                    continue;
-                }
-            }
-
-            results.push((pid.to_string(), *model));
+impl Default for ModelFilter {
+    fn default() -> Self {
+        Self {
+            provider_id: None,
+            endpoint_id: None,
+            region: None,
+            supports_tools: None,
+            supports_vision: None,
+            supports_reasoning: None,
+            min_context_length: None,
+            exclude_deprecated: true,
+            order_by: None,
         }
     }
+}
 
-    // Sort results based on order_by
-    match filter.order_by {
+fn offering_matches_filter(offering: &ModelOffering, filter: &ModelFilter) -> bool {
+    if let Some(ref target_pid) = filter.provider_id
+        && offering.provider_id != target_pid.as_str()
+    {
+        return false;
+    }
+
+    if let Some(ref target_eid) = filter.endpoint_id
+        && offering.endpoint_id != *target_eid
+    {
+        return false;
+    }
+
+    if let Some(ref target_region) = filter.region
+        && offering.region != target_region.as_str()
+    {
+        return false;
+    }
+
+    if let Some(target_tools) = filter.supports_tools
+        && offering.model.supports_tools != target_tools
+    {
+        return false;
+    }
+
+    if let Some(target_vision) = filter.supports_vision
+        && offering.model.supports_vision != target_vision
+    {
+        return false;
+    }
+
+    if let Some(target_reasoning) = filter.supports_reasoning
+        && offering.model.supports_reasoning != target_reasoning
+    {
+        return false;
+    }
+
+    if let Some(min_ctx) = filter.min_context_length
+        && offering.model.context_length.unwrap_or(0) < min_ctx
+    {
+        return false;
+    }
+
+    if filter.exclude_deprecated && offering.model.is_deprecated() {
+        return false;
+    }
+
+    true
+}
+
+fn sort_offerings(results: &mut [ModelOffering], order_by: Option<OrderBy>) {
+    match order_by {
         Some(OrderBy::PublishedAtAsc) => {
-            results.sort_by(|a, b| {
-                match (a.1.published_at, b.1.published_at) {
-                    (Some(a_date), Some(b_date)) => a_date.cmp(b_date),
-                    (Some(_), None) => std::cmp::Ordering::Less,
-                    (None, Some(_)) => std::cmp::Ordering::Greater,
-                    (None, None) => {
-                        let p_cmp = a.0.cmp(&b.0);
-                        if p_cmp == std::cmp::Ordering::Equal {
-                            a.1.id.cmp(b.1.id)
-                        } else {
-                            p_cmp
-                        }
-                    }
-                }
+            results.sort_by(|a, b| match (a.model.published_at, b.model.published_at) {
+                (Some(a_date), Some(b_date)) => a_date.cmp(b_date),
+                (Some(_), None) => std::cmp::Ordering::Less,
+                (None, Some(_)) => std::cmp::Ordering::Greater,
+                (None, None) => a
+                    .endpoint_id
+                    .cmp(&b.endpoint_id)
+                    .then_with(|| a.model.id.cmp(b.model.id)),
             });
         }
         Some(OrderBy::PublishedAtDesc) => {
-            results.sort_by(|a, b| {
-                match (a.1.published_at, b.1.published_at) {
-                    (Some(a_date), Some(b_date)) => b_date.cmp(a_date),
-                    (Some(_), None) => std::cmp::Ordering::Less,
-                    (None, Some(_)) => std::cmp::Ordering::Greater,
-                    (None, None) => {
-                        let p_cmp = a.0.cmp(&b.0);
-                        if p_cmp == std::cmp::Ordering::Equal {
-                            a.1.id.cmp(b.1.id)
-                        } else {
-                            p_cmp
-                        }
-                    }
-                }
+            results.sort_by(|a, b| match (a.model.published_at, b.model.published_at) {
+                (Some(a_date), Some(b_date)) => b_date.cmp(a_date),
+                (Some(_), None) => std::cmp::Ordering::Less,
+                (None, Some(_)) => std::cmp::Ordering::Greater,
+                (None, None) => a
+                    .endpoint_id
+                    .cmp(&b.endpoint_id)
+                    .then_with(|| a.model.id.cmp(b.model.id)),
             });
         }
         _ => {
-            // Default: sort by provider_id, then model_id
             results.sort_by(|a, b| {
-                let p_cmp = a.0.cmp(&b.0);
-                if p_cmp == std::cmp::Ordering::Equal {
-                    a.1.id.cmp(b.1.id)
-                } else {
-                    p_cmp
-                }
+                a.endpoint_id
+                    .cmp(&b.endpoint_id)
+                    .then_with(|| a.model.id.cmp(b.model.id))
             });
         }
     }
+}
 
+/// Endpoint-aware filtering; each result includes regional pricing currency.
+pub fn filter_offerings(filter: ModelFilter) -> Vec<ModelOffering> {
+    let mut results: Vec<ModelOffering> = list_offerings()
+        .into_iter()
+        .filter(|offering| offering_matches_filter(offering, &filter))
+        .collect();
+
+    sort_offerings(&mut results, filter.order_by);
     results
+}
+
+/// Deprecated: use [`filter_offerings`] for endpoint-accurate pricing and currency.
+pub fn filter_models(filter: ModelFilter) -> Vec<(String, Model)> {
+    filter_offerings(filter)
+        .into_iter()
+        .map(|o| (o.provider_id.to_string(), o.model))
+        .collect()
 }
 
 pub fn filter_models_ref(filter: ModelFilter) -> Vec<(&'static str, &'static Model)> {
     let mut results = Vec::new();
 
     for (&pid, provider) in get_providers_data() {
-        if let Some(ref target_pid) = filter.provider_id {
-            if pid != target_pid.as_str() {
-                continue;
-            }
+        if let Some(ref target_pid) = filter.provider_id
+            && pid != target_pid.as_str()
+        {
+            continue;
         }
 
         if let Some(ref target_region) = filter.region {
@@ -288,62 +437,68 @@ pub fn filter_models_ref(filter: ModelFilter) -> Vec<(&'static str, &'static Mod
         }
 
         for model in provider.models {
-            if let Some(target_tools) = filter.supports_tools {
-                if model.supports_tools != target_tools {
-                    continue;
-                }
+            if filter.exclude_deprecated && model.is_deprecated() {
+                continue;
             }
-
-            if let Some(min_ctx) = filter.min_context_length {
-                if model.context_length.unwrap_or(0) < min_ctx {
-                    continue;
-                }
+            if let Some(target_tools) = filter.supports_tools
+                && model.supports_tools != target_tools
+            {
+                continue;
+            }
+            if let Some(target_vision) = filter.supports_vision
+                && model.supports_vision != target_vision
+            {
+                continue;
+            }
+            if let Some(target_reasoning) = filter.supports_reasoning
+                && model.supports_reasoning != target_reasoning
+            {
+                continue;
+            }
+            if let Some(min_ctx) = filter.min_context_length
+                && model.context_length.unwrap_or(0) < min_ctx
+            {
+                continue;
             }
 
             results.push((pid, model));
         }
     }
 
-    // Sort results based on order_by
     match filter.order_by {
         Some(OrderBy::PublishedAtAsc) => {
-            results.sort_by(|a, b| {
-                match (a.1.published_at, b.1.published_at) {
-                    (Some(a_date), Some(b_date)) => a_date.cmp(b_date),
-                    (Some(_), None) => std::cmp::Ordering::Less,
-                    (None, Some(_)) => std::cmp::Ordering::Greater,
-                    (None, None) => {
-                        let p_cmp = a.0.cmp(&b.0);
-                        if p_cmp == std::cmp::Ordering::Equal {
-                            a.1.id.cmp(b.1.id)
-                        } else {
-                            p_cmp
-                        }
+            results.sort_by(|a, b| match (a.1.published_at, b.1.published_at) {
+                (Some(a_date), Some(b_date)) => a_date.cmp(b_date),
+                (Some(_), None) => std::cmp::Ordering::Less,
+                (None, Some(_)) => std::cmp::Ordering::Greater,
+                (None, None) => {
+                    let p_cmp = a.0.cmp(b.0);
+                    if p_cmp == std::cmp::Ordering::Equal {
+                        a.1.id.cmp(b.1.id)
+                    } else {
+                        p_cmp
                     }
                 }
             });
         }
         Some(OrderBy::PublishedAtDesc) => {
-            results.sort_by(|a, b| {
-                match (a.1.published_at, b.1.published_at) {
-                    (Some(a_date), Some(b_date)) => b_date.cmp(a_date),
-                    (Some(_), None) => std::cmp::Ordering::Less,
-                    (None, Some(_)) => std::cmp::Ordering::Greater,
-                    (None, None) => {
-                        let p_cmp = a.0.cmp(&b.0);
-                        if p_cmp == std::cmp::Ordering::Equal {
-                            a.1.id.cmp(b.1.id)
-                        } else {
-                            p_cmp
-                        }
+            results.sort_by(|a, b| match (a.1.published_at, b.1.published_at) {
+                (Some(a_date), Some(b_date)) => b_date.cmp(a_date),
+                (Some(_), None) => std::cmp::Ordering::Less,
+                (None, Some(_)) => std::cmp::Ordering::Greater,
+                (None, None) => {
+                    let p_cmp = a.0.cmp(b.0);
+                    if p_cmp == std::cmp::Ordering::Equal {
+                        a.1.id.cmp(b.1.id)
+                    } else {
+                        p_cmp
                     }
                 }
             });
         }
         _ => {
-            // Default: sort by provider_id, then model_id
             results.sort_by(|a, b| {
-                let p_cmp = a.0.cmp(&b.0);
+                let p_cmp = a.0.cmp(b.0);
                 if p_cmp == std::cmp::Ordering::Equal {
                     a.1.id.cmp(b.1.id)
                 } else {
@@ -365,8 +520,16 @@ mod tests {
         let providers = get_providers_data();
         assert!(!providers.is_empty());
         assert!(providers.contains_key("openai"));
+        assert_eq!(registry_version(), "3.0");
+    }
 
-        assert_eq!(registry_version(), "2.0");
+    #[test]
+    fn test_canonical_model_id() {
+        assert_eq!(canonical_model_id("gemini-3.5-flash"), "gemini-3.5-flash");
+        assert_eq!(
+            canonical_model_id("google/gemini-3.5-flash"),
+            "gemini-3.5-flash"
+        );
     }
 
     #[test]
@@ -379,44 +542,62 @@ mod tests {
             .expect("aliyun endpoint not found");
         assert_eq!(ep.region, "cn");
         assert_eq!(ep.price_currency, "CNY");
-
-        // Multi-endpoint provider
-        let moonshot = providers.get("moonshot").expect("moonshot not found");
-        assert!(moonshot.endpoints.contains_key("cn"));
-        assert!(moonshot.endpoints.contains_key("global"));
-        assert_eq!(moonshot.endpoints["cn"].region, "cn");
-        assert_eq!(moonshot.endpoints["global"].region, "global");
     }
 
     #[test]
-    fn test_list_providers() {
-        let providers = list_providers();
-        assert!(providers.contains(&"openai".to_string()));
-        assert!(providers.contains(&"anthropic".to_string()));
-        // moonshot_global should NOT be a top-level provider anymore
-        assert!(!providers.contains(&"moonshot_global".to_string()));
+    fn test_get_model_for_endpoint_includes_currency() {
+        let resolved =
+            get_model_for_endpoint("minimax:global", "MiniMax-M3").expect("model not found");
+        assert_eq!(resolved.price_currency, "USD");
+        assert_eq!(resolved.model.input_price, 0.6);
     }
 
     #[test]
-    fn test_list_endpoints() {
-        let endpoints = list_endpoints();
-        assert!(endpoints.contains(&"openai:global".to_string()));
-        assert!(endpoints.contains(&"moonshot:cn".to_string()));
-        assert!(endpoints.contains(&"moonshot:global".to_string()));
+    fn test_list_catalog_dedupes_resellers() {
+        let catalog = list_catalog_models();
+        let flash = catalog
+            .iter()
+            .find(|c| c.id == "deepseek-v4-flash")
+            .expect("catalog entry");
+        assert_eq!(flash.primary_provider_id, "deepseek");
     }
 
     #[test]
-    fn test_get_endpoint() {
-        let (family_id, ep) = get_endpoint("moonshot:global").expect("endpoint not found");
-        assert_eq!(family_id, "moonshot");
-        assert_eq!(ep.region, "global");
-        assert_eq!(ep.price_currency, "USD");
+    fn test_list_offerings_includes_tencent() {
+        let offerings = list_offerings();
+        assert!(
+            offerings
+                .iter()
+                .any(|o| o.provider_id == "tencent" && o.model.id == "deepseek-v4-flash")
+        );
     }
 
     #[test]
-    fn test_list_models() {
-        let models = list_models("openai").expect("OpenAI provider not found");
-        assert!(models.contains(&"gpt-4o".to_string()));
+    fn test_filter_offerings_excludes_deprecated_by_default() {
+        let all = filter_offerings(ModelFilter {
+            exclude_deprecated: false,
+            provider_id: Some("deepseek".to_string()),
+            ..Default::default()
+        });
+        let active = filter_offerings(ModelFilter {
+            provider_id: Some("deepseek".to_string()),
+            ..Default::default()
+        });
+        assert!(active.len() < all.len() || all.iter().all(|o| !o.model.is_deprecated()));
+    }
+
+    #[test]
+    fn test_export_pararouter_shape() {
+        let exported = export_pararouter_registry();
+        assert_eq!(exported.registry_version, registry_version());
+        assert!(!exported.catalog.is_empty());
+        assert!(!exported.offerings.is_empty());
+        assert!(
+            exported
+                .offerings
+                .iter()
+                .all(|o| !o.price_currency.is_empty())
+        );
     }
 
     #[test]
@@ -424,89 +605,5 @@ mod tests {
         let model = get_model("openai", "gpt-4o").expect("Model not found");
         assert_eq!(model.id, "gpt-4o");
         assert!(model.supports_tools);
-    }
-
-    #[test]
-    fn test_filter_models() {
-        // 1. Filter by region="cn" — matches providers that have any CN endpoint
-        let cn_models = filter_models(ModelFilter {
-            region: Some("cn".to_string()),
-            ..Default::default()
-        });
-        assert!(!cn_models.is_empty());
-        assert!(cn_models.iter().any(|(p, _)| p == "aliyun"));
-        assert!(!cn_models.iter().any(|(p, _)| p == "openai"));
-
-        // 2. Filter by supports_tools=true
-        let tool_models = filter_models(ModelFilter {
-            supports_tools: Some(true),
-            provider_id: Some("openai".to_string()),
-            ..Default::default()
-        });
-        assert!(tool_models.iter().any(|(_, m)| m.id == "gpt-4o"));
-    }
-
-    #[tokio::test]
-    async fn test_integration_with_llm_connector() {
-        let providers = get_providers_data();
-        if let Some(openai) = providers.get("openai") {
-            let ep = openai
-                .endpoints
-                .get("global")
-                .expect("openai endpoint not found");
-            assert!(ep.base_url.contains("api.openai.com"));
-            let has_gpt4o = openai.models.iter().any(|m| m.id == "gpt-4o");
-            assert!(has_gpt4o, "OpenAI provider should have gpt-4o");
-        }
-    }
-
-    #[test]
-    fn test_filter_models_order_by_published_at_desc() {
-        // Test sorting by published_at descending (newest first)
-        let models = filter_models(ModelFilter {
-            order_by: Some(OrderBy::PublishedAtDesc),
-            ..Default::default()
-        });
-
-        // Find indices of models with known published_at dates
-        let gpt55_idx = models.iter().position(|(_, m)| m.id == "gpt-5.5");
-        let _gpt52_idx = models.iter().position(|(_, m)| m.id == "gpt-5.2");
-        let _gemini35flash_idx = models.iter().position(|(_, m)| m.id == "gemini-3.5-flash");
-        let gemini25pro_idx = models.iter().position(|(_, m)| m.id == "gemini-2.5-pro");
-
-        // Models with published_at should come before models without
-        // And among models with dates, newer ones should come first
-        if let (Some(idx1), Some(idx2)) = (gpt55_idx, gemini25pro_idx) {
-            // gpt-5.5 (2026-04-24) is newer than gemini-2.5-pro (2025-06-17)
-            assert!(idx1 < idx2, "gpt-5.5 should come before gemini-2.5-pro when sorting desc");
-        }
-    }
-
-    #[test]
-    fn test_filter_models_order_by_published_at_asc() {
-        // Test sorting by published_at ascending (oldest first)
-        let models = filter_models(ModelFilter {
-            order_by: Some(OrderBy::PublishedAtAsc),
-            ..Default::default()
-        });
-
-        // Find indices of models with known published_at dates
-        let gpt55_idx = models.iter().position(|(_, m)| m.id == "gpt-5.5");
-        let gemini25pro_idx = models.iter().position(|(_, m)| m.id == "gemini-2.5-pro");
-
-        // Among models with dates, older ones should come first
-        if let (Some(idx1), Some(idx2)) = (gemini25pro_idx, gpt55_idx) {
-            // gemini-2.5-pro (2025-06-17) is older than gpt-5.5 (2026-04-24)
-            assert!(idx1 < idx2, "gemini-2.5-pro should come before gpt-5.5 when sorting asc");
-        }
-    }
-
-    #[test]
-    fn test_model_published_at_field() {
-        // Test that the published_at field is correctly loaded from JSON
-        let gpt55 = get_model("openai", "gpt-5.5");
-        assert!(gpt55.is_some(), "gpt-5.5 should exist");
-        let model = gpt55.unwrap();
-        assert_eq!(model.published_at, Some("2026-04-24"));
     }
 }

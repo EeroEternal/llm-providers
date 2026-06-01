@@ -1,6 +1,6 @@
 [package]
 name = "llm_providers"
-version = "0.13.0"
+version = "0.14.0"
 edition = "2024"
 description = "A unified source of truth for LLM providers, models, pricing, and capabilities."
 license = "MIT"
@@ -13,7 +13,12 @@ build = "build.rs"
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
 phf = { version = "0.11", features = ["macros", "serde"] }
+
+[[bin]]
+name = "llm_providers"
+path = "src/bin/llm_providers.rs"
 
 [dev-dependencies]
 llm-connector = "0.6.1"

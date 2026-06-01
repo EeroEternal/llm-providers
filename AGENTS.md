@@ -6,7 +6,7 @@ This repository maintains a single curated registry at `data/providers.json`. Al
 
 ```json
 {
-  "version": "2.0",
+  "version": "3.0",
   "updated_at": "2026-06-01T00:00:00.000000Z",
   "providers": {
     "<provider_id>": { ... }
@@ -63,14 +63,22 @@ Every model entry must include:
 
 | Field | Type | Notes |
 |---|---|---|
-| `id` | string | **Must match the vendor API model ID exactly** (case-sensitive) |
+| `id` | string | **Must match the vendor API model ID exactly** (official short id; no `google/` prefixes) |
 | `name` | string | Display name |
 | `description` | string | Capabilities, context, deprecation notes |
 | `supports_tools` | bool | `true` for chat/LLM with function calling; `false` for TTS/video/image/music |
+| `supports_vision` | bool (optional) | Default `false` |
+| `supports_reasoning` | bool (optional) | Default `false` |
 | `context_length` | number or null | Context window in tokens; use official vendor value |
-| `input_price` | number | Price per **1M input tokens** |
-| `output_price` | number | Price per **1M output tokens** |
-| `published_at` | string (optional) | `YYYY-MM-DD` release date for new models |
+| `input_price` | number | Price per **1M input tokens** (maps to export `global_pricing.prompt`) |
+| `output_price` | number | Price per **1M output tokens** (maps to export `global_pricing.completion`) |
+| `cache_read_price` | number or null | Cache read $/1M; omit or `null` if unknown |
+| `cache_write_price` | number or null | Cache write $/1M; omit or `null` if unknown |
+| `reasoning_price` | number or null | Reasoning/thinking $/1M; omit or `null` if unknown |
+| `category` | string (optional) | e.g. `Coding`, `Reasoning` |
+| `published_at` | string (optional) | `YYYY-MM-DD` release date; required for new non-deprecated models (build warns if missing) |
+| `deprecated_at` | string (optional) | `YYYY-MM-DD` when the model id stops being recommended |
+| `replacement_id` | string (optional) | Canonical replacement model id |
 
 ### Pricing Rules
 
@@ -191,10 +199,13 @@ Some models appear on platforms that resell third-party models. Add them under t
 
 Use the **reseller’s model ID and CNY pricing**, not the upstream vendor’s ID, when they differ.
 
+Duplicate ids across vendor + reseller families are intentional. Global catalog dedupe prefers the **vendor family** over resellers (`tencent`, `volcengine`, aggregators). Use `list_offerings()` for all deployable tuples; use `list_catalog_models()` for a flat canonical catalog.
+
 ### 4. Validate
 
 ```bash
 cargo test
+cargo run -- export --format pararouter --output /tmp/registry.json
 ```
 
 This runs `build.rs`, validates JSON, embeds the registry, and executes unit tests. Fix any panic from invalid JSON, empty endpoints, or empty `endpoint_models` arrays.
@@ -210,10 +221,9 @@ cargo fmt --all -- --check
 Only when explicitly requested:
 
 1. Bump `version` in root `Cargo.toml` (semver).
-2. Update `llm_providers` path/version in `py/Cargo.toml` if needed.
-3. Commit with conventional message, e.g. `feat: add MiniMax M3 model`.
-4. Tag `vX.Y.Z`, push to GitHub.
-5. Publish: `cargo publish`
+2. Commit with conventional message, e.g. `feat: add MiniMax M3 model`.
+3. Tag `vX.Y.Z`, push to GitHub.
+4. Publish: `cargo publish`
 
 ## Common Mistakes
 
@@ -223,27 +233,32 @@ Only when explicitly requested:
 - Setting `supports_tools: true` on TTS/video/image models.
 - Leaving stale `context_length` (e.g. 32K when vendor documents 256K or 1M).
 - Not noting deprecation/auto-routing in `description` for legacy model IDs.
+- Not setting structured `deprecated_at` / `replacement_id` when retiring model ids.
 - Forgetting to bump `updated_at`.
 
 ## Quick API Reference
 
 ```rust
-use llm_providers::{get_endpoint, get_model, get_model_for_endpoint};
+use llm_providers::{
+    canonical_model_id, export_pararouter_registry, get_endpoint, get_model_for_endpoint,
+    list_catalog_models, list_offerings,
+};
 
-// Endpoint base URL + currency
-let (_, ep) = get_endpoint("minimax:global").unwrap();
-// ep.base_url, ep.price_currency
+// Endpoint base URL + currency + regional pricing
+let resolved = get_model_for_endpoint("minimax:global", "MiniMax-M3").unwrap();
+// resolved.price_currency, resolved.model.input_price
 
-// Provider-level model (fallback list)
-let model = get_model("minimax", "MiniMax-M3").unwrap();
+// Global catalog (deduped by canonical id; vendor beats reseller)
+let catalog = list_catalog_models();
 
-// Region-accurate pricing
-let model = get_model_for_endpoint("minimax:global", "MiniMax-M3").unwrap();
+// All offerings for routing / Hub sync
+let offerings = list_offerings();
+
+// ParaRouter export
+let export = export_pararouter_registry();
+
+// Strip aggregator prefixes
+assert_eq!(canonical_model_id("google/gemini-3.5-flash"), "gemini-3.5-flash");
 ```
 
-```python
-import llm_providers_list
-
-family, ep = llm_providers_list.get_endpoint("minimax:cn")
-model = llm_providers_list.get_model_for_endpoint("minimax:global", "MiniMax-M3")
-```
+Export schema: `schemas/pararouter-export-v1.json`.
