@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated_at": "2026-05-31T00:00:00.000000Z",
+  "updated_at": "2026-05-31T12:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -15,115 +15,133 @@
       },
       "models": [
         {
-          "id": "gemini-3",
-          "name": "Gemini 3",
-          "description": "Next generation multimodal model with frontier intelligence",
+          "id": "gemini-3.5-flash",
+          "name": "Gemini 3.5 Flash",
+          "description": "Latest stable Flash model with frontier intelligence and search grounding",
           "supports_tools": true,
-          "context_length": 2000000,
-          "input_price": 5.0,
-          "output_price": 20.0,
-          "published_at": "2025-01-15"
+          "context_length": 1000000,
+          "input_price": 1.5,
+          "output_price": 9.0,
+          "published_at": "2026-05-01"
         },
         {
           "id": "gemini-3.1-pro-preview",
           "name": "Gemini 3.1 Pro Preview",
-          "description": "Preview model",
+          "description": "Preview of Gemini 3.1 Pro with enhanced reasoning and agentic capabilities",
           "supports_tools": true,
-          "context_length": null,
+          "context_length": 1000000,
           "input_price": 2.0,
-          "output_price": 12.0
+          "output_price": 12.0,
+          "published_at": "2026-02-19"
         },
         {
           "id": "gemini-3.1-pro-preview-customtools",
           "name": "Gemini 3.1 Pro Preview Custom Tools",
-          "description": "Preview model with custom tools",
+          "description": "Gemini 3.1 Pro Preview variant optimized for custom tool use",
           "supports_tools": true,
-          "context_length": null,
+          "context_length": 1000000,
           "input_price": 2.0,
-          "output_price": 12.0
+          "output_price": 12.0,
+          "published_at": "2026-02-19"
         },
         {
-          "id": "gemini-3-pro-image-preview",
-          "name": "Gemini 3 Pro Image Preview",
-          "description": "Preview image generation model",
+          "id": "gemini-3.1-flash-lite",
+          "name": "Gemini 3.1 Flash-Lite",
+          "description": "Stable cost-efficient model for high-volume agentic tasks",
           "supports_tools": true,
-          "context_length": null,
-          "input_price": 2.0,
-          "output_price": 12.0
+          "context_length": 1000000,
+          "input_price": 0.25,
+          "output_price": 1.5,
+          "published_at": "2026-05-01"
         },
         {
           "id": "gemini-3-flash-preview",
           "name": "Gemini 3 Flash Preview",
-          "description": "Preview flash model",
+          "description": "Intelligent model built for speed with frontier intelligence and search grounding",
           "supports_tools": true,
-          "context_length": null,
+          "context_length": 1000000,
           "input_price": 0.5,
-          "output_price": 3.0
+          "output_price": 3.0,
+          "published_at": "2025-12-17"
         },
         {
-          "id": "gemini-embedding-001",
-          "name": "Gemini Embedding 001",
-          "description": "Embedding model",
-          "supports_tools": false,
-          "context_length": null,
-          "input_price": 0.15,
-          "output_price": 0.15
+          "id": "gemini-3-pro-image",
+          "name": "Gemini 3 Pro Image",
+          "description": "Native image generation model optimized for speed and contextual understanding",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 2.0,
+          "output_price": 12.0,
+          "published_at": "2025-11-20"
         },
         {
           "id": "gemini-2.5-pro",
           "name": "Gemini 2.5 Pro",
-          "description": "Highly capable multimodal model for complex reasoning and tasks",
+          "description": "Advanced reasoning model with 1M context window",
           "supports_tools": true,
-          "context_length": 2000000,
+          "context_length": 1000000,
           "input_price": 1.25,
           "output_price": 10.0,
-          "published_at": "2024-09-24"
+          "published_at": "2025-06-17"
         },
         {
           "id": "gemini-2.5-flash",
           "name": "Gemini 2.5 Flash",
-          "description": "Fast and versatile multimodal model for high-volume tasks",
+          "description": "Hybrid reasoning model for low-latency, high-volume tasks",
           "supports_tools": true,
           "context_length": 1000000,
-          "input_price": 0.1,
-          "output_price": 0.4
+          "input_price": 0.3,
+          "output_price": 2.5,
+          "published_at": "2025-06-17"
         },
         {
           "id": "gemini-2.5-flash-lite",
           "name": "Gemini 2.5 Flash-Lite",
-          "description": "Lite version of Gemini 2.5 Flash for ultra-fast response",
-          "supports_tools": true,
-          "context_length": 1000000,
-          "input_price": 0.05,
-          "output_price": 0.2
-        },
-        {
-          "id": "gemini-2.0-flash",
-          "name": "Gemini 2.0 Flash",
-          "description": "Previous flagship flash model, fast and efficient",
+          "description": "Smallest and most cost-effective model for at-scale usage",
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 0.1,
           "output_price": 0.4,
-          "published_at": "2024-02-15"
+          "published_at": "2025-06-17"
+        },
+        {
+          "id": "gemini-2.0-flash",
+          "name": "Gemini 2.0 Flash",
+          "description": "Deprecated previous generation flash model",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 0.1,
+          "output_price": 0.4,
+          "published_at": "2024-12-11"
         },
         {
           "id": "gemini-1.5-pro",
           "name": "Gemini 1.5 Pro",
-          "description": "Mid-range model with massive context window",
+          "description": "Legacy model with 2M context window",
           "supports_tools": true,
           "context_length": 2000000,
-          "input_price": 3.5,
-          "output_price": 10.5
+          "input_price": 1.25,
+          "output_price": 5.0,
+          "published_at": "2024-05-14"
         },
         {
           "id": "gemini-1.5-flash",
           "name": "Gemini 1.5 Flash",
-          "description": "Fast and cost-efficient multimodal model",
+          "description": "Legacy fast and cost-efficient multimodal model",
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 0.075,
-          "output_price": 0.3
+          "output_price": 0.3,
+          "published_at": "2024-05-14"
+        },
+        {
+          "id": "gemini-embedding-001",
+          "name": "Gemini Embedding 001",
+          "description": "Text embedding model",
+          "supports_tools": false,
+          "context_length": null,
+          "input_price": 0.15,
+          "output_price": 0.0
         }
       ]
     },
@@ -135,7 +153,7 @@
           "region": "global",
           "base_url": "https://api.openai.com/v1",
           "price_currency": "USD",
-          "docs_url": null
+          "docs_url": "https://developers.openai.com/api/docs/models"
         }
       },
       "models": [
@@ -144,10 +162,60 @@
           "name": "GPT-5.5",
           "description": "Flagship model for complex reasoning, coding, and professional work",
           "supports_tools": true,
-          "context_length": 1000000,
+          "context_length": 1050000,
           "input_price": 5.0,
           "output_price": 30.0,
-          "published_at": "2025-03-01"
+          "published_at": "2026-04-24"
+        },
+        {
+          "id": "gpt-5.5-pro",
+          "name": "GPT-5.5 Pro",
+          "description": "High-compute variant of GPT-5.5 for smarter and more precise responses",
+          "supports_tools": true,
+          "context_length": 1050000,
+          "input_price": 30.0,
+          "output_price": 180.0,
+          "published_at": "2026-04-24"
+        },
+        {
+          "id": "gpt-5.4",
+          "name": "GPT-5.4",
+          "description": "Frontier model for coding and professional work at lower cost than GPT-5.5",
+          "supports_tools": true,
+          "context_length": 1050000,
+          "input_price": 2.5,
+          "output_price": 15.0,
+          "published_at": "2026-03-05"
+        },
+        {
+          "id": "gpt-5.4-pro",
+          "name": "GPT-5.4 Pro",
+          "description": "Maximum capability GPT-5.4 variant for complex high-stakes tasks",
+          "supports_tools": true,
+          "context_length": 1050000,
+          "input_price": 30.0,
+          "output_price": 180.0,
+          "published_at": "2026-03-05"
+        },
+        {
+          "id": "gpt-5.4-mini",
+          "name": "GPT-5.4 Mini",
+          "description": "Strong mini model for coding, computer use, and subagents",
+          "supports_tools": true,
+          "context_length": 400000,
+          "input_price": 0.75,
+          "output_price": 4.5,
+          "published_at": "2026-03-17"
+        },
+        {
+          "id": "gpt-5.4-nano",
+          "name": "GPT-5.4 Nano",
+          "description": "Ultra-low-cost model for classification, routing, and simple tasks",
+          "supports_tools": true,
+          "context_length": 400000,
+          "input_price": 0.2,
+          "output_price": 1.25,
+          "published_at": "2026-03-17"
         },
         {
           "id": "gpt-5.2",
@@ -268,39 +336,49 @@
           "region": "global",
           "base_url": "https://api.anthropic.com",
           "price_currency": "USD",
-          "docs_url": null
+          "docs_url": "https://docs.anthropic.com/en/docs/about-claude/models"
         }
       },
       "models": [
         {
-          "id": "claude-opus-4-7",
-          "name": "Claude Opus 4.7",
-          "description": "Most capable generally available model for complex reasoning and agentic coding",
+          "id": "claude-opus-4-8",
+          "name": "Claude Opus 4.8",
+          "description": "Latest flagship model for coding, agentic tasks, and professional work with 1M context",
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 5.0,
           "output_price": 25.0,
-          "published_at": "2025-02-01"
+          "published_at": "2026-05-28"
+        },
+        {
+          "id": "claude-opus-4-7",
+          "name": "Claude Opus 4.7",
+          "description": "Previous generation Opus for complex reasoning and agentic coding",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 5.0,
+          "output_price": 25.0,
+          "published_at": "2026-02-01"
         },
         {
           "id": "claude-opus-4-6",
           "name": "Claude Opus 4.6",
-          "description": "Most intelligent for agents and coding",
+          "description": "Previous generation Opus for agents and coding",
           "supports_tools": true,
-          "context_length": 200000,
+          "context_length": 1000000,
           "input_price": 5.0,
           "output_price": 25.0,
-          "published_at": "2024-10-01"
+          "published_at": "2025-10-01"
         },
         {
           "id": "claude-sonnet-4-6",
           "name": "Claude Sonnet 4.6",
-          "description": "Best balance of speed and intelligence",
+          "description": "Best balance of speed and intelligence for production workloads",
           "supports_tools": true,
-          "context_length": 200000,
+          "context_length": 1000000,
           "input_price": 3.0,
           "output_price": 15.0,
-          "published_at": "2024-10-01"
+          "published_at": "2026-02-01"
         },
         {
           "id": "claude-haiku-4-5-20251001",
@@ -1045,7 +1123,83 @@
           "docs_url": "https://platform.minimax.io/docs/guides/models-intro"
         }
       },
+      "endpoint_models": {
+        "cn": [
+          {
+            "id": "MiniMax-M3",
+            "name": "MiniMax M3",
+            "description": "Frontier multimodal coding and agentic model with 1M MSA context, native vision, tool use, and long-horizon task execution",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 4.2,
+            "output_price": 16.8,
+            "published_at": "2026-06-01"
+          },
+          {
+            "id": "MiniMax-M2.7",
+            "name": "MiniMax M2.7",
+            "description": "Recursive self-improvement for real-world engineering, office delivery, and rich interaction",
+            "supports_tools": true,
+            "context_length": 204800,
+            "input_price": 2.1,
+            "output_price": 8.4,
+            "published_at": "2026-03-18"
+          },
+          {
+            "id": "MiniMax-M2.7-highspeed",
+            "name": "MiniMax M2.7 Highspeed",
+            "description": "Same M2.7 performance with significantly faster inference",
+            "supports_tools": true,
+            "context_length": 204800,
+            "input_price": 4.2,
+            "output_price": 16.8,
+            "published_at": "2026-03-18"
+          }
+        ],
+        "global": [
+          {
+            "id": "MiniMax-M3",
+            "name": "MiniMax M3",
+            "description": "Frontier multimodal coding and agentic model with 1M MSA context, native vision, tool use, and long-horizon task execution",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 0.6,
+            "output_price": 2.4,
+            "published_at": "2026-06-01"
+          },
+          {
+            "id": "MiniMax-M2.7",
+            "name": "MiniMax M2.7",
+            "description": "Recursive self-improvement for real-world engineering, office delivery, and rich interaction",
+            "supports_tools": true,
+            "context_length": 204800,
+            "input_price": 0.3,
+            "output_price": 1.2,
+            "published_at": "2026-03-18"
+          },
+          {
+            "id": "MiniMax-M2.7-highspeed",
+            "name": "MiniMax M2.7 Highspeed",
+            "description": "Same M2.7 performance with significantly faster inference",
+            "supports_tools": true,
+            "context_length": 204800,
+            "input_price": 0.6,
+            "output_price": 2.4,
+            "published_at": "2026-03-18"
+          }
+        ]
+      },
       "models": [
+        {
+          "id": "MiniMax-M3",
+          "name": "MiniMax M3",
+          "description": "Frontier multimodal coding and agentic model with 1M MSA context, native vision, tool use, and long-horizon task execution",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 4.2,
+          "output_price": 16.8,
+          "published_at": "2026-06-01"
+        },
         {
           "id": "MiniMax-M2.7",
           "name": "MiniMax M2.7",
@@ -1062,8 +1216,8 @@
           "description": "Same M2.7 performance with significantly faster inference",
           "supports_tools": true,
           "context_length": 204800,
-          "input_price": 2.1,
-          "output_price": 8.4,
+          "input_price": 4.2,
+          "output_price": 16.8,
           "published_at": "2026-03-18"
         },
         {

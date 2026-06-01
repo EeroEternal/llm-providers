@@ -471,13 +471,13 @@ mod tests {
         // Find indices of models with known published_at dates
         let gpt55_idx = models.iter().position(|(_, m)| m.id == "gpt-5.5");
         let _gpt52_idx = models.iter().position(|(_, m)| m.id == "gpt-5.2");
-        let _gemini3_idx = models.iter().position(|(_, m)| m.id == "gemini-3");
+        let _gemini35flash_idx = models.iter().position(|(_, m)| m.id == "gemini-3.5-flash");
         let gemini25pro_idx = models.iter().position(|(_, m)| m.id == "gemini-2.5-pro");
 
         // Models with published_at should come before models without
         // And among models with dates, newer ones should come first
         if let (Some(idx1), Some(idx2)) = (gpt55_idx, gemini25pro_idx) {
-            // gpt-5.5 (2025-03-01) is newer than gemini-2.5-pro (2024-09-24)
+            // gpt-5.5 (2026-04-24) is newer than gemini-2.5-pro (2025-06-17)
             assert!(idx1 < idx2, "gpt-5.5 should come before gemini-2.5-pro when sorting desc");
         }
     }
@@ -496,7 +496,7 @@ mod tests {
 
         // Among models with dates, older ones should come first
         if let (Some(idx1), Some(idx2)) = (gemini25pro_idx, gpt55_idx) {
-            // gemini-2.5-pro (2024-09-24) is older than gpt-5.5 (2025-03-01)
+            // gemini-2.5-pro (2025-06-17) is older than gpt-5.5 (2026-04-24)
             assert!(idx1 < idx2, "gemini-2.5-pro should come before gpt-5.5 when sorting asc");
         }
     }
@@ -507,6 +507,6 @@ mod tests {
         let gpt55 = get_model("openai", "gpt-5.5");
         assert!(gpt55.is_some(), "gpt-5.5 should exist");
         let model = gpt55.unwrap();
-        assert_eq!(model.published_at, Some("2025-03-01"));
+        assert_eq!(model.published_at, Some("2026-04-24"));
     }
 }
