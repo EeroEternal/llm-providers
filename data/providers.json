@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "updated_at": "2026-05-04T00:00:00.000000Z",
+  "updated_at": "2026-05-31T00:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -349,25 +349,131 @@
           "docs_url": "https://api-docs.deepseek.com/api/list-models"
         }
       },
+      "endpoint_models": {
+        "cn": [
+          {
+            "id": "deepseek-v4-flash",
+            "name": "DeepSeek V4 Flash",
+            "description": "Efficient V4 model with 1M context, hybrid thinking/non-thinking modes",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 1.0,
+            "output_price": 2.0,
+            "published_at": "2026-04-24"
+          },
+          {
+            "id": "deepseek-v4-pro",
+            "name": "DeepSeek V4 Pro",
+            "description": "Flagship V4 model with 1M context and frontier agentic reasoning",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 3.0,
+            "output_price": 6.0,
+            "published_at": "2026-04-24"
+          },
+          {
+            "id": "deepseek-chat",
+            "name": "DeepSeek Chat",
+            "description": "Legacy alias for deepseek-v4-flash non-thinking mode (deprecated 2026-07-24)",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 1.0,
+            "output_price": 2.0,
+            "published_at": "2024-05-01"
+          },
+          {
+            "id": "deepseek-reasoner",
+            "name": "DeepSeek Reasoner",
+            "description": "Legacy alias for deepseek-v4-flash thinking mode (deprecated 2026-07-24)",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 1.0,
+            "output_price": 2.0,
+            "published_at": "2025-01-01"
+          }
+        ],
+        "global": [
+          {
+            "id": "deepseek-v4-flash",
+            "name": "DeepSeek V4 Flash",
+            "description": "Efficient V4 model with 1M context, hybrid thinking/non-thinking modes",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 0.14,
+            "output_price": 0.28,
+            "published_at": "2026-04-24"
+          },
+          {
+            "id": "deepseek-v4-pro",
+            "name": "DeepSeek V4 Pro",
+            "description": "Flagship V4 model with 1M context and frontier agentic reasoning",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 0.435,
+            "output_price": 0.87,
+            "published_at": "2026-04-24"
+          },
+          {
+            "id": "deepseek-chat",
+            "name": "DeepSeek Chat",
+            "description": "Legacy alias for deepseek-v4-flash non-thinking mode (deprecated 2026-07-24)",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 0.14,
+            "output_price": 0.28,
+            "published_at": "2024-05-01"
+          },
+          {
+            "id": "deepseek-reasoner",
+            "name": "DeepSeek Reasoner",
+            "description": "Legacy alias for deepseek-v4-flash thinking mode (deprecated 2026-07-24)",
+            "supports_tools": true,
+            "context_length": 1000000,
+            "input_price": 0.14,
+            "output_price": 0.28,
+            "published_at": "2025-01-01"
+          }
+        ]
+      },
       "models": [
+        {
+          "id": "deepseek-v4-flash",
+          "name": "DeepSeek V4 Flash",
+          "description": "Efficient V4 model with 1M context, hybrid thinking/non-thinking modes",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 1.0,
+          "output_price": 2.0,
+          "published_at": "2026-04-24"
+        },
+        {
+          "id": "deepseek-v4-pro",
+          "name": "DeepSeek V4 Pro",
+          "description": "Flagship V4 model with 1M context and frontier agentic reasoning",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 3.0,
+          "output_price": 6.0,
+          "published_at": "2026-04-24"
+        },
         {
           "id": "deepseek-chat",
           "name": "DeepSeek Chat",
-          "description": "General chat model with 128K context",
+          "description": "Legacy alias for deepseek-v4-flash non-thinking mode (deprecated 2026-07-24)",
           "supports_tools": true,
-          "context_length": 131072,
-          "input_price": 2.0,
-          "output_price": 8.0,
+          "context_length": 1000000,
+          "input_price": 1.0,
+          "output_price": 2.0,
           "published_at": "2024-05-01"
         },
         {
           "id": "deepseek-reasoner",
           "name": "DeepSeek Reasoner",
-          "description": "Reasoning model with 128K context, max 64K output",
-          "supports_tools": false,
-          "context_length": 131072,
-          "input_price": 4.0,
-          "output_price": 16.0,
+          "description": "Legacy alias for deepseek-v4-flash thinking mode (deprecated 2026-07-24)",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 1.0,
+          "output_price": 2.0,
           "published_at": "2025-01-01"
         }
       ]
@@ -531,15 +637,276 @@
           "docs_url": "https://platform.moonshot.ai/docs/pricing/chat#generation-model-kimi-k2"
         }
       },
+      "endpoint_models": {
+        "cn": [
+          {
+            "id": "kimi-k2.6",
+            "name": "Kimi K2.6",
+            "description": "Latest flagship with Agent Swarm, multimodal input, and 256K context",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 6.5,
+            "output_price": 27.0,
+            "published_at": "2026-04-21"
+          },
+          {
+            "id": "kimi-k2.5",
+            "name": "Kimi K2.5",
+            "description": "256K context, 1T params MoE, Agent Swarm",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 4.0,
+            "output_price": 21.0
+          },
+          {
+            "id": "kimi-k2-0905-preview",
+            "name": "Kimi K2 0905",
+            "description": "K2 model with 256K context, strong Agentic Coding",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 4.0,
+            "output_price": 16.0
+          },
+          {
+            "id": "kimi-k2-turbo-preview",
+            "name": "Kimi K2 Turbo",
+            "description": "High-speed K2 with 256K context, 60-100 tokens/s",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 8.0,
+            "output_price": 58.0
+          },
+          {
+            "id": "kimi-k2-0711-preview",
+            "name": "Kimi K2 0711",
+            "description": "Earlier K2 version with 128K context",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 4.0,
+            "output_price": 16.0
+          },
+          {
+            "id": "kimi-k2-thinking",
+            "name": "Kimi K2 Thinking",
+            "description": "Deep reasoning model with 256K context",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 4.0,
+            "output_price": 16.0
+          },
+          {
+            "id": "kimi-k2-thinking-turbo",
+            "name": "Kimi K2 Thinking Turbo",
+            "description": "High-speed deep reasoning with 256K context",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 8.0,
+            "output_price": 58.0
+          },
+          {
+            "id": "kimi-latest",
+            "name": "Kimi Latest",
+            "description": "Auto-select model based on context (8K/32K/128K), vision support",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 2.0,
+            "output_price": 10.0
+          },
+          {
+            "id": "moonshot-v1-8k",
+            "name": "Moonshot V1 8K",
+            "description": "Classic v1 model with 8K context",
+            "supports_tools": true,
+            "context_length": 8192,
+            "input_price": 2.0,
+            "output_price": 10.0
+          },
+          {
+            "id": "moonshot-v1-8k-vision-preview",
+            "name": "Moonshot V1 8K Vision Preview",
+            "description": "Vision model, understands image content and outputs text, context length 8K",
+            "supports_tools": true,
+            "context_length": 8192,
+            "input_price": 2.0,
+            "output_price": 10.0
+          },
+          {
+            "id": "moonshot-v1-32k",
+            "name": "Moonshot V1 32K",
+            "description": "Classic v1 model with 32K context",
+            "supports_tools": true,
+            "context_length": 32768,
+            "input_price": 5.0,
+            "output_price": 20.0
+          },
+          {
+            "id": "moonshot-v1-32k-vision-preview",
+            "name": "Moonshot V1 32K Vision Preview",
+            "description": "Vision model, understands image content and outputs text, context length 32K",
+            "supports_tools": true,
+            "context_length": 32768,
+            "input_price": 5.0,
+            "output_price": 20.0
+          },
+          {
+            "id": "moonshot-v1-128k",
+            "name": "Moonshot V1 128K",
+            "description": "Classic v1 model with 128K context",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 10.0,
+            "output_price": 30.0
+          },
+          {
+            "id": "moonshot-v1-128k-vision-preview",
+            "name": "Moonshot V1 128K Vision Preview",
+            "description": "Vision model, understands image content and outputs text, context length 128K",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 10.0,
+            "output_price": 30.0
+          }
+        ],
+        "global": [
+          {
+            "id": "kimi-k2.6",
+            "name": "Kimi K2.6",
+            "description": "Latest flagship with Agent Swarm, multimodal input, and 256K context",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.95,
+            "output_price": 4.0,
+            "published_at": "2026-04-21"
+          },
+          {
+            "id": "kimi-k2.5",
+            "name": "Kimi K2.5",
+            "description": "256K context, 1T params MoE, Agent Swarm",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.6,
+            "output_price": 3.0
+          },
+          {
+            "id": "kimi-k2-0905-preview",
+            "name": "Kimi K2 0905",
+            "description": "K2 model with 256K context, strong Agentic Coding",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.6,
+            "output_price": 2.4
+          },
+          {
+            "id": "kimi-k2-turbo-preview",
+            "name": "Kimi K2 Turbo",
+            "description": "High-speed K2 with 256K context, 60-100 tokens/s",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 1.2,
+            "output_price": 8.0
+          },
+          {
+            "id": "kimi-k2-0711-preview",
+            "name": "Kimi K2 0711",
+            "description": "Earlier K2 version with 128K context",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 0.6,
+            "output_price": 2.4
+          },
+          {
+            "id": "kimi-k2-thinking",
+            "name": "Kimi K2 Thinking",
+            "description": "Deep reasoning model with 256K context",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 0.6,
+            "output_price": 2.4
+          },
+          {
+            "id": "kimi-k2-thinking-turbo",
+            "name": "Kimi K2 Thinking Turbo",
+            "description": "High-speed deep reasoning with 256K context",
+            "supports_tools": true,
+            "context_length": 256000,
+            "input_price": 1.2,
+            "output_price": 8.0
+          },
+          {
+            "id": "kimi-latest",
+            "name": "Kimi Latest",
+            "description": "Auto-select model based on context (8K/32K/128K), vision support",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 0.3,
+            "output_price": 1.5
+          },
+          {
+            "id": "moonshot-v1-8k",
+            "name": "Moonshot V1 8K",
+            "description": "Classic v1 model with 8K context",
+            "supports_tools": true,
+            "context_length": 8192,
+            "input_price": 0.3,
+            "output_price": 1.5
+          },
+          {
+            "id": "moonshot-v1-8k-vision-preview",
+            "name": "Moonshot V1 8K Vision Preview",
+            "description": "Vision model, understands image content and outputs text, context length 8K",
+            "supports_tools": true,
+            "context_length": 8192,
+            "input_price": 0.3,
+            "output_price": 1.5
+          },
+          {
+            "id": "moonshot-v1-32k",
+            "name": "Moonshot V1 32K",
+            "description": "Classic v1 model with 32K context",
+            "supports_tools": true,
+            "context_length": 32768,
+            "input_price": 0.75,
+            "output_price": 3.0
+          },
+          {
+            "id": "moonshot-v1-32k-vision-preview",
+            "name": "Moonshot V1 32K Vision Preview",
+            "description": "Vision model, understands image content and outputs text, context length 32K",
+            "supports_tools": true,
+            "context_length": 32768,
+            "input_price": 0.75,
+            "output_price": 3.0
+          },
+          {
+            "id": "moonshot-v1-128k",
+            "name": "Moonshot V1 128K",
+            "description": "Classic v1 model with 128K context",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 1.5,
+            "output_price": 4.5
+          },
+          {
+            "id": "moonshot-v1-128k-vision-preview",
+            "name": "Moonshot V1 128K Vision Preview",
+            "description": "Vision model, understands image content and outputs text, context length 128K",
+            "supports_tools": true,
+            "context_length": 131072,
+            "input_price": 1.5,
+            "output_price": 4.5
+          }
+        ]
+      },
       "models": [
         {
           "id": "kimi-k2.6",
           "name": "Kimi K2.6",
-          "description": "Latest flagship with stronger long-context coding stability and multimodal input",
+          "description": "Latest flagship with Agent Swarm, multimodal input, and 256K context",
           "supports_tools": true,
-          "context_length": 262144,
+          "context_length": 256000,
           "input_price": 6.5,
-          "output_price": 27.0
+          "output_price": 27.0,
+          "published_at": "2026-04-21"
         },
         {
           "id": "kimi-k2.5",
@@ -685,8 +1052,9 @@
           "description": "Recursive self-improvement for real-world engineering, office delivery, and rich interaction",
           "supports_tools": true,
           "context_length": 204800,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 2.1,
+          "output_price": 8.4,
+          "published_at": "2026-03-18"
         },
         {
           "id": "MiniMax-M2.7-highspeed",
@@ -694,8 +1062,9 @@
           "description": "Same M2.7 performance with significantly faster inference",
           "supports_tools": true,
           "context_length": 204800,
-          "input_price": 0.0,
-          "output_price": 0.0
+          "input_price": 2.1,
+          "output_price": 8.4,
+          "published_at": "2026-03-18"
         },
         {
           "id": "MiniMax-M2.5",
@@ -887,14 +1256,14 @@
           "region": "cn",
           "base_url": "https://api.xiaomimimo.com/v1",
           "price_currency": "CNY",
-          "docs_url": "https://platform.xiaomimimo.com/docs/en-US/pricing"
+          "docs_url": "https://platform.xiaomimimo.com/docs/en-US/quick-start/model"
         },
         "global": {
           "label": "Xiaomi MiMo",
           "region": "global",
           "base_url": "https://api.xiaomimimo.com/v1",
           "price_currency": "USD",
-          "docs_url": "https://platform.xiaomimimo.com/docs/en-US/pricing"
+          "docs_url": "https://platform.xiaomimimo.com/docs/en-US/quick-start/model"
         }
       },
       "endpoint_models": {
@@ -902,16 +1271,17 @@
           {
             "id": "mimo-v2.5-pro",
             "name": "MiMo V2.5 Pro",
-            "description": "Enhanced long-range reasoning, higher agent efficiency, and better coding experience",
+            "description": "Pro-series model for complex reasoning and long documents; 1M context, 128K max output; deep thinking, tools, structured output, web search",
             "supports_tools": true,
             "context_length": 1000000,
             "input_price": 7.0,
-            "output_price": 21.0
+            "output_price": 21.0,
+            "published_at": "2026-04-30"
           },
           {
             "id": "mimo-v2-pro",
             "name": "MiMo V2 Pro",
-            "description": "Earlier Pro-series reasoning model with 1M context and tool use",
+            "description": "Legacy Pro model; auto-routes to mimo-v2.5-pro from 2026-06-01 and will be deprecated on 2026-06-30",
             "supports_tools": true,
             "context_length": 1000000,
             "input_price": 7.0,
@@ -920,16 +1290,17 @@
           {
             "id": "mimo-v2.5",
             "name": "MiMo V2.5",
-            "description": "Native multimodal flagship with 1M context and stronger agentic coding",
+            "description": "Omni-series full-modal model for image, audio, and video understanding; 1M context, 128K max output; deep thinking, tools, structured output, web search",
             "supports_tools": true,
             "context_length": 1000000,
             "input_price": 2.8,
-            "output_price": 14.0
+            "output_price": 14.0,
+            "published_at": "2026-04-30"
           },
           {
             "id": "mimo-v2-omni",
             "name": "MiMo V2 Omni",
-            "description": "Full-modal understanding model with deep thinking, tool use, and web search",
+            "description": "Legacy Omni model with 256K context; auto-routes to mimo-v2.5 from 2026-06-01 and will be deprecated on 2026-06-30",
             "supports_tools": true,
             "context_length": 256000,
             "input_price": 2.8,
@@ -938,7 +1309,7 @@
           {
             "id": "mimo-v2-flash",
             "name": "MiMo V2 Flash",
-            "description": "Fast low-cost text generation model with deep thinking and function calling",
+            "description": "Flash-series low-cost text model; 256K context, 64K max output; deep thinking, tools, structured output, web search",
             "supports_tools": true,
             "context_length": 256000,
             "input_price": 0.7,
@@ -947,7 +1318,7 @@
           {
             "id": "mimo-v2.5-tts",
             "name": "MiMo V2.5 TTS",
-            "description": "Speech synthesis model with upgraded voice quality",
+            "description": "Speech synthesis with standard preset voices; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -956,7 +1327,7 @@
           {
             "id": "mimo-v2.5-tts-voiceclone",
             "name": "MiMo V2.5 TTS Voice Clone",
-            "description": "Speech synthesis model for timbre cloning",
+            "description": "Speech synthesis with timbre cloning from uploaded audio samples; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -965,7 +1336,7 @@
           {
             "id": "mimo-v2.5-tts-voicedesign",
             "name": "MiMo V2.5 TTS Voice Design",
-            "description": "Speech synthesis model for custom voice design",
+            "description": "Speech synthesis with custom voice design; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -974,7 +1345,7 @@
           {
             "id": "mimo-v2-tts",
             "name": "MiMo V2 TTS",
-            "description": "Legacy speech synthesis model",
+            "description": "Legacy speech synthesis model; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -985,16 +1356,17 @@
           {
             "id": "mimo-v2.5-pro",
             "name": "MiMo V2.5 Pro",
-            "description": "Enhanced long-range reasoning, higher agent efficiency, and better coding experience",
+            "description": "Pro-series model for complex reasoning and long documents; 1M context, 128K max output; deep thinking, tools, structured output, web search",
             "supports_tools": true,
             "context_length": 1000000,
             "input_price": 1.0,
-            "output_price": 3.0
+            "output_price": 3.0,
+            "published_at": "2026-04-30"
           },
           {
             "id": "mimo-v2-pro",
             "name": "MiMo V2 Pro",
-            "description": "Earlier Pro-series reasoning model with 1M context and tool use",
+            "description": "Legacy Pro model; auto-routes to mimo-v2.5-pro from 2026-06-01 and will be deprecated on 2026-06-30",
             "supports_tools": true,
             "context_length": 1000000,
             "input_price": 1.0,
@@ -1003,16 +1375,17 @@
           {
             "id": "mimo-v2.5",
             "name": "MiMo V2.5",
-            "description": "Native multimodal flagship with 1M context and stronger agentic coding",
+            "description": "Omni-series full-modal model for image, audio, and video understanding; 1M context, 128K max output; deep thinking, tools, structured output, web search",
             "supports_tools": true,
             "context_length": 1000000,
             "input_price": 0.4,
-            "output_price": 2.0
+            "output_price": 2.0,
+            "published_at": "2026-04-30"
           },
           {
             "id": "mimo-v2-omni",
             "name": "MiMo V2 Omni",
-            "description": "Full-modal understanding model with deep thinking, tool use, and web search",
+            "description": "Legacy Omni model with 256K context; auto-routes to mimo-v2.5 from 2026-06-01 and will be deprecated on 2026-06-30",
             "supports_tools": true,
             "context_length": 256000,
             "input_price": 0.4,
@@ -1021,7 +1394,7 @@
           {
             "id": "mimo-v2-flash",
             "name": "MiMo V2 Flash",
-            "description": "Fast low-cost text generation model with deep thinking and function calling",
+            "description": "Flash-series low-cost text model; 256K context, 64K max output; deep thinking, tools, structured output, web search",
             "supports_tools": true,
             "context_length": 256000,
             "input_price": 0.1,
@@ -1030,7 +1403,7 @@
           {
             "id": "mimo-v2.5-tts",
             "name": "MiMo V2.5 TTS",
-            "description": "Speech synthesis model with upgraded voice quality",
+            "description": "Speech synthesis with standard preset voices; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -1039,7 +1412,7 @@
           {
             "id": "mimo-v2.5-tts-voiceclone",
             "name": "MiMo V2.5 TTS Voice Clone",
-            "description": "Speech synthesis model for timbre cloning",
+            "description": "Speech synthesis with timbre cloning from uploaded audio samples; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -1048,7 +1421,7 @@
           {
             "id": "mimo-v2.5-tts-voicedesign",
             "name": "MiMo V2.5 TTS Voice Design",
-            "description": "Speech synthesis model for custom voice design",
+            "description": "Speech synthesis with custom voice design; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -1057,7 +1430,7 @@
           {
             "id": "mimo-v2-tts",
             "name": "MiMo V2 TTS",
-            "description": "Legacy speech synthesis model",
+            "description": "Legacy speech synthesis model; 8K context, limited-time free",
             "supports_tools": false,
             "context_length": 8000,
             "input_price": 0.0,
@@ -1069,16 +1442,17 @@
         {
           "id": "mimo-v2.5-pro",
           "name": "MiMo V2.5 Pro",
-          "description": "Enhanced long-range reasoning, higher agent efficiency, and better coding experience",
+          "description": "Pro-series model for complex reasoning and long documents; 1M context, 128K max output; deep thinking, tools, structured output, web search",
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 7.0,
-          "output_price": 21.0
+          "output_price": 21.0,
+          "published_at": "2026-04-30"
         },
         {
           "id": "mimo-v2-pro",
           "name": "MiMo V2 Pro",
-          "description": "Earlier Pro-series reasoning model with 1M context and tool use",
+          "description": "Legacy Pro model; auto-routes to mimo-v2.5-pro from 2026-06-01 and will be deprecated on 2026-06-30",
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 7.0,
@@ -1087,16 +1461,17 @@
         {
           "id": "mimo-v2.5",
           "name": "MiMo V2.5",
-          "description": "Native multimodal flagship with 1M context and stronger agentic coding",
+          "description": "Omni-series full-modal model for image, audio, and video understanding; 1M context, 128K max output; deep thinking, tools, structured output, web search",
           "supports_tools": true,
           "context_length": 1000000,
           "input_price": 2.8,
-          "output_price": 14.0
+          "output_price": 14.0,
+          "published_at": "2026-04-30"
         },
         {
           "id": "mimo-v2-omni",
           "name": "MiMo V2 Omni",
-          "description": "Full-modal understanding model with deep thinking, tool use, and web search",
+          "description": "Legacy Omni model with 256K context; auto-routes to mimo-v2.5 from 2026-06-01 and will be deprecated on 2026-06-30",
           "supports_tools": true,
           "context_length": 256000,
           "input_price": 2.8,
@@ -1105,7 +1480,7 @@
         {
           "id": "mimo-v2-flash",
           "name": "MiMo V2 Flash",
-          "description": "Fast low-cost text generation model with deep thinking and function calling",
+          "description": "Flash-series low-cost text model; 256K context, 64K max output; deep thinking, tools, structured output, web search",
           "supports_tools": true,
           "context_length": 256000,
           "input_price": 0.7,
@@ -1114,7 +1489,7 @@
         {
           "id": "mimo-v2.5-tts",
           "name": "MiMo V2.5 TTS",
-          "description": "Speech synthesis model with upgraded voice quality",
+          "description": "Speech synthesis with standard preset voices; 8K context, limited-time free",
           "supports_tools": false,
           "context_length": 8000,
           "input_price": 0.0,
@@ -1123,7 +1498,7 @@
         {
           "id": "mimo-v2.5-tts-voiceclone",
           "name": "MiMo V2.5 TTS Voice Clone",
-          "description": "Speech synthesis model for timbre cloning",
+          "description": "Speech synthesis with timbre cloning from uploaded audio samples; 8K context, limited-time free",
           "supports_tools": false,
           "context_length": 8000,
           "input_price": 0.0,
@@ -1132,7 +1507,7 @@
         {
           "id": "mimo-v2.5-tts-voicedesign",
           "name": "MiMo V2.5 TTS Voice Design",
-          "description": "Speech synthesis model for custom voice design",
+          "description": "Speech synthesis with custom voice design; 8K context, limited-time free",
           "supports_tools": false,
           "context_length": 8000,
           "input_price": 0.0,
@@ -1141,7 +1516,7 @@
         {
           "id": "mimo-v2-tts",
           "name": "MiMo V2 TTS",
-          "description": "Legacy speech synthesis model",
+          "description": "Legacy speech synthesis model; 8K context, limited-time free",
           "supports_tools": false,
           "context_length": 8000,
           "input_price": 0.0,
@@ -1176,7 +1551,8 @@
             "supports_tools": true,
             "context_length": 200000,
             "input_price": 6.0,
-            "output_price": 24.0
+            "output_price": 24.0,
+            "published_at": "2026-04-07"
           },
           {
             "id": "glm-5",
@@ -1195,6 +1571,24 @@
             "context_length": 200000,
             "input_price": 6.0,
             "output_price": 28.0
+          },
+          {
+            "id": "glm-5-turbo",
+            "name": "GLM-5-Turbo",
+            "description": "Agent-optimized turbo variant with stronger long-task execution",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 4.8,
+            "output_price": 19.2
+          },
+          {
+            "id": "glm-5v-turbo",
+            "name": "GLM-5V-Turbo",
+            "description": "Multimodal coding model with vision and tool use",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 5.0,
+            "output_price": 22.0
           },
           {
             "id": "glm-4.7",
@@ -1348,8 +1742,9 @@
             "description": "Latest flagship with stronger coding and long-horizon autonomous execution",
             "supports_tools": true,
             "context_length": 200000,
-            "input_price": 0.0,
-            "output_price": 0.0
+            "input_price": 1.4,
+            "output_price": 4.4,
+            "published_at": "2026-04-07"
           },
           {
             "id": "glm-5",
@@ -1368,6 +1763,24 @@
             "context_length": 200000,
             "input_price": 1.2,
             "output_price": 5.0
+          },
+          {
+            "id": "glm-5-turbo",
+            "name": "GLM-5-Turbo",
+            "description": "Agent-optimized turbo variant with stronger long-task execution",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 1.2,
+            "output_price": 4.0
+          },
+          {
+            "id": "glm-5v-turbo",
+            "name": "GLM-5V-Turbo",
+            "description": "Multimodal coding model with vision and tool use",
+            "supports_tools": true,
+            "context_length": 200000,
+            "input_price": 1.2,
+            "output_price": 4.0
           },
           {
             "id": "glm-4.7",
@@ -1514,7 +1927,26 @@
           "supports_tools": true,
           "context_length": 200000,
           "input_price": 6.0,
-          "output_price": 24.0
+          "output_price": 24.0,
+          "published_at": "2026-04-07"
+        },
+        {
+          "id": "glm-5-turbo",
+          "name": "GLM-5-Turbo",
+          "description": "Agent-optimized turbo variant with stronger long-task execution",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 4.8,
+          "output_price": 19.2
+        },
+        {
+          "id": "glm-5v-turbo",
+          "name": "GLM-5V-Turbo",
+          "description": "Multimodal coding model with vision and tool use",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 5.0,
+          "output_price": 22.0
         },
         {
           "id": "glm-5",
@@ -1831,6 +2263,56 @@
       },
       "models": [
         {
+          "id": "deepseek-v4-flash",
+          "name": "DeepSeek V4 Flash",
+          "description": "Efficient V4 model with 1M context, hybrid thinking and tool calling",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 1.0,
+          "output_price": 2.0,
+          "published_at": "2026-04-24"
+        },
+        {
+          "id": "deepseek-v4-pro",
+          "name": "DeepSeek V4 Pro",
+          "description": "Flagship V4 model with 1M context and frontier agentic reasoning",
+          "supports_tools": true,
+          "context_length": 1000000,
+          "input_price": 12.0,
+          "output_price": 24.0,
+          "published_at": "2026-04-24"
+        },
+        {
+          "id": "glm-5.1",
+          "name": "GLM-5.1",
+          "description": "Zhipu GLM-5.1 with 200K context, deep thinking and prefix completion",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 6.0,
+          "output_price": 24.0,
+          "published_at": "2026-04-07"
+        },
+        {
+          "id": "kimi-k2.6",
+          "name": "Kimi K2.6",
+          "description": "Moonshot K2.6 with 256K context, multimodal input and agentic tool use",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 6.5,
+          "output_price": 27.0,
+          "published_at": "2026-04-21"
+        },
+        {
+          "id": "MiniMax-M2.7",
+          "name": "MiniMax M2.7",
+          "description": "MiniMax M2.7 with 200K context, agent harness and tool calling",
+          "supports_tools": true,
+          "context_length": 200000,
+          "input_price": 2.1,
+          "output_price": 8.4,
+          "published_at": "2026-03-18"
+        },
+        {
           "id": "GLM-4.7",
           "name": "GLM-4.7",
           "description": "Zhipu GLM model provided via Ark",
@@ -2124,38 +2606,70 @@
       },
       "models": [
         {
-          "id": "LongCat-Flash-Chat",
-          "name": "LongCat Flash Chat",
-          "description": "High-performance general chat model",
+          "id": "LongCat-2.0-Preview",
+          "name": "LongCat 2.0 Preview",
+          "description": "Trillion-parameter MoE flagship with 1M context, agentic tool use, and 128K max output",
           "supports_tools": true,
-          "context_length": 32768,
+          "context_length": 1000000,
           "input_price": 0.0,
-          "output_price": 0.0
+          "output_price": 0.0,
+          "published_at": "2026-04-24"
         },
         {
-          "id": "LongCat-Flash-Thinking",
-          "name": "LongCat Flash Thinking",
-          "description": "Deep thinking model",
+          "id": "LongCat-Flash-Omni-2603",
+          "name": "LongCat Flash Omni 2603",
+          "description": "Multimodal omni model with vision and audio understanding, max 8K output",
           "supports_tools": true,
-          "context_length": 32768,
+          "context_length": 256000,
           "input_price": 0.0,
-          "output_price": 0.0
+          "output_price": 0.0,
+          "published_at": "2026-03-01"
+        },
+        {
+          "id": "LongCat-Flash-Chat-2602-Exp",
+          "name": "LongCat Flash Chat 2602 Exp",
+          "description": "Experimental chat model with improved general dialogue and instruction following",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 0.0,
+          "output_price": 0.0,
+          "published_at": "2026-02-01"
         },
         {
           "id": "LongCat-Flash-Thinking-2601",
           "name": "LongCat Flash Thinking 2601",
-          "description": "Upgraded deep thinking model",
+          "description": "560B MoE reasoning model with agentic tool use, Heavy Thinking mode, and 256K max output",
           "supports_tools": true,
-          "context_length": 32768,
+          "context_length": 256000,
+          "input_price": 0.0,
+          "output_price": 0.0,
+          "published_at": "2026-01-01"
+        },
+        {
+          "id": "LongCat-Flash-Thinking",
+          "name": "LongCat Flash Thinking",
+          "description": "560B MoE deep reasoning model with formal and agentic reasoning, 256K max output",
+          "supports_tools": true,
+          "context_length": 256000,
+          "input_price": 0.0,
+          "output_price": 0.0,
+          "published_at": "2025-09-22"
+        },
+        {
+          "id": "LongCat-Flash-Chat",
+          "name": "LongCat Flash Chat",
+          "description": "High-performance general chat model with 256K max output",
+          "supports_tools": true,
+          "context_length": 256000,
           "input_price": 0.0,
           "output_price": 0.0
         },
         {
           "id": "LongCat-Flash-Lite",
           "name": "LongCat Flash Lite",
-          "description": "Efficient lightweight MoE model",
+          "description": "Efficient lightweight MoE model with 256K max output",
           "supports_tools": true,
-          "context_length": 32768,
+          "context_length": 256000,
           "input_price": 0.0,
           "output_price": 0.0
         }
@@ -2264,6 +2778,15 @@
           "id": "qwen-3-235b-a22b-instruct-2507",
           "name": "Qwen 3 235B Instruct",
           "description": "Preview Qwen 3 235B Instruct served by Cerebras",
+          "supports_tools": true,
+          "context_length": null,
+          "input_price": 0.0,
+          "output_price": 0.0
+        },
+        {
+          "id": "zai-glm-5.1",
+          "name": "Z.ai GLM 5.1",
+          "description": "Preview Zhipu GLM 5.1 served by Cerebras",
           "supports_tools": true,
           "context_length": null,
           "input_price": 0.0,
