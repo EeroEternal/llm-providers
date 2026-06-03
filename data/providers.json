@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "updated_at": "2026-06-01T12:00:00.000000Z",
+  "updated_at": "2026-06-03T00:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -2855,6 +2855,19 @@
         }
       },
       "models": [
+        {
+          "id": "google/gemma-4-31b-it",
+          "name": "Gemma 4 31B",
+          "description": "Google DeepMind 30.7B dense multimodal instruct model with 256K context, vision input, native function calling, configurable thinking/reasoning, and 140+ languages; Apache 2.0",
+          "supports_tools": true,
+          "supports_vision": true,
+          "supports_reasoning": true,
+          "context_length": 262144,
+          "input_price": 0.12,
+          "output_price": 0.37,
+          "cache_read_price": 0.1,
+          "published_at": "2026-04-02"
+        },
         {
           "id": "openrouter/auto",
           "name": "OpenRouter Auto",
