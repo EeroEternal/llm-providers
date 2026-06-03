@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "updated_at": "2026-06-03T00:00:00.000000Z",
+  "updated_at": "2026-06-03T12:00:00.000000Z",
   "providers": {
     "google": {
       "label": "Google Gemini",
@@ -2856,7 +2856,7 @@
       },
       "models": [
         {
-          "id": "google/gemma-4-31b-it",
+          "id": "gemma-4-31b-it",
           "name": "Gemma 4 31B",
           "description": "Google DeepMind 30.7B dense multimodal instruct model with 256K context, vision input, native function calling, configurable thinking/reasoning, and 140+ languages; Apache 2.0",
           "supports_tools": true,
